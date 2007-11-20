@@ -9,7 +9,7 @@ public class Course {
 	private String dependencies[];
 	private String courseName;
 	private String skemagruppe[];
-	private String year;
+	private String season;
 		
 	/**
 	 * @return the courseID
@@ -72,16 +72,16 @@ public class Course {
 	}
 
 	/**
-	 * @return the year
+	 * @return the season
 	 */
-	public String getYear() {
-		return year;
+	public String getSeason() {
+		return season;
 	}
 
 	/**
-	 * @param year the year to set
+	 * @param season the season to set
 	 */
-	public void setYear(String year) {
-		this.year = year;
+	public void setSeason(String season) {
+		this.season = season;
 	}
 }
