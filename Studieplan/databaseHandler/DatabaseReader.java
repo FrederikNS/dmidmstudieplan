@@ -48,13 +48,26 @@ public class DatabaseReader implements DatabaseHandler {
 			throw new CourseDoesNotExistException(courseID);
 		}
 		
-		scan[DatabaseFiles.NAVN.ordinal()].next(courseID + " (.*)");
-	    MatchResult result = scan[DatabaseFiles.NAVN.ordinal()].match();
-	    for (int i=1; i<=result.groupCount(); i++) {
-	    	
-	    }
+		String courseName, dependencies[] = null;
 		
+		scan[DatabaseFiles.NAVN.ordinal()].next(courseID + " (.*)");
+	    courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(1);
+		
+	    if(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID) ) {
+	    	int Max;
+	    	scan[DatabaseFiles.KRAV.ordinal()].next(courseID + " (.*)+");
+	    	MatchResult result = scan[DatabaseFiles.KRAV.ordinal()].match();
+	    	Max = result.groupCount();
+	    	dependencies = new String[Max];
+	    	for(int i=1 ; i <= Max ; i ++ ) {
+	    		dependencies[i] = scan[DatabaseFiles.KRAV.ordinal()].match().group(i);
+	    	}
+	    }
+	    
 		Course course = new Course(courseID);
+		course.setCourseName(courseName);
+		if(dependencies != null) 
+			course.setDependencies(dependencies);
 		return course;
 	}
 		
