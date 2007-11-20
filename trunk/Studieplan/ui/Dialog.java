@@ -107,8 +107,8 @@ public class Dialog {
 				System.out.print("> ");
 				while ((input = this.readInput()) != null) {
 					String[] indtastet2 = input.split(" ");
+					indtastet[1] = indtastet2[0];
 					indtastet[2] = indtastet2[1];
-					indtastet[3] = indtastet2[2];
 					System.out.print("> ");
 				}
 			} catch (Exception e) {
@@ -170,9 +170,9 @@ public class Dialog {
 			temp2 = Integer.parseInt(indtastet[1]);
 			if (temp2 > 0 && temp2 <= 20) {
 				System.out.println("Semester: "+indtastet[1]+"   mandag  tirsdag  onsdag  torsdag  fredag");
-				System.out.println("8:00-12:00          test1  test2  test3  test4  test5");
+				System.out.println("8:00-12:00    test1    test2    test3   test4    test5");
 				System.out.println("  Pause");
-				System.out.println("13:00-17:00         test1  test2  test3  test4  test5");
+				System.out.println("13:00-17:00   test1    test2    test3   test4    test5");
 			}
 		} catch (Exception e) {
 
