@@ -9,7 +9,7 @@ package dataClass;
  * in the Course class, this also contains the data on which semester this course is 
  * taken.
  */
-public class SelectedCourse extends Course implements Comparable {
+public class SelectedCourse extends Course implements Comparable<SelectedCourse> {
 
 	private int semester = 0;
 
@@ -25,9 +25,10 @@ public class SelectedCourse extends Course implements Comparable {
 		this.semester = semester;
 		}
 	
-	/**
-	 * Called by the overloaded compareTo(Object o) method, if and only if that object is a Course
-	 * object. Follows the standards of the compareTo method.
+	/*(non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * 
+	 * Follows the standards of the compareTo method.
 	 * 
 	 * This class is sorted first by the semester it appears in and secondarily the number of the 
 	 * course if the semesters are the same.
@@ -56,15 +57,6 @@ public class SelectedCourse extends Course implements Comparable {
 		return order;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Object o) throws ClassCastException{
-		if(! (o instanceof Course) ) {
-			throw new ClassCastException();
-		}
-		return compareTo( (Course) o );
-	}
 	/**
 	 * @return the semester
 	 */
