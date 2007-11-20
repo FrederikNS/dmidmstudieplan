@@ -71,14 +71,56 @@ public class Dialog {
 	}
 	
 	private void add(String indtastet[]){
-		if(indtastet.size() == 1){
-			
+		String temp;
+		int temp2;
+		boolean courseFormatOk = false;
+		boolean semesterFormatOk = false;
+		
+		switch(indtastet.length){
+			default:
+			case 3:
+				//Semester
+				temp = indtastet[2];
+				try {
+					temp2 = Integer.parseInt(temp);
+					if(temp2 > 0 && temp2 <= 20)
+					{
+						semesterFormatOk = true;
+					}
+				}
+				catch (Exception e){
+					
+				}
+			case 2:
+				//Course
+				try{
+					temp2 = Integer.parseInt(indtastet[1]);
+					if(indtastet[1].length() == 5 && temp2 > -1){
+						courseFormatOk = true;
+					}
+				}
+				catch (Exception e){
+					
+				}
+			case 1:
+				break;
 		}
-		else if(indtastet.size() == 2){
-			
+		
+		//Spørg efter manglede / fejlformatterde informationer
+		if(semesterFormatOk == false){
+			System.out.println("Det indtastede data for semesternummeret var forkert.");
+			System.out.println("Indtast det korrekte semesternummer:");
+			System.out.print("> ");
+			changeCourse(input);
 		}
-		courseID = indtastet[1];
-		semesterNumber = indtastet[2];
+		else if(courseFormatOk == false){
+			System.out.println("Det indtastede data for kursusnummeret var forkert.");
+			System.out.println("Indtast det korrekte kursusnummer:");
+		}
+	}
+	
+	private void changeCourse(String input){
+		System.out.print()
 	}
 	
 	/**
