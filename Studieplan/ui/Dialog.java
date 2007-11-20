@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 /**
  * @author Morten Sørensen
- *
+ * 
  */
 public class Dialog {
 
@@ -74,6 +74,16 @@ public class Dialog {
 		switch (indtastet.length) {
 		default:
 		case 3:
+			//Course
+			try {
+				temp2 = Integer.parseInt(indtastet[1]);
+				if (indtastet[1].length() == 5 && temp2 > -1) {
+					courseFormatOk = true;
+				}
+			} catch (Exception e) {
+
+			}
+		case 2:
 			//Semester
 			temp = indtastet[2];
 			try {
@@ -84,44 +94,40 @@ public class Dialog {
 			} catch (Exception e) {
 
 			}
-		case 2:
-			//Course
-			try {
-				temp2 = Integer.parseInt(indtastet[1]);
-				if (indtastet[1].length() == 5 && temp2 > -1) {
-					courseFormatOk = true;
-				}
-			} catch (Exception e) {
-
-			}
 		case 1:
 			break;
 		}
 
-		//Spørg efter manglede / fejlformatterde informationer
-		if (semesterFormatOk == false) {
+		// Spørg efter manglede / fejlformatterde informationer
+		if (courseFormatOk == false) {
+			System.out.println("Indtast venligst kursusnummeret:");
+
+			keyboard = new BufferedReader(new InputStreamReader(System.in));
+			try {
+				System.out.print("> ");
+				while ((input = this.readInput()) != null) {
+					String[] indtastet2 = input.split(" ");
+					indtastet[2] = indtastet2[1];
+					indtastet[3] = indtastet2[2];
+					System.out.print("> ");
+				}
+			} catch (Exception e) {
+			}
+
+		} else if (semesterFormatOk == false) {
 			System.out.println("Det indtastede data for semesternummeret var forkert.");
 			System.out.println("Indtast det korrekte semesternummer:");
-			System.out.print("> ");
-			changeSemester(input);
-		} else if (courseFormatOk == false) {
-			System.out.println("Det indtastede data for kursusnummeret var forkert.");
-			System.out.println("Indtast det korrekte kursusnummer:");
-			System.out.print("> ");
-			changeCourse(input);
 		}
 	}
 
-	private void changeCourse(String input) {
-		indtastet[1] = input;
-		add(indtastet);
-	}
+	/*private void changeCourse(String input) {
 
-	private void changeSemester(String input) {
-		indtastet[2] = input;
-		add(indtastet);
-	}
-	
+	}*/
+
+	/*private void changeSemester(String input) {
+
+	}*/
+
 	private void remove(String indtastet[]){
 		int temp3;
 		try {
@@ -135,7 +141,7 @@ public class Dialog {
 			changeCourse(input);
 			remove(indtastet);
 		} catch (Exception e) {
-			
+
 		}
 	}
 
@@ -174,8 +180,10 @@ public class Dialog {
 	}
 
 	/**
-	 * Trimmer input for at slippe af med eventuelle mellemrum der er blevet sat foran eller bag ved kommandoen.
-	 * Hvis input bliver/er null, vil den kaste en exception.
+	 * Trimmer input for at slippe af med eventuelle mellemrum der er blevet sat
+	 * foran eller bag ved kommandoen. Hvis input bliver/er null, vil den kaste
+	 * en exception.
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
