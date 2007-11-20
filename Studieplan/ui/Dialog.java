@@ -55,8 +55,7 @@ public class Dialog {
 				} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
 					add(indtastet);
 				} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-					//courseID = Integer.parseInt(indtastet[1]);
-					//TODO
+					remove(indtastet);
 				}
 				System.out.print("> ");
 			}
@@ -120,6 +119,18 @@ public class Dialog {
 	private void changeSemester(String input) {
 		indtastet[2] = input;
 		add(indtastet);
+	}
+	
+	private void remove(String indtastet[]){
+		int temp3;
+		try {
+			temp3 = Integer.parseInt(indtastet[1]);
+			if (indtastet[1].length() == 5 && temp3 > -1) {
+				//Kommando sendes til anden class
+			}
+		} catch (Exception e) {
+			
+		}
 	}
 
 	/**
