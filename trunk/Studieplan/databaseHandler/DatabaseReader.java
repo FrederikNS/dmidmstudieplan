@@ -5,6 +5,7 @@ package databaseHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
@@ -17,7 +18,7 @@ import dataClass.CritalCourseDataMissingException;
  * @author Niels Thykier
  *
  */
-public class DatabaseReader implements DatabaseHandler {
+public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	
 	/**
 	 * Files objects, the databases loaded into memory.
@@ -27,7 +28,6 @@ public class DatabaseReader implements DatabaseHandler {
 	 * Scanner objects, used to parse the database files
 	 */
 	Scanner scan[] = new Scanner[3];
-	
 	/**
 	 * Opens the three database files for reading.
 	 * @throws FileNotFoundException If one of the database files are missing.
@@ -200,5 +200,107 @@ public class DatabaseReader implements DatabaseHandler {
         course.setSeason(season);
         return course;
     } 
-		
+    
+	public Iterator<Course> iterator() {
+		return new DatabaseReaderIterator(new Iter());
+	}
+
+    /**
+     * @author Niels Thykier
+     * This inner class handles all interaction with the DatabaseReaderIterator.
+     * Care should be used when using this class directly. It does not follow the 
+     * Iterator standards (nor does it implements said interface).
+     * 
+     * If you need an Iterator for the Database readers, see the 
+     * DatabaseReaderIterator class or the Iterator<Course> iterator() method of DatabaseReader.
+     */
+    public class Iter {
+    	Scanner s;
+    	boolean cached = false;
+    	String idCache;
+    	Course courseCache;
+    	
+    	public Iter() {
+    		try {
+    		s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
+    		s.useDelimiter("\n");
+    		} catch(FileNotFoundException e){
+    			//since the file is already loaded into memory, it cannot be missing
+    		}
+    	}
+    	
+    	/**
+    	 * Scans the database and checks for the next valid entry.
+    	 * 
+    	 * Note: this method caches the CourseID and the Course. 
+    	 * @return true if another valid Course could be found.
+    	 */
+    	public boolean hasNext() {
+    		//We already got an unread result cached. That is still the next entry. 
+    		if(cached) return true;
+    		
+    		boolean next = false;
+    		
+    		while(s.hasNext("(\\d{5}).*")) {
+	        	try {
+	        		//Cache all the possible "nexts".
+	        		//Allows us to catch the exceptions and garantuee 
+	        		// that the getNextCourse* methods do not throw them.
+	    			s.next("(\\d{5}).*");
+	    			//TODO test that this reg.ex. works properly
+	    			idCache = s.match().group(1); 
+	        		courseCache = findCourse(idCache);
+	        		cached = true;
+	        		next = true;
+	        		break;
+	        	} catch(Exception e) {
+	        	}
+	        	
+	        }
+    		// if no next exists, clean up (just in case)
+    		if(!next) {
+    			cached = false;
+    			courseCache = null;
+    			idCache = null;
+    		}
+    		return next;
+    	}
+    	
+    	/**
+    	 * Fetches the next course ID in the database. 
+    	 * @return the course ID of the next entry.
+    	 * @throws NoSuchElementException if there is no more entries could be found
+    	 */
+    	public String getNextCourseID() {
+    		String toReturn;
+    		if(hasNext()) {
+    			toReturn = idCache;
+    			courseCache = null;
+    			idCache = null;
+    			cached = false;
+    		} else {
+    			throw new NoSuchElementException();
+    		}
+    		return toReturn;
+    	}
+
+    	/**
+    	 * Fetches the next course in the database. 
+    	 * @return the course of the next entry.
+    	 * @throws NoSuchElementException if there is no more entries could be found
+    	 */
+    	public Course getNextCourse() {
+    		Course toReturn;
+    		if(hasNext()) {
+    			toReturn = courseCache;
+    			courseCache = null;
+    			idCache = null;
+    			cached = false;
+    		} else {
+    			throw new NoSuchElementException(); 
+    		}
+			return toReturn;
+    	}
+
+    }
 }
