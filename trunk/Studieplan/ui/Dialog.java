@@ -120,13 +120,13 @@ public class Dialog {
 		}
 	}
 
-	/*private void changeCourse(String input) {
+	private void changeCourse(String input) {
 
-	}*/
+	}
 
-	/*private void changeSemester(String input) {
+	private void changeSemester(String input) {
 
-	}*/
+	}
 
 	private void remove(String indtastet[]){
 		int temp3;
