@@ -166,13 +166,21 @@ public class Dialog {
 	
 	private void showPlan(String indtastet[]){
 		int temp2;
+		String season;
 		try {
 			temp2 = Integer.parseInt(indtastet[1]);
+			//vi antager at man kun starter på uddannelsen på efterårssemesteret
+			if ((temp2 & 1) == 1){
+				season = "e";
+			}
+			else{
+				season = "f";
+			}
 			if (temp2 > 0 && temp2 <= 20) {
-				System.out.println("Semester: "+indtastet[1]+"   mandag  tirsdag  onsdag  torsdag  fredag");
-				System.out.println("8:00-12:00    test1    test2    test3   test4    test5");
+				System.out.println("Semester: "+indtastet[1]+" "+season+"   mandag  tirsdag  onsdag  torsdag  fredag");
+				System.out.println("8:00-12:00       test1    test2   test3   test4    test5");
 				System.out.println("  Pause");
-				System.out.println("13:00-17:00   test1    test2    test3   test4    test5");
+				System.out.println("13:00-17:00      test1    test2   test3   test4    test5");
 			}
 		} catch (Exception e) {
 
