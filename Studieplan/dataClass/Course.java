@@ -9,6 +9,7 @@ public class Course {
 	private String dependencies[];
 	private String courseName;
 	private String skemagruppe[];
+	private String year;
 		
 	/**
 	 * @return the courseID
@@ -68,5 +69,19 @@ public class Course {
 
 	public Course(String CourseID) {
 		this.courseID=CourseID;
+	}
+
+	/**
+	 * @return the year
+	 */
+	public String getYear() {
+		return year;
+	}
+
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(String year) {
+		this.year = year;
 	}
 }
