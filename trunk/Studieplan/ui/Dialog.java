@@ -10,7 +10,7 @@ import java.lang.reflect.Array;
 
 /**
  * @author Morten Sørensen
- * 
+ * Sets up the interface the user will see.
  */
 public class Dialog {
 
@@ -26,7 +26,7 @@ public class Dialog {
 	}
 
 	/**
-	 * Udskriver velkommen-teksten når programmet startes.
+	 * Prints the welcome text when the program starts.
 	 */
 	private void intro() {
 		System.out.println("Velkommen til 'Læg en Studieplan'");
@@ -38,7 +38,7 @@ public class Dialog {
 	}
 
 	/**
-	 * Selve hovedprogrammet.
+	 * The main loop which keeps everything alive.
 	 */
 	public void mainProgram() {
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
@@ -65,7 +65,11 @@ public class Dialog {
 		}
 		end();
 	}
-
+	/**
+	 * When adding a new course, it checks if there are any of the data in a wrong format
+	 * (eg. too high semester number, or the course ID contains letters).
+	 * @param the command "tilføj" along with data for course and semester (if any).
+	 */
 	private void add(String indtastet[]) {
 		String temp;
 		int temp2;
@@ -73,7 +77,7 @@ public class Dialog {
 		boolean semesterFormatOk = false;
 		switch (Array.getLength(indtastet)) {
 		case 3:
-			//Course
+			//Checks if the format of course ID
 			try {
 				temp2 = Integer.parseInt(indtastet[1]);
 				if (indtastet[1].length() == 5 && temp2 > -1) {
@@ -83,7 +87,7 @@ public class Dialog {
 				
 			}
 		case 2:
-			//Semester
+			//Checks the format of semester number
 			temp = indtastet[2];
 			try {
 				temp2 = Integer.parseInt(temp);
@@ -94,10 +98,11 @@ public class Dialog {
 
 			}
 		case 1:
+			//Breaks the switch
 			break;
 		}
 
-		// Spørg efter manglede / fejlformatterde informationer
+		//Asks for a new course ID (in case the format was missing or wrong)
 		if (courseFormatOk == false) {
 			System.out.println("Indtast venligst kursusnummeret:");
 
@@ -112,8 +117,9 @@ public class Dialog {
 				}
 			} catch (Exception e) {
 			}
-
+			
 		}
+		//Asks for a new semester (in case it was missing or wrong)
 		if (semesterFormatOk == false) {
 			System.out.println("Det indtastede data for semesternummeret var forkert.");
 			System.out.println("Indtast det korrekte semesternummer:");
@@ -160,22 +166,22 @@ public class Dialog {
 		System.out.println("tilføj - tilføjer et kursus til kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'tilføj kursusnummer semesternummer'");
 		System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'fjern kursusnummer'");
 		System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
-		System.out.println("visplan - viser en komplet plan over det valgte semester");
+		System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
 		System.out.println("gem - gemmer studieplanen så man kan arbejde videre på det senere");
 		System.out.println("hent - indlæser en studieplan så det er muligt man kan arbejde videre på den");
 		System.out.println("afslut - afslutter programmet");
 	}
-	
+	//Prints the list over available courses
 	private void printDatabaseList(){
 		//kommando sendes til anden class
 	}
-	
+	//Prints the plan as it currently is
 	private void showPlan(String indtastet[]){
 		int temp2;
 		String season;
 		try {
 			temp2 = Integer.parseInt(indtastet[1]);
-			//vi antager at man kun starter på uddannelsen på efterårssemesteret
+			//We expect people to only start at the 
 			if ((temp2 & 1) == 1){
 				season = "e";
 			}
@@ -194,19 +200,17 @@ public class Dialog {
 	}
 
 	/**
-	 * Trimmer input for at slippe af med eventuelle mellemrum der er blevet sat
-	 * foran eller bag ved kommandoen. Hvis input bliver/er null, vil den kaste
-	 * en exception.
-	 * 
-	 * @return
-	 * @throws IOException
+	 * Trims the input to get rid of spaces in the ends.
+	 * If the input turns to null, it will throw an exception.
+	 * @return the input without spaces
+	 * @throws IOException is thrown if the input is null
 	 */
 	private String readInput() throws IOException {
 		return keyboard.readLine().trim();
 	}
 
 	/**
-	 * Afslutter programmet.
+	 * Exits the program.
 	 */
 	private void end() {
 		System.out.println("Tak for idag.");
