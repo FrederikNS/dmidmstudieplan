@@ -71,58 +71,30 @@ public class Dialog {
 	 * @param the command "tilføj" along with data for course and semester (if any).
 	 */
 	private void add(String indtastet[]) {
-		String temp;
-		int temp2;
-		boolean courseFormatOk = false;
-		boolean semesterFormatOk = false;
-		switch (Array.getLength(indtastet)) {
-		case 3:
-			//Checks if the format of course ID
-			try {
-				temp2 = Integer.parseInt(indtastet[1]);
-				if (indtastet[1].length() == 5 && temp2 > -1) {
-					courseFormatOk = true;
-				}
-			} catch (Exception e) {
-				
+		System.out.println("add started!");
+		System.out.println("add initiated");
+		while(courseCheck()!=true||semesterCheck()!=true) {
+			System.out.println("while loop started");
+			switch (Array.getLength(indtastet)) {
+			case 1:
+				//Breaks the switch
+				System.out.println("only got command, changing CourseID");
+				changeCourse();
+				System.out.println("CourseID change complete");
+				break;
+			case 2:
+				//Checks if the format of course ID
+				courseCheck();
+				//System.out.println("Changin semester number");
+				changeSemester();
+				//System.out.println("Semester change complete");
+				break;
+			case 3:
+				//Checks the format of semester number
+				courseCheck();
+				semesterCheck();
+				break;
 			}
-		case 2:
-			//Checks the format of semester number
-			temp = indtastet[2];
-			try {
-				temp2 = Integer.parseInt(temp);
-				if (temp2 > 0 && temp2 <= 20 && temp2 != 0) {
-					semesterFormatOk = true;
-				}
-			} catch (Exception e) {
-
-			}
-		case 1:
-			//Breaks the switch
-			break;
-		}
-
-		//Asks for a new course ID (in case the format was missing or wrong)
-		if (courseFormatOk == false) {
-			System.out.println("Indtast venligst kursusnummeret:");
-
-			keyboard = new BufferedReader(new InputStreamReader(System.in));
-			try {
-				System.out.print("> ");
-				while ((input = this.readInput()) != null) {
-					String[] indtastet2 = input.split(" ");
-					indtastet[1] = indtastet2[0];
-					indtastet[2] = indtastet2[1];
-					System.out.print("> ");
-				}
-			} catch (Exception e) {
-			}
-			
-		}
-		//Asks for a new semester (in case it was missing or wrong)
-		if (semesterFormatOk == false) {
-			System.out.println("Det indtastede data for semesternummeret var forkert.");
-			System.out.println("Indtast det korrekte semesternummer:");
 		}
 		System.out.print("indtastet 0: ");
 		System.out.println(indtastet[0]);
@@ -132,12 +104,69 @@ public class Dialog {
 		System.out.println(indtastet[2]);
 	}
 
-	private void changeCourse(String input) {
-		//TODO
+	private boolean courseCheck() {
+		String temp;
+		int temp2;
+		boolean courseCorrect=false;
+		try {
+			temp2 = Integer.parseInt(indtastet[1]);
+			System.out.println("CourseID is "+temp2+" characters long.");
+			while(indtastet[1].length() != 5 || temp2 > -1) {
+				System.out.println("CourseID incorrect, Changing CouseID");
+				changeCourse();
+				System.out.println("CourseID change complete");
+			}
+			courseCorrect=true;
+			System.out.println("CourseID format is: "+courseCorrect);
+		} catch (Exception e) {	
+		}
+		return courseCorrect;
+	}
+	
+	private boolean semesterCheck() {
+		boolean semesterCorrect=false;
+		String temp;
+		int temp2;
+		temp = indtastet[2];
+		//System.out.println("Semester number string is: "+temp);
+		try {
+			temp2 = Integer.parseInt(temp);
+			//System.out.println("Semester number int is: "+temp);
+			while(temp2 <= 0 || temp2 >= 20) {
+				//System.out.println("Changin semester number");
+				changeSemester();
+				//System.out.println("Semester change complete");
+			}
+			semesterCorrect=true;
+			//System.out.println("Semester format is: "+courseCorrect);
+		} catch (Exception e) {
+		}
+		return semesterCorrect;
+	}
+	
+	private void changeCourse() {
+		keyboard = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			System.out.print("> ");
+			while ((input = this.readInput()) != null) {
+				if(input.contains(" ")){
+					String indtastet2[];
+					indtastet2 = input.split(" ");
+					indtastet[1] = indtastet2[0];
+					indtastet[2] = indtastet2[1];
+				} else {
+					indtastet[1]=input;
+				}
+			}
+		} catch (Exception e) {
+		}
 	}
 
-	private void changeSemester(String input) {
-		//TODO
+	private void changeSemester() {
+		//unfunctional
+			System.out.println("Det indtastede data for semesternummeret var forkert.");
+			System.out.println("Indtast det korrekte semesternummer:");
+		//unfunctional
 	}
 
 	private void remove(String indtastet[]){
