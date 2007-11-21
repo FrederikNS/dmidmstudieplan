@@ -6,6 +6,7 @@ package ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 
 /**
  * @author Morten Sørensen
@@ -70,12 +71,12 @@ public class Dialog {
 		int temp2;
 		boolean courseFormatOk = false;
 		boolean semesterFormatOk = false;
-
-		switch (indtastet.length) {
-		default:
+		switch (Array.getLength(indtastet)) {
 		case 3:
+			System.out.println("bum?!");
 			//Course
 			try {
+				System.out.println("bum?!");
 				temp2 = Integer.parseInt(indtastet[1]);
 				if (indtastet[1].length() == 5 && temp2 > -1) {
 					courseFormatOk = true;
@@ -86,17 +87,22 @@ public class Dialog {
 		case 2:
 			//Semester
 			temp = indtastet[2];
+			System.out.println(temp);
 			try {
 				temp2 = Integer.parseInt(temp);
-				if (temp2 > 0 && temp2 <= 20) {
+				System.out.println(temp2);
+				if (temp2 > 0 && temp2 <= 20 && temp2 != 0) {
 					semesterFormatOk = true;
 				}
 			} catch (Exception e) {
 
 			}
 		case 1:
+			System.out.println("bum?!");
 			break;
 		}
+		
+		System.out.println("bum?!");
 
 		// Spørg efter manglede / fejlformatterde informationer
 		if (courseFormatOk == false) {
@@ -114,10 +120,17 @@ public class Dialog {
 			} catch (Exception e) {
 			}
 
-		} else if (semesterFormatOk == false) {
+		}
+		if (semesterFormatOk == false) {
 			System.out.println("Det indtastede data for semesternummeret var forkert.");
 			System.out.println("Indtast det korrekte semesternummer:");
 		}
+		System.out.print("indtastet 0: ");
+		System.out.println(indtastet[0]);
+		System.out.print("indtastet 1: ");
+		System.out.println(indtastet[1]);
+		System.out.print("indtastet 2: ");
+		System.out.println(indtastet[2]);
 	}
 
 	private void changeCourse(String input) {
