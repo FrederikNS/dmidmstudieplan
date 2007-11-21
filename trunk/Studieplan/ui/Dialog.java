@@ -133,11 +133,11 @@ public class Dialog {
 	}
 
 	private void changeCourse(String input) {
-
+		//TODO
 	}
 
 	private void changeSemester(String input) {
-
+		//TODO
 	}
 
 	private void remove(String indtastet[]){
