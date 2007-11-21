@@ -73,24 +73,20 @@ public class Dialog {
 		boolean semesterFormatOk = false;
 		switch (Array.getLength(indtastet)) {
 		case 3:
-			System.out.println("bum?!");
 			//Course
 			try {
-				System.out.println("bum?!");
 				temp2 = Integer.parseInt(indtastet[1]);
 				if (indtastet[1].length() == 5 && temp2 > -1) {
 					courseFormatOk = true;
 				}
 			} catch (Exception e) {
-
+				
 			}
 		case 2:
 			//Semester
 			temp = indtastet[2];
-			System.out.println(temp);
 			try {
 				temp2 = Integer.parseInt(temp);
-				System.out.println(temp2);
 				if (temp2 > 0 && temp2 <= 20 && temp2 != 0) {
 					semesterFormatOk = true;
 				}
@@ -98,11 +94,8 @@ public class Dialog {
 
 			}
 		case 1:
-			System.out.println("bum?!");
 			break;
 		}
-		
-		System.out.println("bum?!");
 
 		// Spørg efter manglede / fejlformatterde informationer
 		if (courseFormatOk == false) {
