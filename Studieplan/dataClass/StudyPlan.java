@@ -14,21 +14,21 @@ public class StudyPlan extends ArrayList<SelectedCourse> implements Serializable
 
 	private static final long serialVersionUID = -5338908112285902395L;
 
-	private String student;
+	private String studentID;
 	
 	public StudyPlan() {
 	}
 	
-	public StudyPlan(String student) {
-		this.student = student;
+	public StudyPlan(String studentID) {
+		this.studentID = studentID;
 	}
 	
-	public void setStudent(String student) {
-		this.student = student;
+	public void setStudent(String studentID) {
+		this.studentID = studentID;
 	}
 	
 	public String getStudent() {
-		return student;
+		return studentID;
 	}
 	
 }
