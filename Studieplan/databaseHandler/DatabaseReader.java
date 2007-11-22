@@ -23,11 +23,12 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	/**
 	 * Files objects, the databases loaded into memory.
 	 */
-	File database[] = new File[3];
+	private File database[] = new File[3];
 	/**
 	 * Scanner objects, used to parse the database files
 	 */
-	Scanner scan[] = new Scanner[3];
+	private Scanner scan[] = new Scanner[3];
+	
 	/**
 	 * Opens the three database files for reading.
 	 * @throws FileNotFoundException If one of the database files are missing.
@@ -60,7 +61,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 		} catch (FileNotFoundException e) {
 		}
 	}
-	
     /**
      * Looks up a course using a Course ID and returns it with all the related data about the course.
      * @param courseID The ID to look up.
@@ -73,6 +73,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	//load the parses.
         openFileScan();
         
+        //rather than taking it "word" by "word" we want "line" by "line" parsing.
+        scan[DatabaseFiles.NAVN.ordinal()].useDelimiter("\n");
+        
         try {
         	//parse through the Name database and see if the courseID appears.
         	//if it does not appear, the scanner will run out of lines and throw the
@@ -80,7 +83,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	//
         	//else if it exists, the condition for the while loop will be false and it will end
         	// before we run out of lines.
-        	while(!scan[DatabaseFiles.NAVN.ordinal()].hasNext(courseID)) {
+        	while(!scan[DatabaseFiles.NAVN.ordinal()].hasNext(courseID + ".*") ) {
         		scan[DatabaseFiles.NAVN.ordinal()].nextLine();
         	}
         } catch(NoSuchElementException e) {
@@ -89,9 +92,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 
         
         String courseName, dependencies[], skema[], season = "";
-        
-        //rather than taking it "word" by "word" we want "line" by "line" parsing now.
-        scan[DatabaseFiles.NAVN.ordinal()].useDelimiter("\n");
+            
         /*The data in the Name database is formatted like this.
          ddddd c*
          * where d is a (decimal) digit and c* is one or more characters (incl. whitespace).
@@ -114,9 +115,10 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(1);
         
         try {
+        	scan[DatabaseFiles.KRAV.ordinal()].useDelimiter("\n");
         	//scan through the Dependency/Demand database and see if an entry appears.
         	//an entry in this database is not mandantory.
-        	while(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID)) {
+        	while(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID + "(.*)+") ) {
         		scan[DatabaseFiles.KRAV.ordinal()].nextLine();
         	}
         	
@@ -126,8 +128,8 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	 * course number of the required course(s). A course appearing in this database 
         	 * (as the first part of an entry) must have at least one dependency course. 
         	 */ 
-        	scan[DatabaseFiles.KRAV.ordinal()].useDelimiter("\n");
-        	scan[DatabaseFiles.KRAV.ordinal()].next("\\d{5} (.*)");
+        	//Possible re-write with for loop and .group
+        	scan[DatabaseFiles.KRAV.ordinal()].next("\\d{5} (\\d{5})+");
             String depends = scan[DatabaseFiles.KRAV.ordinal()].match().group(1);
             //Since the regular expression simply fetches everything but the original course number
             // and the first whitespace after, the match will contain the dependency courses in a 
@@ -140,17 +142,17 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
             dependencies[0] = null;       
         }
         
-        try {
+    	scan[DatabaseFiles.SKEMA.ordinal()].useDelimiter("\n");
+        
+    	try {
         	//look through the Skema Database - an entry here is mandantory!
         	//Note that there has been added an optional "dash single character" to the course ID
         	// The reason is the Skema database is structed slightly different than the rest and
         	// for this pattern to properly read every line, we have to include it.
         	// the formatting is explained in greater detail below.
-        	while(!scan[DatabaseFiles.SKEMA.ordinal()].hasNext(courseID+"(-\\w)?")) {
+        	while(!scan[DatabaseFiles.SKEMA.ordinal()].hasNext(courseID+"(-\\w)?.*")) {
         		scan[DatabaseFiles.SKEMA.ordinal()].nextLine();
         	}
-
-        	scan[DatabaseFiles.SKEMA.ordinal()].useDelimiter("\n");
         	/*In this database, the course number is optionally followed by a -f or -e
         	 ddddd(-c)? SSS( SSS)*
         	 * Where ddddd are the digits in the course ID, (-c)? means the optional occurance of
@@ -177,7 +179,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
             MatchResult result = scan[DatabaseFiles.SKEMA.ordinal()].match();
             season = result.group(1);
             // if the optional season specifier is missing, it will be assumed to "both" or "b"
-            if(season == null) season = "-b";
+            if(season == null || season.equals("") ) season = "-b";
             skema = result.group(2).trim().split(" ");
             
         } catch(NoSuchElementException e) {
@@ -201,6 +203,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         return course;
     } 
     
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	public Iterator<Course> iterator() {
 		return new DatabaseReaderIterator(new Iter());
 	}
@@ -227,6 +232,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     		} catch(FileNotFoundException e){
     			//since the file is already loaded into memory, it cannot be missing
     		}
+
     	}
     	
     	/**
@@ -303,4 +309,5 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	}
 
     }
+    
 }
