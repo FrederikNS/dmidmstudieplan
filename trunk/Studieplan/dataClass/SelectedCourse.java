@@ -25,6 +25,19 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		this.semester = semester;
 		}
 	
+	/**
+	 * @param An object of the Course type.
+	 * @param semester the semester it is taken on.
+	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
+	 */
+	public SelectedCourse(Course course, int semester) throws IllegalArgumentException {
+		super(course.getCourseID());
+		super.setCourseName(course.getCourseName());
+		super.setDependencies(course.getDependencies());
+		super.setSeason(course.getSeason());
+		super.setSkemagruppe(course.getSkemagruppe());
+	}
+	
 	/*(non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 * 
