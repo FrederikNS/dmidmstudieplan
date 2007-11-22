@@ -74,6 +74,31 @@ public class Dialog {
 	 * (eg. too high semester number, or the course ID contains letters).
 	 * @param the command "tilføj" along with data for course and semester (if any).
 	 */
+	//THIS IS A REWRITE OF ADD, CHANGESEMESTER, CHANGECOURSE, COURSECHECK AND SEMESTERCHECK
+	
+	private void add(String indtastet[]) {
+		
+	}
+	
+	private void courseCheck() {
+		
+	}
+	
+	private void semesterCheck() {
+		
+	}
+	
+	private void changeCourse() {
+		
+	}
+	
+	private void changeSemester() {
+		
+	}
+	
+	//HERE ENDS THE REWRITE
+	
+	/*
 	private void add(String indtastet[]) {
 		System.out.println("add started!");
 		System.out.println("add initiated");
@@ -171,7 +196,7 @@ public class Dialog {
 			System.out.println("Det indtastede data for semesternummeret var forkert.");
 			System.out.println("Indtast det korrekte semesternummer:");
 		//unfunctional
-	}
+	}*/
 
 	private void remove(String indtastet[]){
 		int temp3;
