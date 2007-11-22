@@ -58,6 +58,10 @@ public class Dialog {
 					add(indtastet);
 				} else if (indtastet[0].equalsIgnoreCase("fjern")) {
 					remove(indtastet);
+				} else if (indtastet[0].equalsIgnoreCase("hent")) {
+					loadPlan(indtastet);
+				} else if (indtastet[0].equalsIgnoreCase("gem")) {
+					savePlan(indtastet);
 				}
 				System.out.print("> ");
 			}
@@ -226,6 +230,14 @@ public class Dialog {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	private void savePlan(String indtastet[]){
+		//TODO
+	}
+	
+	private void loadPlan(String indtastet[]{
+		//TODO
 	}
 
 	/**
