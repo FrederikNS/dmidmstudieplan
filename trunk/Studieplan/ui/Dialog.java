@@ -40,34 +40,66 @@ public class Dialog {
 	/**
 	 * The main loop which keeps everything alive.
 	 */
-	public void mainProgram() {
+	
+	///* CLOSED FOR RENOVATION
+	public void input() {
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			System.out.print("> ");
 			while ((input = this.readInput()) != null) {
-				String[] indtastet = input.split(" ");
-				if (indtastet[0].equalsIgnoreCase("afslut")) {
-					break;
-				} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
-					helpMe();
-				} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-					showPlan(indtastet);
-				} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-					printDatabaseList();
-				} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-					add(indtastet);
-				} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-					remove(indtastet);
-				} else if (indtastet[0].equalsIgnoreCase("hent")) {
-					loadPlan(indtastet);
-				} else if (indtastet[0].equalsIgnoreCase("gem")) {
-					savePlan(indtastet);
+				if(input.contains(" ")==true) {
+					String indtastet[] = input.split(" ");
+					
+				} else {
+					
 				}
-				System.out.print("> ");
 			}
 		} catch (Exception e) {
 		}
-		end();
+	}//*/
+	
+	public boolean commandCheck(int offset){
+		if (indtastet[offset].equalsIgnoreCase("afslut")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("hjælp")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("visplan")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("udskrivbase")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("tilføj")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("fjern")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("hent")) {
+			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("gem")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void crossroads() {
+		if (indtastet[0].equalsIgnoreCase("afslut")) {
+			end();
+		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
+			helpMe();
+		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
+			showPlan(indtastet);
+		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
+			printDatabaseList();
+		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
+			add(indtastet);
+		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
+			remove(indtastet);
+		} else if (indtastet[0].equalsIgnoreCase("hent")) {
+			loadPlan(indtastet);
+		} else if (indtastet[0].equalsIgnoreCase("gem")) {
+			savePlan(indtastet);
+		} else {
+			System.out.println("Command not understood");
+		}
 	}
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
@@ -77,23 +109,38 @@ public class Dialog {
 	//THIS IS A REWRITE OF ADD, CHANGESEMESTER, CHANGECOURSE, COURSECHECK AND SEMESTERCHECK
 	
 	private void add(String indtastet[]) {
-		
+		while(courseCheck()==false){
+			changeCourse();
+		}
+		while(semesterCheck()==false){
+			changeSemester();
+		}
+		/*some code to actually set the course in the program core*/
+		//TODO
 	}
 	
-	private void courseCheck() {
-		
+	private boolean courseCheck() {
+		//TODO
+		try {
+			int temp2 = Integer.parseInt(indtastet[1]);
+			while(indtastet[1].length() != 5 || temp2 > -1) {
+				changeCourse();
+			}
+			courseCorrect=true;
+		} catch (Exception e) {	
+		}
 	}
 	
-	private void semesterCheck() {
-		
+	private boolean semesterCheck() {
+		//TODO
 	}
 	
 	private void changeCourse() {
-		
+		//TODO
 	}
 	
 	private void changeSemester() {
-		
+		//TODO
 	}
 	
 	//HERE ENDS THE REWRITE
@@ -261,7 +308,7 @@ public class Dialog {
 		//TODO
 	}
 	
-	private void loadPlan(String indtastet[]{
+	private void loadPlan(String indtastet[]){
 		//TODO
 	}
 
