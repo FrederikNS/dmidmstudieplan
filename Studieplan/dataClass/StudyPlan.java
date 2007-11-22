@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Niels Thykier
  *
  */
-public class StudyPlan extends ArrayList<Course> implements Serializable {
+public class StudyPlan extends ArrayList<SelectedCourse> implements Serializable {
 
 	private static final long serialVersionUID = -5338908112285902395L;
 
