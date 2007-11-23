@@ -1,0 +1,80 @@
+DONE   1.  Kunne fortælle brugeren navnene på de ordrer programmet kender.
+DONE   2. Have en hjælpefacilitet der i terminalvinduet kan oplyse detaljer om ordrerne.
+TEST   3. Danne programmets kursusbase ud fra de tre filer som nævnt ovenfor.
+   4. Kunne give en tekstrepræsentation af kursusbasen - toString().
+   5. Vise i terminalvinduet den aktuelle studieplan som den ser ud her og nu.
+TEST   6. Kunne indsætte i studieplanen på et angivet semester et kursus der står i kursusbasen.
+TEST   7. Kunne fjerne et tidligere indsat kursus fra studieplanen.
+   8. Afslutte programkørslen med mulighed for at man i en efterfølgende kørsel (program run) kan arbejde videre på en tidligere udarbejdet studieplan - benyt Object serialization.
+   9. Kunne arbejde videre på en tidligere udarbejdet studieplan.
+  10. Give fejlmeldinger når brugeren beder om noget der ikke kan lade sig gøre.
+  11. Sørge for at en studieplan altid opfylder de krav der er stillet i underafsnittet Krav til en studieplan.
+
+
+Krav til en studieplan
+Placeringen af et kursus på en ugedag og i en tidsperiode på dagen (8-12 eller 13-17) er bestemt af en skemagruppe således:
+
+                Mandag  Tirsdag   Onsdag  Torsdag   Fredag 
+        8-12      1A       3A       5A       2B       4B
+       13-17      2A       4A       5B       1B       3B
+
+Kurserne 02101 og 01017 udbydes om efteråret (E) på første semester. Placeringen på ugedag og tidsperiode - jfr. underafsnittet Eksempel på en dialog - angives derfor i DTU kursusbasen som E3A henholdsvis E1B, altså med et foranstillet E.
+
+For kurser på 2. semester (om foråret) angives kursernes placering i DTU kursusbasen med bogstavet F foran skemagruppen.
+
+Et eksempel på en studieplan for de første to semestre kunne være:
+
+    Semester    Mandag  Tirsdag   Onsdag  Torsdag   Fredag
+ 
+    E   8-12     ---     02101    01005     ---     02121
+       13-17     ---      ---     01005    01017    01005
+
+    F   8-12     ---      ---     01005    02105    02405
+       13-17    02161    02402    01005     ---     01005
+
+Denne studieplan opfylder følgende krav:
+
+    * Hvert kursus forekommer kun én gang.
+    * For hvert semester er der kun ét kursus i hver skemagruppe.
+    * Alle forudsætningskurser for et vilkårligt kursus på 2. eller efterfølgende semestre er placeret på tidligere semestre. 
+
+Tidligere, i afsnittet Eksempel på en dialog, forsøgte vi at placere kursus 02105 på 1. semester, men det accepterede programmet ikke, fordi 02105 har følgende to forudsætningskurser: 02101 og 01017. 
+
+
+
+Udvidede krav til 3-mands grupper:
+
+Opgaven skal løses som den er specificeret ovenfor i afsnittet Opgaven, men med tilføjelse af mindst tre af nedenstående funktionalitetskrav:
+
+PLANNED  12. Ret i programmet så man kan lægge studieplaner med kurser der udbydes i 3-ugersperioderne januar og juni.
+  13. Ved definitionen af skemagrupper for de enkelte kurser forenklede vi modellen ved at tilføje -e eller -f til kursusnummeret for at lette håndteringen af kurser over to semestre og af kurser der blev udbudt såvel forår som efterår. Foretag de nødvendige rettelser så skemagruppefiler kan se sådan ud:
+
+          01005 E5A E5B E3B F5A F5B F3B 
+          01017 E1B
+          02101 E3A
+          02105 F2B
+          02121 E4B
+          02161 F2A
+          02402 E3A
+          02402 F4A
+          02405 E4B
+          02405 F4B
+
+      Hvis jeres program kan håndtere kurser i 3-ugersperioderne skal 02121 specificeres således.
+
+          02121 E4B januar
+
+  14. Håndtering af fejlmeldinger sker med så udstrakt brug af exceptions som muligt (helst udelukkende).
+  15. Alle fejlmeldinger skal fortælle årsagen til at det gik galt. Fejlmeldingsteksterne i afsnittet Eksempel på en dialog angiver årsager, fx
+          ... manglende forudsætningskurser
+      Men det kan gøres endnu bedre:
+          *** Kursus 02105 ej tilføjet - forudsætningskurset 01017 mangler ***
+PLANNED  16. Indfør en ordre, så man fra terminalvinduet kan indtaste et manglende kursus til kursusbasen.
+PLANNED  17. Indfør en ordre og en kursusfil så man kan få udvidet kursusbasen med de kurser der står i kursusfilen, hvori der er én linie pr. kursus, fx:
+
+      02101;Indledende programmering;E3A;
+      02161;Software Engineering 1;F2A;02101
+
+  18. Indfør en ordre så man til sin studieplan kan tilføje en hel række af kurser på én gang i stedet for at skulle komme med ét kursus ad gangen.
+  19. Indfør en ordre der i terminalvinduet kan udskrive alle de kurser fra kursusbasen som ligger i en bestemt skemagruppe.
+PLANNED  20. Indfør ordrer, så programmet kan håndtere flere studieplaner, enten for samme person, eller for flere personer. Dog naturligvis kun én studieplan ad gangen. Man skal i samme kørsel kunne afslutte en plan og skifte til en anden. Og kunne skifte mellem personerne. 
