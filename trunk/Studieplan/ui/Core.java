@@ -1,13 +1,13 @@
 package ui;
 
+import java.util.Iterator;
+
 import dataClass.Course;
 import exceptions.CourseDoesNotExistException;
 import dataClass.StudyPlan;
 import exceptions.StudyPlanDoesNotExistException;
 
 public interface Core {
-	
-	//public boolean isValidCourse(String courseID);
 	
 	public Course findCourse(String courseID) throws CourseDoesNotExistException;
 	public Course[] getAllCourses();
@@ -16,6 +16,8 @@ public interface Core {
 	
 	public void saveStudyPlan(String studentID) throws Exception;
 	public void saveStudyPlan(StudyPlan plan) throws Exception;
+	
+	public Iterator<Course> getDatabaseReaderIterator();
 	
 	public boolean isValidCourse(String courseID);
 	
