@@ -1,4 +1,4 @@
-package databaseHandler;
+package exceptions;
 
 import java.io.IOException;
 

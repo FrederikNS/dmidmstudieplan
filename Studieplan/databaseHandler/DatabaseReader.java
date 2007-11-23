@@ -11,8 +11,8 @@ import java.util.Scanner;
 import java.util.regex.MatchResult;
 
 import dataClass.Course;
-import dataClass.CourseDoesNotExistException;
-import dataClass.CritalCourseDataMissingException;
+import exceptions.CourseDoesNotExistException;
+import exceptions.CritalCourseDataMissingException;
 
 /**
  * @author Niels Thykier

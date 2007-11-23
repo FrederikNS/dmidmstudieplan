@@ -1,4 +1,4 @@
-package dataClass;
+package exceptions;
 
 public class StudyPlanDoesNotExistException extends Exception {
 

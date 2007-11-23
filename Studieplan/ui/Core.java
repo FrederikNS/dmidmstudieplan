@@ -1,9 +1,9 @@
 package ui;
 
 import dataClass.Course;
-import dataClass.CourseDoesNotExistException;
+import exceptions.CourseDoesNotExistException;
 import dataClass.StudyPlan;
-import dataClass.StudyPlanDoesNotExistException;
+import exceptions.StudyPlanDoesNotExistException;
 
 public interface Core {
 	
@@ -11,11 +11,11 @@ public interface Core {
 	
 	public Course findCourse(String courseID) throws CourseDoesNotExistException;
 	public Course[] getAllCourses();
-	public int addCourseToPlan(String courseID, int semester);
-	public int removeCourseFromPlan(String courseID, int semester);
+	public void addCourseToPlan(String courseID, int semester) throws Exception;
+	public void removeCourseFromPlan(String courseID, int semester) throws Exception;
 	
-	public boolean saveStudyPlan(String studentID);
-	public boolean saveStudyPlan(StudyPlan plan);
+	public void saveStudyPlan(String studentID) throws Exception;
+	public void saveStudyPlan(StudyPlan plan) throws Exception;
 	
 	public StudyPlan loadStudyPlan(String studentID) throws StudyPlanDoesNotExistException;
 	
