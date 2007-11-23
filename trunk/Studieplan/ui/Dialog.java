@@ -328,17 +328,17 @@ public class Dialog extends UI {
 		} else if (indtastet[1].equalsIgnoreCase("hent")) {
 			System.out.println("Kommandoen hent indlæser en gemt studieplan.");
 			System.out.println("Brugen af kommandoen kan ske på følgende måde:");
-			System.out.println("\"hent <filnavn>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("\"hent <studienummer>\" (uden gåseøjne og større/mindre-end tegn)");
 			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
-			System.out.println("Det anbefalede filnavn vil være ens studienummer, hvilket gør det lettere bagefter at finde og eventuelt");
-			System.out.println("vidersende til andre.");
+			System.out.println("Det vil være anbefalet man har brugt sit studienummer da det i forvejen er uniks. Har man brugt noget andet,");
+			System.out.println("og man har været konsekvent med at bruge det, så kan man bruge det.");
 		} else if (indtastet[1].equalsIgnoreCase("gem")) {
 			System.out.println("Kommandoen gem gemmer en studieplan, så man kan arbejde videre på det på et andet tidspunkt.");
 			System.out.println("Brugen af kommandoen kan ske på følgende måde:");
-			System.out.println("\"gem <filnavn>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("\"gem <studenternummer>\" (uden gåseøjne og større/mindre-end tegn)");
 			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
 			System.out.println("Det anbefalede filnavn vil være ens studienummer, hvilket gør det lettere bagefter at finde og eventuelt");
-			System.out.println("vidersende til andre.");
+			System.out.println("vidersende til andre. Men så længe man er konsekvent med det man skriver, så er det fint.");
 		} else if (indtastet[1].equalsIgnoreCase("viskursus")) {
 			System.out.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
 			System.out.println("Kommandoen kan bruges på følgende måde:");
@@ -407,10 +407,20 @@ public class Dialog extends UI {
 	}
 	
 	private void savePlan(String indtastet[]){
+		if(indtastet[1] != null) {
+			//kommando videre
+		} else {
+			//spørger efter filnavn/studienummer
+		}
 		//TODO
 	}
 	
 	private void loadPlan(String indtastet[]){
+		if(indtastet[1] != null) {
+			//kommando videre
+		} else {
+			//spørger efter filnavn/studienummer
+		}
 		//TODO
 	}
 
