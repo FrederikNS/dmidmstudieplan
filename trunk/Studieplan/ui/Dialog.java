@@ -22,7 +22,7 @@ public class Dialog {
 
 	public Dialog() {
 		intro();
-		mainProgram();
+		//mainProgram();
 	}
 
 	/**
@@ -48,8 +48,8 @@ public class Dialog {
 			System.out.print("> ");
 			while ((input = this.readInput()) != null) {
 				if(input.contains(" ")==true) {
-					String indtastet[] = input.split(" ");
-					
+					indtastet = input.split(" ");
+					crossroads();
 				} else {
 					
 				}
@@ -120,19 +120,27 @@ public class Dialog {
 	}
 	
 	private boolean courseCheck() {
-		//TODO
+		boolean courseCorrect=false;
 		try {
 			int temp2 = Integer.parseInt(indtastet[1]);
-			while(indtastet[1].length() != 5 || temp2 > -1) {
-				changeCourse();
+			if(indtastet[1].length() != 5 || temp2 > -1) {
+				courseCorrect = true;
 			}
-			courseCorrect=true;
 		} catch (Exception e) {	
 		}
+		return courseCorrect;
 	}
 	
 	private boolean semesterCheck() {
-		//TODO
+		boolean semesterCorrect=false;
+		try {
+			int temp2 = Integer.parseInt(indtastet[2]);
+			if(temp2 > -1 || temp2 < 20) {
+				semesterCorrect = true;
+			}
+		} catch (Exception e) {	
+		}
+		return semesterCorrect;
 	}
 	
 	private void changeCourse() {
