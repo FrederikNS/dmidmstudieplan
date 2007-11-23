@@ -23,44 +23,52 @@ public class UserDatabase {
 	public UserDatabase() {
 	}
 
-	public boolean exists(String file) {
-		return exists(file, "plan");
+	public void exists(String file) throws FileNotFoundException {
+		exists(file, "plan");
 	}
 	
-	public boolean exists(String file, String extension) {
+	public void exists(String file, String extension) throws FileNotFoundException {
 		File f = new File(file + "." + extension);
-		return f.exists();
+		if(!f.exists()) 
+			throw new FileNotFoundException(file + "." + extension);
 	}
 	
-	public boolean saveStudyPlan(StudyPlan plan) throws IOException {
+	public void saveStudyPlan(StudyPlan plan) throws CannotSaveStudyPlanException, IOException {
 		String studentID = plan.getStudent();
+		
 		if(studentID == null || studentID.equals(""))
-			return false;
-		File f = new File(studentID + ".plan");
-		if(!f.exists()) {
+			throw new CannotSaveStudyPlanException(plan, "Invalid StudentID");
+		
+		File f =  new File(studentID + ".plan");
+			
+		try {
+			exists(studentID + ".plan");
+			
+		}catch (Exception exists) {
 			try {
 				f.createNewFile();
-			}catch (FileNotFoundException e) {
-				
+			} catch (FileNotFoundException creation) {
+				throw new CannotSaveStudyPlanException(plan, "Could not create file");
 			}
 		}
+		
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new ObjectOutputStream(new FileOutputStream(f)) );
 			oos.writeObject(plan);
 		} catch(FileNotFoundException e) {
-			
+			throw new CannotSaveStudyPlanException(plan, "ObjectOutputStream failed to store StudyPlan object");	
 		}
-		return true;
 	}
 	
 	public StudyPlan loadStudyPlan(String studentID) throws IOException, CorruptStudyPlanFileException {
 		return loadStudyPlan(studentID, "plan");
 	}
 	
-	public StudyPlan loadStudyPlan(String file, String extension) throws IOException, CorruptStudyPlanFileException {
-		if(!exists(file, extension)) {
-			throw new FileNotFoundException();
-		}
+	public StudyPlan loadStudyPlan(String file, String extension) throws FileNotFoundException, IOException, CorruptStudyPlanFileException {
+		
+		//throws FileNotFoundException if it does not exist.
+		exists(file, extension);
+		
 		File f = new File(file + "." + extension);
 		ObjectInputStream ois = new ObjectInputStream(new ObjectInputStream(new FileInputStream(f)) );
 		Object obj;
@@ -75,15 +83,16 @@ public class UserDatabase {
 		return (StudyPlan) obj;
 	}
 
-	public boolean deleteFile(String file, String extension) {
+	public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException{
 		String filename = file + "." + extension;
-		if(!exists(file, extension)) 
-			return false;
-		return new File(filename).delete();
+		exists(file, extension); 
+
+		if(!new File(filename).delete())
+			throw new FileCouldNotBeDeletedException(file + "." + extension);
 	}
 	
-	public boolean deleteFile(String file) {
-		return deleteFile(file, "plan");
+	public void deleteFile(String file) throws FileNotFoundException, FileCouldNotBeDeletedException {
+		deleteFile(file, "plan");
 	}
 	
 }
