@@ -1,7 +1,7 @@
 /**
  * 
  */
-package dataClass;
+package exceptions;
 
 /**
  * @author Niels Thykier
