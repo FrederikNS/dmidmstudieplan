@@ -6,13 +6,12 @@ package ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 
 /**
  * @author Morten Sørensen
  * Sets up the interface the user will see.
  */
-public class Dialog {
+public class Dialog extends UI {
 
 	String input;
 	BufferedReader keyboard;
@@ -20,7 +19,11 @@ public class Dialog {
 	String semesterNumber;
 	String indtastet[];
 
-	public Dialog() {
+	public Dialog(Core core) {
+		super(core);
+	}
+	
+	public void start(){
 		intro();
 		//mainProgram();
 	}
@@ -32,7 +35,7 @@ public class Dialog {
 		System.out.println("Velkommen til 'Læg en Studieplan'");
 		System.out.println("");
 		System.out.println("Programmet kender følgende kommandoer:");
-		System.out.println("hjælp  tilføj  fjern  udskrivbase  visplan  gem  hent  afslut");
+		System.out.println("hjælp  tilføj  fjern  udskrivbase  visplan  gem  hent  viskursus  afslut");
 		System.out.println("");
 		System.out.println("Indtast dine kommandoer efter tegnet '>'");
 	}
@@ -75,6 +78,8 @@ public class Dialog {
 			return true;
 		} else if (indtastet[offset].equalsIgnoreCase("gem")) {
 			return true;
+		} else if (indtastet[offset].equalsIgnoreCase("viskursus")){
+			return true;
 		} else {
 			return false;
 		}
@@ -97,7 +102,9 @@ public class Dialog {
 			loadPlan(indtastet);
 		} else if (indtastet[0].equalsIgnoreCase("gem")) {
 			savePlan(indtastet);
-		} else {
+		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
+			//TODO
+		}else {
 			System.out.println("Command not understood");
 		}
 	}
@@ -263,7 +270,7 @@ public class Dialog {
 			System.out.println("Det indtastede data for kursusnummeret var forkert.");
 			System.out.println("Indtast det korrekte kursusnummer:");
 			System.out.print("> ");
-			changeCourse(input);
+			//changeCourse(input);
 			remove(indtastet);
 		} catch (Exception e) {
 
@@ -275,24 +282,63 @@ public class Dialog {
 	 */
 	private void helpMe() {
 		if (indtastet[1].equalsIgnoreCase("afslut")) {
-			System.out.println("Kommandoen afslut sørger for at lukke programmet ned");
+			System.out.println("Kommandoen afslut sørger for at lukke programmet ned.");
+			System.out.println("FIX ME");
 		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
-			showPlan(indtastet);
+			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
+			System.out.println("Et eksempel på en studieplan kan se således ud: \n");
+			testPlan();
+			System.out.println("");
+			System.out.println("Kommandoen til at fremkalde en studieplan er: \"visplan <semester>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Bliver et semesternummer ikke indtastet, eller det er af forkert format, vil man blive spurgt efter et nyt");
 		} else if (indtastet[1].equalsIgnoreCase("udskrivbase")) {
+			System.out.println("Kommandoen udskrivbase udskriver en liste over alle de kuser der er i kursusdatabasen.");
+			System.out.println("Den nuværende liste over kurser i databasen ser således ud: \n");
 			printDatabaseList();
+			System.out.println("");
+			System.out.println("Kommandoen modtager ingen argumenter. Ønsker man et mere specifikt resultat, brug viskursus.");
 		} else if (indtastet[1].equalsIgnoreCase("tilføj")) {
-			add(indtastet);
+			System.out.println("Kommandoen tilføj tilføjer et nyt kursus til en studieplan.");
+			System.out.println("Kommandoen skal bruge argumenter, men den kan bruges på følgendemåde:");
+			System.out.println("\"tilføj <kursusnummer> <semester>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer og/eller semesternummer)");
+			System.out.println("vil man blive spurgt efter at indtaste kursusnummer/semester igen hvorefter kommandoen så vil blive udført");
+			System.out.println("(såfrem ifald formatet af det nyligt indtastede er i orden).");
 		} else if (indtastet[1].equalsIgnoreCase("fjern")) {
-			remove(indtastet);
+			System.out.println("Kommandoen fjern vil fjerne et kursus fra en studieplan.");
+			System.out.println("Kommandoen skal bruge et argument, men kan bruges på følgende måde:");
+			System.out.println("\"fjern <kursusnummer>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer)");
+			System.out.println("vil man blive spurgt efter at indtaste kursusnummer, hvorefter kommandoen vil blive udført (såfrem ifald");
+			System.out.println("formatet af det nyligt indtastede er i orden).");
 		} else if (indtastet[1].equalsIgnoreCase("hent")) {
-			loadPlan(indtastet);
+			System.out.println("Kommandoen hent indlæser en gemt studieplan.");
+			System.out.println("Brugen af kommandoen kan ske på følgende måde:");
+			System.out.println("\"hent <filnavn>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
+			System.out.println("Det anbefalede filnavn vil være ens studienummer, hvilket gør det lettere bagefter at finde og eventuelt");
+			System.out.println("vidersende til andre.");
 		} else if (indtastet[1].equalsIgnoreCase("gem")) {
-			savePlan(indtastet);
+			System.out.println("Kommandoen gem gemmer en studieplan, så man kan arbejde videre på det på et andet tidspunkt.");
+			System.out.println("Brugen af kommandoen kan ske på følgende måde:");
+			System.out.println("\"gem <filnavn>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
+			System.out.println("Det anbefalede filnavn vil være ens studienummer, hvilket gør det lettere bagefter at finde og eventuelt");
+			System.out.println("vidersende til andre.");
+		} else if (indtastet[1].equalsIgnoreCase("viskursus")) {
+			System.out.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
+			System.out.println("Kommandoen kan bruges på følgende måde:");
+			System.out.println("\"virkursus <kursusnummer>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
 		} else if (indtastet[1].equalsIgnoreCase("hjælp")) {
 			System.out.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
-			System.out.println("");
+			System.out.println("Kommandoen kan tage imod argumenter, og kan bruges på følgende måde:");
+			System.out.println("\"hjælp <kommando>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Kommandoen kræver ikke et argument for at fungere. Indtaster man ingen får man standard listen over funktioner.");
+			System.out.println("Indtaster man en ukendt kommando får man besked om det.");
 		} else if (indtastet[1] != null || indtastet[1] != "") {
 			System.out.println("Kommandoen \"" + indtastet[1] + "\" genkendes ikke.");
+			System.out.println("Tjek om kommandoen eksisterer ved brug af \"hjælp\"-funktionen");
 		} else {
 			System.out.println("Programmet kender følgende kommandoer:");
 			System.out.println("hjælp - viser denne hjælpe tekst samt forklaring til de forskellige kommandoer");
@@ -300,9 +346,12 @@ public class Dialog {
 			System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'fjern kursusnummer'");
 			System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
 			System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
+			System.out.println("virkursus - viser alle info for et enkelt kursus");
 			System.out.println("gem - gemmer studieplanen så man kan arbejde videre på det senere");
 			System.out.println("hent - indlæser en studieplan så det er muligt man kan arbejde videre på den");
 			System.out.println("afslut - afslutter programmet");
+			System.out.println("");
+			System.out.println("For at få en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjælp og dernæst kommandoen.");
 		}
 	}
 	//Prints the list over available courses
@@ -331,6 +380,13 @@ public class Dialog {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	private void testPlan(){
+		System.out.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
+		System.out.println("8:00-12:00       -----    02101   01005   -----    02121");
+		System.out.println("  Pause");
+		System.out.println("13:00-17:00      -----    -----   01005   01017    01005");
 	}
 	
 	private void savePlan(String indtastet[]){
