@@ -1,6 +1,6 @@
 package ui;
 
-abstract class UI {
+public abstract class UI {
 	
 	private Core core;
 	
