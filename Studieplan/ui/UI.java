@@ -12,7 +12,9 @@ public abstract class UI {
 	
 	private Core core;
 	
-	protected UI(Core core) {
+	protected UI(Core core) throws IllegalArgumentException {
+		if(core == null)
+			throw new IllegalArgumentException();
 		this.core = core;
 	}
 	
