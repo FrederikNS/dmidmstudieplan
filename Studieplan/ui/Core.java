@@ -17,6 +17,8 @@ public interface Core {
 	public void saveStudyPlan(String studentID) throws Exception;
 	public void saveStudyPlan(StudyPlan plan) throws Exception;
 	
+	public boolean isValidCourse(String courseID);
+	
 	public StudyPlan loadStudyPlan(String studentID) throws StudyPlanDoesNotExistException;
 	
 }
