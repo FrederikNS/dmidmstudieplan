@@ -126,6 +126,10 @@ public class Dialog extends UI {
 		//TODO
 	}
 	
+	/**
+	 * Checks if the form of courseID is a possible courseID
+	 * @return true if the form is correct, else false
+	 */
 	private boolean courseCheck() {
 		boolean courseCorrect=false;
 		try {
@@ -138,6 +142,10 @@ public class Dialog extends UI {
 		return courseCorrect;
 	}
 	
+	/**
+	 * Checks if the form of semester number is a possible semester number 
+	 * @return true if the form is correct, else false
+	 */
 	private boolean semesterCheck() {
 		boolean semesterCorrect=false;
 		try {
@@ -259,7 +267,11 @@ public class Dialog extends UI {
 			System.out.println("Indtast det korrekte semesternummer:");
 		//unfunctional
 	}*/
-
+	
+	/**
+	 * Remove a course from the users study plan.
+	 * If the format of the inputted courseID is wrong, it will ask for a new courseID
+	 */
 	private void remove(String indtastet[]){
 		int temp3;
 		try {
@@ -279,11 +291,13 @@ public class Dialog extends UI {
 
 	/**
 	 * Prints the hjælp-function.
+	 * If the funktion is followed by an argument, it will print an more detailed discription of
+	 * how to use the function (if it exists).
 	 */
 	private void helpMe() {
 		if (indtastet[1].equalsIgnoreCase("afslut")) {
 			System.out.println("Kommandoen afslut sørger for at lukke programmet ned.");
-			System.out.println("FIX ME");
+			System.out.println("FIX ME"); //TODO
 		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
 			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
 			System.out.println("Et eksempel på en studieplan kan se således ud: \n");
@@ -364,7 +378,7 @@ public class Dialog extends UI {
 		String season;
 		try {
 			temp2 = Integer.parseInt(indtastet[1]);
-			//We expect people to only start at the 
+			//We expect people to only start at autumn semester
 			if ((temp2 & 1) == 1){
 				season = "e";
 			}
@@ -382,6 +396,9 @@ public class Dialog extends UI {
 		}
 	}
 	
+	/**
+	 * Prints a possible study plan
+	 */
 	private void testPlan(){
 		System.out.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
 		System.out.println("8:00-12:00       -----    02101   01005   -----    02121");
