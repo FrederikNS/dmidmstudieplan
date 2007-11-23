@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.FileCouldNotBeDeletedException;
+import exceptions.FilePermissionException;
 import dataClass.StudyPlan;
 import exceptions.CannotSaveStudyPlanException;
 
@@ -50,8 +51,9 @@ public class UserDatabase {
 	/**
 	 * @param plan The StudyPlan you wish to save. (it will be stored as the "studentID.plan")
 	 * @throws CannotSaveStudyPlanException if the plan could not be saved.
+	 * @throws FilePermissionException if the needed permissions were missing.
 	 */
-	public void saveStudyPlan(StudyPlan plan) throws CannotSaveStudyPlanException {
+	public void saveStudyPlan(StudyPlan plan) throws CannotSaveStudyPlanException, FilePermissionException {
 		String studentID = plan.getStudent();
 		
 		if(studentID == null || studentID.equals(""))
@@ -70,6 +72,9 @@ public class UserDatabase {
 			}
 		}
 		
+		if(!f.canWrite() ) 
+			throw new FilePermissionException("write");
+		
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new ObjectOutputStream(new FileOutputStream(f)) );
 			oos.writeObject(plan);
@@ -85,8 +90,9 @@ public class UserDatabase {
 	 * @throws FileNotFoundException if no filed has been saved for that student.
 	 * @throws IOException if Java classes failed.
 	 * @throws CorruptStudyPlanFileException if the StudyPlan file existed, but was not valid/readable.
+	 * @throws FilePermissionException If needed permissions were missing.
 	 */
-	public StudyPlan loadStudyPlan(String studentID) throws FileNotFoundException, IOException, CorruptStudyPlanFileException {
+	public StudyPlan loadStudyPlan(String studentID) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException {
 		return loadStudyPlan(studentID, "plan");
 	}
 	
@@ -98,13 +104,16 @@ public class UserDatabase {
 	 * @throws FileNotFoundException if no filed has been saved for that student.
 	 * @throws IOException if Java classes failed.
 	 * @throws CorruptStudyPlanFileException if no filed has been saved for that student.
+	 * @throws FilePermissionException If needed permissions were missing.
 	 */
-	public StudyPlan loadStudyPlan(String file, String extension) throws FileNotFoundException, IOException, CorruptStudyPlanFileException {
+	public StudyPlan loadStudyPlan(String file, String extension) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException {
 		
 		//throws FileNotFoundException if it does not exist.
 		exists(file, extension);
 		
 		File f = new File(file + "." + extension);
+		if(!f.canRead()) 
+			throw new FilePermissionException("read");
 		ObjectInputStream ois = new ObjectInputStream(new ObjectInputStream(new FileInputStream(f)) );
 		Object obj;
 		try {
@@ -124,12 +133,17 @@ public class UserDatabase {
 	 * @param extension the extension of the file without leading dot.
 	 * @throws FileNotFoundException if the file did not exist.
 	 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
+	 * @throws FilePermissionException If needed permissions were missing. 
 	 */
-	public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException{
+	public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException{
 		String filename = file + "." + extension;
 		exists(file, extension); 
-
-		if(!new File(filename).delete())
+		File f = new File(filename);
+		
+		if(!f.canWrite())
+			throw new FilePermissionException("write");
+		
+		if(!f.delete())
 			throw new FileCouldNotBeDeletedException(file + "." + extension);
 	}
 	
@@ -138,8 +152,9 @@ public class UserDatabase {
 	 * @param file name of file without extension.
 	 * @throws FileNotFoundException if the file did not exist.
 	 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
+	 * @throws FilePermissionException If needed permissions were missing.
 	 */
-	public void deleteFile(String file) throws FileNotFoundException, FileCouldNotBeDeletedException {
+	public void deleteFile(String file) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException {
 		deleteFile(file, "plan");
 	}
 	
