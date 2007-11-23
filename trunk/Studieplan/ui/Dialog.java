@@ -274,15 +274,36 @@ public class Dialog {
 	 * Prints the hjælp-function.
 	 */
 	private void helpMe() {
-		System.out.println("Programmet kender følgende kommandoer:");
-		System.out.println("hjælp - viser denne hjælpe tekst samt forklaring til de forskellige kommandoer");
-		System.out.println("tilføj - tilføjer et kursus til kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'tilføj kursusnummer semesternummer'");
-		System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'fjern kursusnummer'");
-		System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
-		System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
-		System.out.println("gem - gemmer studieplanen så man kan arbejde videre på det senere");
-		System.out.println("hent - indlæser en studieplan så det er muligt man kan arbejde videre på den");
-		System.out.println("afslut - afslutter programmet");
+		if (indtastet[1].equalsIgnoreCase("afslut")) {
+			System.out.println("Kommandoen afslut sørger for at lukke programmet ned");
+		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
+			showPlan(indtastet);
+		} else if (indtastet[1].equalsIgnoreCase("udskrivbase")) {
+			printDatabaseList();
+		} else if (indtastet[1].equalsIgnoreCase("tilføj")) {
+			add(indtastet);
+		} else if (indtastet[1].equalsIgnoreCase("fjern")) {
+			remove(indtastet);
+		} else if (indtastet[1].equalsIgnoreCase("hent")) {
+			loadPlan(indtastet);
+		} else if (indtastet[1].equalsIgnoreCase("gem")) {
+			savePlan(indtastet);
+		} else if (indtastet[1].equalsIgnoreCase("hjælp")) {
+			System.out.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
+			System.out.println("");
+		} else if (indtastet[1] != null || indtastet[1] != "") {
+			System.out.println("Kommandoen \"" + indtastet[1] + "\" genkendes ikke.");
+		} else {
+			System.out.println("Programmet kender følgende kommandoer:");
+			System.out.println("hjælp - viser denne hjælpe tekst samt forklaring til de forskellige kommandoer");
+			System.out.println("tilføj - tilføjer et kursus til kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'tilføj kursusnummer semesternummer'");
+			System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale måde at kalde kommandoen på ville være 'fjern kursusnummer'");
+			System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
+			System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
+			System.out.println("gem - gemmer studieplanen så man kan arbejde videre på det senere");
+			System.out.println("hent - indlæser en studieplan så det er muligt man kan arbejde videre på den");
+			System.out.println("afslut - afslutter programmet");
+		}
 	}
 	//Prints the list over available courses
 	private void printDatabaseList(){
