@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import exceptions.StudyPlanDoesNotExistException;
+
 /**
  * @author Morten Sørensen
  * Sets up the interface the user will see.
@@ -19,7 +21,7 @@ public class Dialog extends UI {
 	String semesterNumber;
 	String indtastet[];
 
-	public Dialog(Core core) {
+	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
 	}
 	
@@ -408,7 +410,12 @@ public class Dialog extends UI {
 	
 	private void savePlan(String indtastet[]){
 		if(indtastet[1] != null) {
-			//kommando videre
+			try {
+				getCore().saveStudyPlan(indtastet[1]);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
 		} else {
 			//spørger efter filnavn/studienummer
 		}
@@ -417,7 +424,12 @@ public class Dialog extends UI {
 	
 	private void loadPlan(String indtastet[]){
 		if(indtastet[1] != null) {
-			//kommando videre
+			try {
+				getCore().loadStudyPlan(indtastet[1]);
+			} catch (StudyPlanDoesNotExistException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
 		} else {
 			//spørger efter filnavn/studienummer
 		}
