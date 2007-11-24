@@ -31,4 +31,12 @@ public class StudyPlan extends ArrayList<SelectedCourse> implements Serializable
 		return studentID;
 	}
 	
+	public boolean equals(String studentID) {
+		return studentID.equalsIgnoreCase(this.studentID);
+	}
+	
+	public boolean equals(StudyPlan study) {
+		return equals(study.getStudent());
+	}
+	
 }

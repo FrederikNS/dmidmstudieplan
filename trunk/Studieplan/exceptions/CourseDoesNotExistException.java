@@ -15,16 +15,16 @@ public class CourseDoesNotExistException extends Exception {
 	/**
 	 * The course ID that did not exist
 	 */
-	private String courseID;
+	private String courseDesciption;
 	
 	/**
 	 * @param courseID the ID of the course that did not exist
 	 */
-	public CourseDoesNotExistException(String courseID) {
-		this.courseID = courseID;
+	public CourseDoesNotExistException(String courseDesciption) {
+		this.courseDesciption = courseDesciption;
 	}
 	
 	public String toString() {
-		return "Error: Course with ID " + courseID + " did not exist";
+		return "Course " + courseDesciption + " could not be found";
 	}
 }

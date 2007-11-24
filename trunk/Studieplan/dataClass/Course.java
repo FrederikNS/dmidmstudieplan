@@ -84,4 +84,33 @@ public class Course {
 	public void setSeason(String season) {
 		this.season = season;
 	}
+
+	/**
+	 * Test if the courses are the same.
+	 * @param course the course you wish to compare it to.
+	 * @return true if the courseID of the two courses match.
+	 */
+	public boolean equals(Course course) {
+		return equals(course.getCourseID());
+	}
+	
+	/**
+	 * Test if the course have the same ID as this.
+	 * @param courseID The ID of the course.
+	 * @return true if the courseID match.
+	 */
+	public boolean equals(String courseID) {
+		return courseID.equals(this.courseID);
+	}
+	
+	public String toString() {
+		String s = courseID + season + " " + courseName + " ";
+		
+		
+		for(int i = 0 ; i< skemagruppe.length ; i++) {
+			s += skemagruppe[i];
+		}
+		
+		return s;
+	}
 }
