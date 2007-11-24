@@ -38,6 +38,8 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		super.setSkemagruppe(course.getSkemagruppe());
 	}
 	
+	
+	
 	/*(non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 * 

@@ -5,6 +5,7 @@ package databaseHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -58,6 +59,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 		scan[DatabaseFiles.KRAV.ordinal()] = new Scanner(database[DatabaseFiles.KRAV.ordinal()]);
 		scan[DatabaseFiles.SKEMA.ordinal()] = new Scanner(database[DatabaseFiles.SKEMA.ordinal()]);
 		scan[DatabaseFiles.NAVN.ordinal()] = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
+        scan[DatabaseFiles.NAVN.ordinal()].useDelimiter("\n");
+        scan[DatabaseFiles.KRAV.ordinal()].useDelimiter("\n");
+        scan[DatabaseFiles.SKEMA.ordinal()].useDelimiter("\n");
 		} catch (FileNotFoundException e) {
 		}
 	}
@@ -72,9 +76,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	
     	//load the parses.
         openFileScan();
-        
-        //rather than taking it "word" by "word" we want "line" by "line" parsing.
-        scan[DatabaseFiles.NAVN.ordinal()].useDelimiter("\n");
         
         try {
         	//parse through the Name database and see if the courseID appears.
@@ -113,36 +114,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
          */
         scan[DatabaseFiles.NAVN.ordinal()].next("\\d{5} (.*)");
         courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(1);
-        
-        try {
-        	scan[DatabaseFiles.KRAV.ordinal()].useDelimiter("\n");
-        	//scan through the Dependency/Demand database and see if an entry appears.
-        	//an entry in this database is not mandantory.
-        	while(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID + "(.*)+") ) {
-        		scan[DatabaseFiles.KRAV.ordinal()].nextLine();
-        	}
-        	
-        	/*This time we search for the dependency courses and this database is formatted like this:
-             ddddd rrrrr( rrrrr)* 
-        	 * Where ddddd is the five digits in the course we wish to look up and rrrrr is(/are) the 
-        	 * course number of the required course(s). A course appearing in this database 
-        	 * (as the first part of an entry) must have at least one dependency course. 
-        	 */ 
-        	//Possible re-write with for loop and .group
-        	scan[DatabaseFiles.KRAV.ordinal()].next("\\d{5} (\\d{5})+");
-            String depends = scan[DatabaseFiles.KRAV.ordinal()].match().group(1);
-            //Since the regular expression simply fetches everything but the original course number
-            // and the first whitespace after, the match will contain the dependency courses in a 
-            // String, where they are delimited by a single whitespace. Hench we split it, using " " 
-            // as delimiter to get it in an array.
-            dependencies = depends.split(" ");
-        } catch(NoSuchElementException e) {
-        	//no entry - but not mandantory either.
-            dependencies = new String[1];
-            dependencies[0] = null;       
-        }
-        
-    	scan[DatabaseFiles.SKEMA.ordinal()].useDelimiter("\n");
         
     	try {
         	//look through the Skema Database - an entry here is mandantory!
@@ -189,6 +160,34 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	throw new CritalCourseDataMissingException("Skema");
         }
         
+        
+        try {
+        	//scan through the Dependency/Demand database and see if an entry appears.
+        	//an entry in this database is not mandantory.
+        	while(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID + "(.*)+") ) {
+        		scan[DatabaseFiles.KRAV.ordinal()].nextLine();
+        	}
+        	
+        	/*This time we search for the dependency courses and this database is formatted like this:
+             ddddd rrrrr( rrrrr)* 
+        	 * Where ddddd is the five digits in the course we wish to look up and rrrrr is(/are) the 
+        	 * course number of the required course(s). A course appearing in this database 
+        	 * (as the first part of an entry) must have at least one dependency course. 
+        	 */ 
+        	//Possible re-write with for loop and .group
+        	scan[DatabaseFiles.KRAV.ordinal()].next("\\d{5} (\\d{5})+");
+            String depends = scan[DatabaseFiles.KRAV.ordinal()].match().group(1);
+            //Since the regular expression simply fetches everything but the original course number
+            // and the first whitespace after, the match will contain the dependency courses in a 
+            // String, where they are delimited by a single whitespace. Hench we split it, using " " 
+            // as delimiter to get it in an array.
+            dependencies = depends.split(" ");
+        } catch(NoSuchElementException e) {
+        	//no entry - but not mandantory either.
+            dependencies = new String[1];
+            dependencies[0] = null;       
+        }
+        
         //All the (mandantory) data was successfully retrieved
         //Create a Course object and fill it up with data
         Course course = new Course(courseID);
@@ -210,6 +209,39 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 		return new DatabaseReaderIterator(new Iter());
 	}
 
+	/**
+	 * Search through the Course data files for a pattern.
+	 * @param pattern searches for a pattern.
+	 * @return returns an array of courses which (somehow) matches this pattern.
+	 */
+	public Course[] search(String pattern) throws CourseDoesNotExistException {
+		ArrayList<Course> match = new ArrayList<Course>();
+		Course course;
+    	//load the parses.
+        openFileScan();
+        for(int i = 0 ; i < scan.length ; i++ ) {
+	        try {
+	        	for ( ; ; ) {
+	        		if(scan[i].hasNext(".*" + pattern + ".*") ) {
+	        			scan[i].next("(\\d{5}).*");
+	        			try {
+							course = findCourse(scan[i].match().group(1));
+							match.add(course);
+						} catch (Exception e) {}
+	        		}
+	        		scan[i].nextLine();
+	        	}
+	        }catch(NoSuchElementException e) {
+	        }
+        }
+		Course[] list = (Course[]) match.toArray();
+		if(list.length < 1) {
+			throw new CourseDoesNotExistException("containing " + pattern);
+		}
+		return  list;
+	}
+	
+	
     /**
      * @author Niels Thykier
      * This inner class handles all interaction with the DatabaseReaderIterator.
@@ -244,7 +276,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	public boolean hasNext() {
     		//We already got an unread result cached. That is still the next entry. 
     		if(cached) return true;
-    		
+
     		boolean next = false;
     		
     		while(s.hasNext("(\\d{5}).*")) {
