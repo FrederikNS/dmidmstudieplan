@@ -4,9 +4,12 @@
 package ui;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import exceptions.CorruptStudyPlanFileException;
+import exceptions.FilePermissionException;
 import exceptions.StudyPlanDoesNotExistException;
 
 /**
@@ -427,6 +430,18 @@ public class Dialog extends UI {
 			try {
 				getCore().loadStudyPlan(indtastet[1]);
 			} catch (StudyPlanDoesNotExistException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} catch (FilePermissionException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			} catch (CorruptStudyPlanFileException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 			}
