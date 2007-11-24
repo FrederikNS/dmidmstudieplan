@@ -22,14 +22,7 @@ public class DatabaseReaderIterator implements Iterator<Course> {
 	 * 
 	 */
 	private Iter iter;
-	
-	/**
-	 * @param db
-	 */
-	public DatabaseReaderIterator(DatabaseReader db) {
-		this.iter = db.new Iter();
-	}
-	
+		
 	/**
 	 * @param iter
 	 */

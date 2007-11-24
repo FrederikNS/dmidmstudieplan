@@ -206,7 +206,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	 * @see java.lang.Iterable#iterator()
 	 */
 	public Iterator<Course> iterator() {
-		return new DatabaseReaderIterator(new Iter());
+		return new DatabaseReaderIterator(this.new Iter());
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	String idCache;
     	Course courseCache;
     	
-    	public Iter() {
+    	private Iter() {
     		try {
     		s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
     		s.useDelimiter("\n");
