@@ -5,7 +5,7 @@ package dataClass;
 
 /**
  * @author Niels Thykier
- * This class specified a course selected by a student. On top of all the information
+ * This class is a course selected by a student. On top of all the information
  * in the Course class, this also contains the data on which semester this course is 
  * taken.
  */
@@ -56,16 +56,16 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		int order = 0;
 		
 		if(semester < compareTo.getSemester() ) {
-			order = 1;
-		} else if (semester > compareTo.getSemester() ) {
 			order = -1;
+		} else if (semester > compareTo.getSemester() ) {
+			order = 1;
 		} else {
 			int ID = Integer.parseInt( super.getCourseID() );
 			int compareToID = Integer.parseInt(compareTo.getCourseID());
 			if(ID < compareToID ) {
-				order = 1;
-			} else if(ID > compareToID) {
 				order = -1;
+			} else if(ID > compareToID) {
+				order = 1;
 			} 
 		}
 		
