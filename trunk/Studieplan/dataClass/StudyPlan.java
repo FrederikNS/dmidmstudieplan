@@ -103,6 +103,34 @@ public class StudyPlan implements Serializable {
 		
 		return plan.remove(toRemove);
 	}
+	
+	public String printSemester(int semester) throws IllegalArgumentException {
+		if(semester < 0 || semester > 20) {
+			throw new IllegalArgumentException();
+		}
+		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
+		Arrays.sort( planned );
+		int plannedSemester;
+		String toReturn = "";
+		
+		for(int i = 0 ; i < planned.length ; i ++) {
+			plannedSemester = planned[i].getSemester();
+			
+			 
+			
+			if(plannedSemester == semester) {
+				
+			}
+			else if(plannedSemester > semester) {
+				break;
+			}
+		}
+		
+		return toReturn;
+	}
 
+	public String toString() {
+		return "StudyPlan for " + studentID;
+	}
 	
 }

@@ -5,11 +5,11 @@ package dataClass;
  * @author Kaffe
  *
  */
-public class Course {
+public class Course implements CourseSkemaData {
 	private String courseID;
 	private String dependencies[];
 	private String courseName;
-	private String skemagruppe[];
+	private int internalSkema;
 	private String season;
 	
 	public Course(String CourseID) {
@@ -58,15 +58,7 @@ public class Course {
 			//TODO
 		}
 		
-		String compareSkema[] = compareTo.getSkemagruppe();
-		for(int i = 0 ; i < skemagruppe.length ; i++ ) {
-			for(int j = 0 ; j < compareSkema.length ; j++) {
-				if(compareSkema[j].equalsIgnoreCase(skemagruppe[i]) ) 
-					return true;
-			}
-		}
-		
-		return false;
+		return 0 != (compareTo.getInternalSkemaRepresentation() & internalSkema);
 	}
 	
 	/**
@@ -79,15 +71,33 @@ public class Course {
 	/**
 	 * @return the skemagruppe
 	 */
-	public String[] getSkemagruppe() {
-		return skemagruppe;
+	public int getInternalSkemaRepresentation() {
+		return internalSkema & INTERNAL_ALL_DAYS;
+	}
+	
+	/**
+	 * 
+	 */
+	public void setInternalSkemaRepresentation(int newInteralSkema) {
+		internalSkema =  newInteralSkema & INTERNAL_ALL_DAYS;
 	}
 
 	/**
 	 * @param skemagruppe the skemagruppe to set
 	 */
 	public void setSkemagruppe(String[] skemagruppe) {
-		this.skemagruppe = skemagruppe;
+		Skema[] dat  = Skema.values();
+		internalSkema &= ~(INTERNAL_ALL_DAYS);
+		
+		
+		for(int i = 0 ; i < skemagruppe.length ; i++ ) {
+			for(int j = 0 ; j < dat.length ; j++ ) {
+				if(dat[j].isSameDTUSkema(skemagruppe[i])) {
+					internalSkema |= dat[j].getInteralRepresentation();
+					j = dat.length;
+				}
+			}
+		}
 	}
 
 	/**
@@ -124,12 +134,6 @@ public class Course {
 	
 	public String toString() {
 		String s = courseID + season + " " + courseName + " ";
-		
-		
-		for(int i = 0 ; i< skemagruppe.length ; i++) {
-			s += skemagruppe[i];
-		}
-		
 		return s;
 	}
 }
