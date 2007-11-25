@@ -103,7 +103,7 @@ public class UserDatabase {
 	 * @return The StudyPlan
 	 * @throws FileNotFoundException if no filed has been saved for that student.
 	 * @throws IOException if Java classes failed.
-	 * @throws CorruptStudyPlanFileException if no filed has been saved for that student.
+	 * @throws CorruptStudyPlanFileException If a file was saved for that student, but it contained garbage.
 	 * @throws FilePermissionException If needed permissions were missing.
 	 */
 	public StudyPlan loadStudyPlan(String file, String extension) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException {

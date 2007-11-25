@@ -1,5 +1,6 @@
 package dataClass;
 
+
 /**
  * @author Kaffe
  *
@@ -10,7 +11,11 @@ public class Course {
 	private String courseName;
 	private String skemagruppe[];
 	private String season;
-		
+	
+	public Course(String CourseID) {
+		this.courseID = CourseID;
+	}
+	
 	/**
 	 * @return the courseID
 	 */
@@ -46,6 +51,24 @@ public class Course {
 		return dependencies;
 	}
 
+	public boolean compareSkema(Course compareTo) {
+		
+		String compareSeason = compareTo.getSeason();
+		if(season == compareSeason) {
+			//TODO
+		}
+		
+		String compareSkema[] = compareTo.getSkemagruppe();
+		for(int i = 0 ; i < skemagruppe.length ; i++ ) {
+			for(int j = 0 ; j < compareSkema.length ; j++) {
+				if(compareSkema[j].equalsIgnoreCase(skemagruppe[i]) ) 
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * @param dependencies the dependencies to set
 	 */
@@ -65,10 +88,6 @@ public class Course {
 	 */
 	public void setSkemagruppe(String[] skemagruppe) {
 		this.skemagruppe = skemagruppe;
-	}
-
-	public Course(String CourseID) {
-		this.courseID=CourseID;
 	}
 
 	/**

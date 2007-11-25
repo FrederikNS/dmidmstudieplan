@@ -2,12 +2,14 @@ package ui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
+//import java.util.Iterator;
 
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import exceptions.CannotSaveStudyPlanException;
+import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
+import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
 import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
@@ -16,28 +18,121 @@ import exceptions.StudyPlanDoesNotExistException;
 
 public interface Core {
 	
+	/**
+	 * Look up a course by a course ID in the database.
+	 * @param courseID the ID of the course to find
+	 * @return the Course with that ID.
+	 * @throws CourseDoesNotExistException Thrown if no course has that ID.
+	 * @throws CritalCourseDataMissingException Thrown if a course have that ID, the data about it is incomplete.
+	 */
 	public Course findCourse(String courseID) throws CourseDoesNotExistException, CritalCourseDataMissingException;
+	/**
+	 * Get a List of all the valid courses in the database. 
+	 * @return an array of all Valid courses.
+	 */
 	public Course[] getAllCourses();
 	
+	/**
+	 * Generate a new StudyPlan to work on.
+	 * @param studentID the studentID of that Student.
+	 * @return the new StudyPlan.
+	 */
 	public StudyPlan newStudyPlan(String studentID);
-	public void addCourseToStudyPlan(String studentID, Course course, int semester) throws Exception;
-	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws Exception;
-	public void addCourseToStudyPlan(String studentID, SelectedCourse course) throws Exception;
+	
+	/**
+	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @param studentID the student ID of the student, who's plan it should be added to.
+	 * @param course The course to be added.
+	 * @param semester The semester the course should be added too.
+	 * @throws CourseDoesNotExistException Thrown if no course had that course ID.
+	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
+	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
+	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
+	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
+	 */
+	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException;
+	/**
+	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @param studentID the student ID of the student, who's plan it should be added to.
+	 * @param course The course to be added.
+	 * @param semester The semester the course should be added too.
+	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
+	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
+	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
+	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
+	 */
+	public void addCourseToStudyPlan(String studentID, Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException;
+	/**
+	 * @param studentID the student ID of the student, who's plan it should be added to.
+	 * @param course The course to be added.
+	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
+	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
+	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
+	 */
+	public void addCourseToStudyPlan(String studentID, SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException;
+	
 	public StudyPlan getStudyPlan(String studentID) throws StudyPlanDoesNotExistException;
 	public StudyPlan getStudyPlan(String studentID, boolean createNewIfNotExists) throws StudyPlanDoesNotExistException;
-	public void removeCourseFromStudyPlan(String studentID, String courseID) throws Exception;
-	public void removeCourseFromStudyPlan(String studentID, Course course) throws Exception;
+	
+	/**
+	 * @param studentID the unique identifier of the StudyPlan
+	 * @param courseID the ID of the course to look for.
+	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
+	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 */
+	public void removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
+	/**
+	 * @param studentID the unique identifier of the StudyPlan
+	 * @param courseID the ID of the course to look for.
+	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
+	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 */
+	public void removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
 
 	public void saveStudyPlanAs(String studentID, String newName) throws  CannotSaveStudyPlanException, FilePermissionException, StudyPlanDoesNotExistException;
 	public void saveStudyPlanAs(StudyPlan plan, String newName)  throws CannotSaveStudyPlanException, FilePermissionException ;
 	
 	public void saveStudyPlan(String studentID) throws  CannotSaveStudyPlanException, FilePermissionException, StudyPlanDoesNotExistException;
 	public void saveStudyPlan(StudyPlan plan)  throws CannotSaveStudyPlanException, FilePermissionException ;
-	public StudyPlan loadStudyPlan(String studentID) throws StudyPlanDoesNotExistException, FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException;	
+	
+	/**
+	 * Load a saved StudyPlan
+	 * @param studentID the unique Identifier of the of the StudyPlan (or the filename of it without a .plan extension)
+	 * @return the StudyPlan.
+	 * @throws FilePermissionException Thrown if required File Permissions for the file was missing.
+	 * @throws FileNotFoundException Thrown if no file could be found (determined from the studentID).
+	 * @throws IOException If internal read errors happened.
+	 * @throws CorruptStudyPlanFileException Thrown if the file could be found, but the data was not understandable.
+	 */
+	public StudyPlan loadStudyPlan(String studentID) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException;	
 	
 	
-	public Iterator<Course> getDatabaseReaderIterator();
+	/**
+	 * @param studentID the student ID (or unique identifier) of the StudyPlan
+	 * @param course the Course to check for.
+	 * @return true if the Course is already in the plan.
+	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan did not exist
+	 */
+	public boolean isCourseInStudyPlan(String studentID, Course course) throws StudyPlanDoesNotExistException;
+	/**
+	 * @param studentID the student ID (or unique identifier) of the StudyPlan
+	 * @param courseID the ID number of the Course to check for.
+	 * @return true if the Course is already in the plan.
+	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan did not exist
+	 */
+	public boolean isCourseInStudyPlan(String studentID, String courseID) throws StudyPlanDoesNotExistException;
 	
+	/*
+	/**
+	 * If you wish to loop
+	 * @return an Iterator for the Courses in the Database files.
+	 */
+	//public Iterator<Course> getCourseDatabaseIterator();
+	
+	/**
+	 * @param courseID the Course ID to look up
+	 * @return true if such a course exists and all mandatory data for it can be found.
+	 */
 	public boolean isValidCourse(String courseID);
 	 
 	
