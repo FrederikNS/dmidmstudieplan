@@ -206,7 +206,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	 * @see java.lang.Iterable#iterator()
 	 */
 	public Iterator<Course> iterator() {
-		return new DatabaseReaderIterator(this.new Iter());
+		return this.new Iter();
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	        }catch(NoSuchElementException e) {
 	        }
         }
-		Course[] list = (Course[]) match.toArray();
+		Course[] list = match.toArray(new Course[1]);
 		if(list.length < 1) {
 			throw new CourseDoesNotExistException("containing " + pattern);
 		}
@@ -251,10 +251,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
      * If you need an Iterator for the Database readers, see the 
      * DatabaseReaderIterator class or the Iterator<Course> iterator() method of DatabaseReader.
      */
-    public class Iter {
+    public class Iter implements Iterator<Course> {
     	Scanner s;
     	boolean cached = false;
-    	String idCache;
     	Course courseCache;
     	
     	private Iter() {
@@ -267,11 +266,8 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 
     	}
     	
-    	/**
-    	 * Scans the database and checks for the next valid entry.
-    	 * 
-    	 * Note: this method caches the CourseID and the Course. 
-    	 * @return true if another valid Course could be found.
+    	/* (non-Javadoc)
+    	 * @see java.util.Iterator#hasNext()
     	 */
     	public boolean hasNext() {
     		//We already got an unread result cached. That is still the next entry. 
@@ -285,9 +281,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	        		//Allows us to catch the exceptions and garantuee 
 	        		// that the getNextCourse* methods do not throw them.
 	    			s.next("(\\d{5}).*");
-	    			//TODO test that this reg.ex. works properly
-	    			idCache = s.match().group(1); 
-	        		courseCache = findCourse(idCache);
+	        		courseCache = findCourse(s.match().group(1));
 	        		cached = true;
 	        		next = true;
 	        		break;
@@ -299,46 +293,26 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     		if(!next) {
     			cached = false;
     			courseCache = null;
-    			idCache = null;
     		}
     		return next;
     	}
-    	
-    	/**
-    	 * Fetches the next course ID in the database. 
-    	 * @return the course ID of the next entry.
-    	 * @throws NoSuchElementException if there is no more entries could be found
-    	 */
-    	public String getNextCourseID() {
-    		String toReturn;
-    		if(hasNext()) {
-    			toReturn = idCache;
-    			courseCache = null;
-    			idCache = null;
-    			cached = false;
-    		} else {
-    			throw new NoSuchElementException();
-    		}
-    		return toReturn;
-    	}
 
-    	/**
-    	 * Fetches the next course in the database. 
-    	 * @return the course of the next entry.
-    	 * @throws NoSuchElementException if there is no more entries could be found
-    	 */
-    	public Course getNextCourse() {
+		public Course next() {
     		Course toReturn;
     		if(hasNext()) {
     			toReturn = courseCache;
     			courseCache = null;
-    			idCache = null;
     			cached = false;
     		} else {
     			throw new NoSuchElementException(); 
     		}
 			return toReturn;
-    	}
+		}
+
+		public void remove() {
+			//Not supported... Follow the standard
+			throw new UnsupportedOperationException();
+		}
 
     }
     

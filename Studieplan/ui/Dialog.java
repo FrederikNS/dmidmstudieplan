@@ -429,9 +429,6 @@ public class Dialog extends UI {
 		if(indtastet[1] != null) {
 			try {
 				getCore().loadStudyPlan(indtastet[1]);
-			} catch (StudyPlanDoesNotExistException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
 			} catch (FilePermissionException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
