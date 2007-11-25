@@ -1,8 +1,0 @@
-01005:Matematik 1
-01017:Diskret matematik og databaser
-02101:Indledende programmering
-02105:Algoritmer og Datastrukturer I
-02121:Ingeniørarbejde
-02161:Software Engineering 1
-02402:Introduktion til statistik
-02405:Sandsynlighedsregning
