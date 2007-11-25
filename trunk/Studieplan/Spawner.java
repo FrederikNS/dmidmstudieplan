@@ -1,4 +1,4 @@
-import ui.Dialog;
+import dataClass.ProgramCore;
 
 /**
  * This is our spawner. It's the only class that contains the method "main", and therefore
@@ -13,7 +13,11 @@ public class Spawner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Dialog dialog = new Dialog();
+		try {
+			new ProgramCore(args);
+		} catch (Exception e) {
+			System.exit(1);
+		}
 	}
 
 }
