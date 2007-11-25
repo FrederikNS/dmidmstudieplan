@@ -78,6 +78,14 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	public int getSemester() {
 		return semester ;
 	}
+	
+	/**
+	 * @param course the course to check.
+	 * @return true if the coures are the same.
+	 */
+	public boolean equals(SelectedCourse course) {
+		return super.equals(course);
+	}
 
 	/**
 	 * @param semester the semester to set

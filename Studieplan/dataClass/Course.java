@@ -110,7 +110,7 @@ public class Course {
 	 * @return true if the courseID of the two courses match.
 	 */
 	public boolean equals(Course course) {
-		return equals(course.getCourseID());
+		return isSameCourseID(course.getCourseID());
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class Course {
 	 * @param courseID The ID of the course.
 	 * @return true if the courseID match.
 	 */
-	public boolean equals(String courseID) {
+	public boolean isSameCourseID(String courseID) {
 		return courseID.equals(this.courseID);
 	}
 	
