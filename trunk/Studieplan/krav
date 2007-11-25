@@ -2,13 +2,27 @@ DONE   1.  Kunne fortælle brugeren navnene på de ordrer programmet kender.
 DONE   2. Have en hjælpefacilitet der i terminalvinduet kan oplyse detaljer om ordrerne.
 TEST   3. Danne programmets kursusbase ud fra de tre filer som nævnt ovenfor.
    4. Kunne give en tekstrepræsentation af kursusbasen - toString().
+   muligvis:
+   course[] = getAllCourses();
+   for(...)  
+   		System.out.println(course);
+   ellers kan vi lave en CourseList class med en overloaded toString metode.		
+   
+   
    5. Vise i terminalvinduet den aktuelle studieplan som den ser ud her og nu.
+   Mangler en overskrivning af toString metode til StudyPlan.
+   
 TEST   6. Kunne indsætte i studieplanen på et angivet semester et kursus der står i kursusbasen.
 TEST   7. Kunne fjerne et tidligere indsat kursus fra studieplanen.
-   8. Afslutte programkørslen med mulighed for at man i en efterfølgende kørsel (program run) kan arbejde videre på en tidligere udarbejdet studieplan - benyt Object serialization.
-   9. Kunne arbejde videre på en tidligere udarbejdet studieplan.
+DONE [partly]   8. Afslutte programkørslen med mulighed for at man i en efterfølgende kørsel (program run) kan arbejde videre på en tidligere udarbejdet studieplan - benyt Object serialization.
+   Core kan gemme StudyPlan.
+DONE [partly]   9. Kunne arbejde videre på en tidligere udarbejdet studieplan.
+   Core kan hente StudyPlan.
   10. Give fejlmeldinger når brugeren beder om noget der ikke kan lade sig gøre.
-  11. Sørge for at en studieplan altid opfylder de krav der er stillet i underafsnittet Krav til en studieplan.
+  
+PARTLY  11. Sørge for at en studieplan altid opfylder de krav der er stillet i underafsnittet Krav til en studieplan.
+  StudyPlan tillader ikke at man tilføjer et kursus, der har samme skema, som et andet kursus i StudyPlan i samme semester.
+  Mangler "dependency" check.
 
 
 Krav til en studieplan
