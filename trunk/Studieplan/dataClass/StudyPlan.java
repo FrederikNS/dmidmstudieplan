@@ -48,11 +48,11 @@ public class StudyPlan implements Serializable {
 	}
 
 	public boolean contains(String courseID) {
-		return plan.contains(courseID);
+		return plan.contains(new Course(courseID));
 	}
 	
-	public boolean contains(SelectedCourse course) {
-		return this.contains(course.getCourseID());
+	public boolean contains(Course course) {
+		return plan.contains(course);
 	}
 	
 	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException {
@@ -93,15 +93,15 @@ public class StudyPlan implements Serializable {
 	}
 	
 	public boolean remove(String toRemove) throws CourseDoesNotExistException {
+		return remove(new Course(toRemove) );
+	}
+	
+	public boolean remove(Course toRemove) throws CourseDoesNotExistException {
 		if(!this.contains(toRemove) ) {
-			throw new CourseDoesNotExistException(toRemove);
+			throw new CourseDoesNotExistException(toRemove.getCourseID());
 		}
 		
 		return plan.remove(toRemove);
-	}
-	
-	public boolean remove(SelectedCourse toRemove) throws CourseDoesNotExistException {
-		return remove(toRemove.getCourseID());
 	}
 
 	
