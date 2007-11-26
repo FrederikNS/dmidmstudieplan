@@ -89,8 +89,11 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 
 	/**
 	 * @param semester the semester to set
+	 * @throws IllegalArgumentException if the semester is less than 1 or greater than 20
 	 */
-	public void setSemester(int semester) {
+	public void setSemester(int semester) throws IllegalArgumentException {
+		if(semester < 1 || semester > 20 )
+			throw new IllegalArgumentException();
 		this.semester = semester;
 	}
 
