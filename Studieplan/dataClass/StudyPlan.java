@@ -13,7 +13,7 @@ import exceptions.CourseDoesNotExistException;
 
 /**
  * @author Niels Thykier
- *
+ * The correct StudyPlan for a user.
  */
 public class StudyPlan implements Serializable {
 
