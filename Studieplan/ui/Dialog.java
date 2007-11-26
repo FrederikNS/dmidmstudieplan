@@ -31,7 +31,9 @@ public class Dialog extends UI {
 	
 	public void start(){
 		intro();
-		while(killSwitch==false)
+		while(killSwitch==false) {
+			input(0);
+		}
 		end();
 	}
 
@@ -52,24 +54,31 @@ public class Dialog extends UI {
 	 */
 	
 	public void input(int offset) {
-		String temp[] = null;
+		String temp[];
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			System.out.print("> ");
 			while ((input = this.readInput()) != null) {
-				if(input.contains(" ")==true) {
+				System.out.println("input was: "+input);
+				if(input.contains(" ")) {
 					temp = input.split(" ");
 				} else {
+					System.out.println("test");
 					temp[0] = input;
+					System.out.println("test");
 				}
 				for(int rotation = 0;temp.length > rotation;rotation++) {
+					System.out.println("rotation: "+rotation);
+					/*here there be errors*/
 					indtastet[offset+rotation] = temp[rotation];
+					System.out.println("indtastning "+rotation+" var: "+indtastet[offset+rotation]);
 				}
 				if(commandCheck()==true) {
 					crossroads();
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("Exception in input");
 		}
 	}
 	
@@ -100,6 +109,7 @@ public class Dialog extends UI {
 	public void crossroads() {
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			end();
+			killSwitch = true;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
 			helpMe();
 		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
@@ -136,6 +146,9 @@ public class Dialog extends UI {
 			System.out.println("The semester number you entered was incorrect, please try again");
 			input(2);
 		}
+		System.out.println("Command was: "+indtastet[0]);
+		System.out.println("CourseID was: "+indtastet[1]);
+		System.out.println("Semester was: "+indtastet[2]);
 		/*some code to actually set the course in the program core*/
 		//TODO
 	}
