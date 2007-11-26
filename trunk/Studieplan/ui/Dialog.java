@@ -31,6 +31,7 @@ public class Dialog extends UI {
 	public void start(){
 		intro();
 		//mainProgram();
+		end();
 	}
 
 	/**
