@@ -20,9 +20,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	public SelectedCourse(String CourseID, int semester) throws IllegalArgumentException{
 		super(CourseID);
-		if(semester < 1 || semester > 20 )
-			throw new IllegalArgumentException();
-		this.semester = semester;
+		setSemester(semester);
 		}
 	
 	/**
@@ -32,10 +30,11 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	public SelectedCourse(Course course, int semester) throws IllegalArgumentException {
 		super(course.getCourseID());
-		super.setCourseName(course.getCourseName());
-		super.setDependencies(course.getDependencies());
-		super.setSeason(course.getSeason());
-		super.setInternalSkemaRepresentation(course.getInternalSkemaRepresentation());
+		setCourseName(course.getCourseName());
+		setDependencies(course.getDependencies());
+		setSeason(course.getSeason());
+		setInternalSkemaRepresentation(course.getInternalSkemaRepresentation());
+		setSemester(semester);
 	}
 	
 	
@@ -87,12 +86,16 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		return super.equals(course);
 	}
 
+	public boolean isValidSemester(int semester) {
+		return semester < 21 && semester > 0;
+	}
+	
 	/**
 	 * @param semester the semester to set
 	 * @throws IllegalArgumentException if the semester is less than 1 or greater than 20
 	 */
 	public void setSemester(int semester) throws IllegalArgumentException {
-		if(semester < 1 || semester > 20 )
+		if(! isValidSemester(semester) )
 			throw new IllegalArgumentException();
 		this.semester = semester;
 	}
