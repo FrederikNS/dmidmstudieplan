@@ -16,6 +16,7 @@ public class FilePermissionException extends IOException {
 	
 	
 	public FilePermissionException(String missingPermissions) {
+		super("Missing vital file permission(s): " + missingPermissions);
 		this.missingPermissions = missingPermissions;
 	}
 

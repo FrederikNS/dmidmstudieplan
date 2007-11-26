@@ -19,10 +19,12 @@ public class CritalCourseDataMissingException extends Exception {
 	 * @param missingData Name of the data type that is missing.
 	 */
 	public CritalCourseDataMissingException(String missingData) {
+		super("The critial course data \"" + missingData + "\" could not be read in the database");
 		this.missingData = missingData;
 	}
 	
-	public String toString() {
-		return "The critial course data \"" + missingData + "\" could not be read in the database";
+	public String getMissingData() {
+		return missingData;
 	}
+	
 }
