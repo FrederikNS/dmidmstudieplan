@@ -23,6 +23,7 @@ public class Dialog extends UI {
 	String courseID;
 	String semesterNumber;
 	String indtastet[];
+	boolean killSwitch;
 
 	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
@@ -30,7 +31,7 @@ public class Dialog extends UI {
 	
 	public void start(){
 		intro();
-		//mainProgram();
+		while(killSwitch==false)
 		end();
 	}
 
@@ -50,41 +51,46 @@ public class Dialog extends UI {
 	 * The main loop which keeps everything alive.
 	 */
 	
-	///* CLOSED FOR RENOVATION
-	public void input() {
+	public void input(int offset) {
+		String temp[] = null;
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			System.out.print("> ");
 			while ((input = this.readInput()) != null) {
 				if(input.contains(" ")==true) {
-					indtastet = input.split(" ");
-					crossroads();
+					temp = input.split(" ");
 				} else {
-					
+					temp[0] = input;
+				}
+				for(int rotation = 0;temp.length > rotation;rotation++) {
+					indtastet[offset+rotation] = temp[rotation];
+				}
+				if(commandCheck()==true) {
+					crossroads();
 				}
 			}
 		} catch (Exception e) {
 		}
-	}//*/
+	}
 	
-	public boolean commandCheck(int offset){
-		if (indtastet[offset].equalsIgnoreCase("afslut")) {
+	public boolean commandCheck(){
+		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("hjælp")) {
+		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("visplan")) {
+		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("udskrivbase")) {
+		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("tilføj")) {
+		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("fjern")) {
+		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("hent")) {
+		} else if (indtastet[0].equalsIgnoreCase("hent")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("gem")) {
+		} else if (indtastet[0].equalsIgnoreCase("gem")) {
 			return true;
-		} else if (indtastet[offset].equalsIgnoreCase("viskursus")){
+		} else if (indtastet[0].equalsIgnoreCase("viskursus")){
 			return true;
 		} else {
 			return false;
@@ -101,7 +107,7 @@ public class Dialog extends UI {
 		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
 			printDatabaseList();
 		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-			add(indtastet);
+			add();
 		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
 			remove(indtastet);
 		} else if (indtastet[0].equalsIgnoreCase("hent")) {
@@ -121,12 +127,14 @@ public class Dialog extends UI {
 	 */
 	//THIS IS A REWRITE OF ADD, CHANGESEMESTER, CHANGECOURSE, COURSECHECK AND SEMESTERCHECK
 	
-	private void add(String indtastet[]) {
+	private void add() {
 		while(courseCheck()==false){
-			changeCourse();
+			System.out.println("The CourseID you entered was incorrect, please try again");
+			input(1);
 		}
 		while(semesterCheck()==false){
-			changeSemester();
+			System.out.println("The semester number you entered was incorrect, please try again");
+			input(2);
 		}
 		/*some code to actually set the course in the program core*/
 		//TODO
@@ -162,14 +170,6 @@ public class Dialog extends UI {
 		} catch (Exception e) {	
 		}
 		return semesterCorrect;
-	}
-	
-	private void changeCourse() {
-		//TODO
-	}
-	
-	private void changeSemester() {
-		//TODO
 	}
 	
 	//HERE ENDS THE REWRITE
