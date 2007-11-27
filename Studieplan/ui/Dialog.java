@@ -193,7 +193,7 @@ public class Dialog extends UI implements DialogInterface {
 			return 1;
 		try {
 			int temp2 = Integer.parseInt(indtastet[2]);
-			if(temp2 > 0 || temp2 < 20) {
+			if(temp2 > 0 || temp2 < 21) {
 				return 0;
 			}
 		} catch (Exception e) {
@@ -206,7 +206,7 @@ public class Dialog extends UI implements DialogInterface {
 	 * Remove a course from the users study plan.
 	 * If the format of the inputted courseID is wrong, it will ask for a new courseID
 	 */
-	private void remove(String indtastet[]){
+	private void remove(){
 		int temp3;
 		try {
 			temp3 = Integer.parseInt(indtastet[1]);
@@ -308,7 +308,7 @@ public class Dialog extends UI implements DialogInterface {
 		//kommando sendes til anden class
 	}
 	//Prints the plan as it currently is
-	private void showPlan(String indtastet[]){
+	private void showPlan(){
 		int temp2;
 		String season;
 		try {
@@ -341,7 +341,7 @@ public class Dialog extends UI implements DialogInterface {
 		System.out.println("13:00-17:00      -----    -----   01005   01017    01005");
 	}
 	
-	private void savePlan(String indtastet[]){
+	private void savePlan(){
 		if(indtastet[1] != null) {
 			try {
 				getCore().saveStudyPlan(indtastet[1]);
@@ -354,7 +354,7 @@ public class Dialog extends UI implements DialogInterface {
 		//TODO
 	}
 	
-	private void loadPlan(String indtastet[]){
+	private void loadPlan(){
 		if(indtastet[1] != null) {
 			try {
 				getCore().loadStudyPlan(indtastet[1]);
