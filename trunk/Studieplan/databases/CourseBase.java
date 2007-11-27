@@ -33,8 +33,8 @@ public class CourseBase {
 		allCourses = new ArrayList<Course>();
 		int i = 0;
 		System.out.print("Loading courses from files...");
-		long start = System.currentTimeMillis();
 		Iterator<Course> ilt = dbRead.iterator();
+		long start = System.currentTimeMillis();
 		while(ilt.hasNext()) {
 			allCourses.add(ilt.next());
 			i++;
@@ -42,8 +42,8 @@ public class CourseBase {
 		long finish = System.currentTimeMillis() - start;
 		amountOfCourses = i;
 		System.out.println("Done");
-		System.out.println("Loaded " + amountOfCourses +" courses in " + (finish) + " milliseconds");
-		System.out.println("Average: " + (amountOfCourses*1000/finish) + " courses per second");
+		System.out.println("Loaded " + amountOfCourses +" courses in " + finish + " milliseconds");
+		System.out.println("Average: " + ((amountOfCourses*1000)/finish) + " courses per second");
 		
 	}
 	
