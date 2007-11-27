@@ -115,8 +115,8 @@ public class ProgramCore implements Core {
 	/* (non-Javadoc)
 	 * @see ui.Core#getAllCourses()
 	 */
-	public Course[] getAllCourses() {
-		return courseDB.getAllCourses();
+	public CourseBase getCourseBase() {
+		return courseDB;
 	}
 
 	/* (non-Javadoc)
