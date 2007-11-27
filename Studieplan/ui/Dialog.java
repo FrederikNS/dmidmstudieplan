@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
+import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
 import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
@@ -182,10 +183,11 @@ public class Dialog extends UI implements DialogInterface {
 			System.err.println(e);
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
-			e.printStackTrace();
 		} catch (CritalCourseDataMissingException e) {
 			//Not going to happen
 		} catch (StudyPlanDoesNotExistException e) {
+			System.err.println(e);
+		} catch (CourseAlreadyExistsException e) {
 			System.err.println(e);
 		}
 	}
