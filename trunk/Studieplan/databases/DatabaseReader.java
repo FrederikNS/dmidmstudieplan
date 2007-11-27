@@ -34,7 +34,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	/**
 	 * Opens the three database files for reading.
 	 * @throws FileNotFoundException If one of the database files are missing.
-	 * @throws FilePermissionException 
+	 * @throws FilePermissionException if permissions is missing to read the file
 	 */
 	public DatabaseReader() throws FileNotFoundException, FilePermissionException {
 		database[DatabaseFiles.KRAV.ordinal()]  = openFile(DatabaseFiles.KRAV.toString());
@@ -47,7 +47,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	 * @param filename The name of the file to open.
 	 * @return The file opened.
 	 * @throws FileNotFoundException if the file is not found.
-	 * @throws FilePermissionException 
+	 * @throws FilePermissionException if permissions is missing to read the file
 	 */
 	private File openFile(String filename) throws FileNotFoundException, FilePermissionException {
 		File f = new File(filename);
