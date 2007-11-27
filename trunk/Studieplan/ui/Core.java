@@ -178,13 +178,6 @@ public interface Core {
 	 */
 	public boolean isCourseInStudyPlan(String studentID, String courseID) throws StudyPlanDoesNotExistException;
 	
-	/*
-	/**
-	 * If you wish to loop
-	 * @return an Iterator for the Courses in the Database files.
-	 */
-	//public Iterator<Course> getCourseDatabaseIterator();
-	
 	/**
 	 * @param courseID the Course ID to look up
 	 * @return true if such a course exists and all mandatory data for it can be found.
