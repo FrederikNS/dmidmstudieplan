@@ -161,7 +161,13 @@ public class Course implements CourseSkemaData {
 	}
 	
 	public String toString() {
-		String s = courseID  + " " + courseName + " ";
+		String s = courseID  + " " + courseName + ", skemagruppe: " + skemaToString();
+		if(dependencies != null){
+			s += ", forudgående kurser: ";
+			for(int i = 0;dependencies.length > i;i++){
+				s += dependencies[i];
+			}
+		}
 		return s;
 	}
 }
