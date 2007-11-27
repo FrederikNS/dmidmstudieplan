@@ -10,7 +10,6 @@ public class Course implements CourseSkemaData {
 	private String dependencies[];
 	private String courseName;
 	private int internalSkema;
-	private String season;
 	
 	public Course(String CourseID) {
 		this.courseID = CourseID;
@@ -53,10 +52,7 @@ public class Course implements CourseSkemaData {
 
 	public boolean compareSkema(Course compareTo) {
 		
-		String compareSeason = compareTo.getSeason();
-		if(season == compareSeason) {
-			//TODO
-		}
+		
 		
 		return 0 != (compareTo.getInternalSkemaRepresentation() & internalSkema);
 	}
@@ -73,6 +69,15 @@ public class Course implements CourseSkemaData {
 	 */
 	public int getInternalSkemaRepresentation() {
 		return internalSkema & INTERNAL_ALL_DAYS;
+	}
+	
+	public int getFullSkemaData() {
+		return internalSkema;
+	}
+
+	
+	public void setFullSkemaData(int skema) {
+		this.internalSkema = skema;
 	}
 	
 	/**
@@ -103,17 +108,40 @@ public class Course implements CourseSkemaData {
 	/**
 	 * @return the season
 	 */
-	public String getSeason() {
-		return season;
+	public int getSeason() {
+		return internalSkema & INTERNAL_SEASON_ALL;
 	}
 
 	/**
 	 * @param season the season to set
 	 */
-	public void setSeason(String season) {
-		this.season = season;
-	}
+	public void setSeason(String season, String period) {
+		int temp;
+		if(season.equalsIgnoreCase("-f")) {
+			temp = INTERNAL_SEASON_SPRING_LONG;
+		} else if(season.equalsIgnoreCase("-e")) {
+			temp = INTERNAL_SEASON_AUTUMN_LONG;
+		} else  {
+			temp = INTERNAL_SEASON_SPRING_LONG | INTERNAL_SEASON_AUTUMN_LONG;
+		}
+		
+		if(!(period == null || period.equals("") ) ) {
+			if(period.equalsIgnoreCase("")) {
+				if(0 != (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
+					temp &= (~INTERNAL_SEASON_AUTUMN_LONG);
+				}
+				temp |= INTERNAL_SEASON_AUTUMN_SHORT;
+			} else if(period.equalsIgnoreCase("juni")) {
+				if(0 != (temp & INTERNAL_SEASON_SPRING_SHORT) ) {
+					temp &= (~ INTERNAL_SEASON_SPRING_SHORT);
+				}				
+				temp |= INTERNAL_SEASON_SPRING_SHORT;				
+			}
 
+		}
+		this.internalSkema |= temp;
+	}
+	
 	/**
 	 * Test if the courses are the same.
 	 * @param course the course you wish to compare it to.
@@ -133,7 +161,7 @@ public class Course implements CourseSkemaData {
 	}
 	
 	public String toString() {
-		String s = courseID + season + " " + courseName + " ";
+		String s = courseID  + " " + courseName + " ";
 		return s;
 	}
 }

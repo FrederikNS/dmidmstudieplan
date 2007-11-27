@@ -15,7 +15,7 @@ import exceptions.CourseDoesNotExistException;
  * @author Niels Thykier
  * The correct StudyPlan for a user.
  */
-public class StudyPlan implements Serializable {
+public class StudyPlan implements Serializable, CourseSkemaData {
 
 	private static final long serialVersionUID = -6200618982406378220L;
 
@@ -111,6 +111,12 @@ public class StudyPlan implements Serializable {
 		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
 		Arrays.sort( planned );
 		int plannedSemester;
+		int skema = 0;
+		String[] courses = new String[10];
+		for(int i = 0 ; i < courses.length ; i++ ) {
+			courses[i] = "-----";
+		}
+		
 		String toReturn = "";
 		
 		for(int i = 0 ; i < planned.length ; i ++) {
@@ -119,12 +125,24 @@ public class StudyPlan implements Serializable {
 			 
 			
 			if(plannedSemester == semester) {
+				skema = planned[i].getInternalSkemaRepresentation();
+				for(int x = 0 ; x < 10 ; x++) {
+					if(0 != (skema >> x) ) {
+						courses[x] = planned[i].getCourseID();
+					}
+				}
 				
-			}
-			else if(plannedSemester > semester) {
+			} else if(plannedSemester > semester) {
 				break;
 			}
 		}
+		
+		
+		
+		toReturn = "Semester: "+semester+" "+((semester&1)==1?"e":"f")+"   mandag  tirsdag  onsdag  torsdag  fredag\n";
+		toReturn += " 8:00-12:00       "+ courses[0] + "    "+ courses[2] + "   "+ courses[4] + "   "+ courses[6] + "    "+ courses[8] + "\n";
+		toReturn += "  Pause";
+		toReturn += "13:00-17:00       "+ courses[1] + "    "+ courses[3] + "   "+ courses[5] + "   "+ courses[7] + "    "+ courses[9] + "\n";
 		
 		return toReturn;
 	}
