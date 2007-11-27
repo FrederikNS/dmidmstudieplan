@@ -14,7 +14,7 @@ public class ConflictingCourseInStudyPlanException extends Exception {
 	private String course2;
 	
 	public ConflictingCourseInStudyPlanException(String course1, String course2) {
-		super("The course " + course1 + " shared the same skema on the same semester with " + course2);
+		super("*** Kurset " + course1 + " ligger i samme skemaperiode som " + course2 + " ***");
 		this.course1 = course1;
 		this.course2 = course2;
 	}

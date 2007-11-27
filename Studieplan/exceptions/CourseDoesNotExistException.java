@@ -21,12 +21,14 @@ public class CourseDoesNotExistException extends Exception {
 	 * @param courseID the ID of the course that did not exist
 	 */
 	public CourseDoesNotExistException(String courseDescription) {
+		super("*** Kursus " + courseDescription + " blev ikke fundet ***");
 		this.courseDescription = courseDescription;
 	}
 	
 	public String getCourseDescription() {
 		return courseDescription;
 	}
+
 	
 	public String toString() {
 		return "Course " + courseDescription + " could not be found";
