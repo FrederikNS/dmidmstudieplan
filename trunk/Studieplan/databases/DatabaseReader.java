@@ -119,7 +119,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
        	 * scan[enum.NAVN.ordinal()].match.group(1) returns the match of that pattern we specified as 
        	 * "interesting". (It returns the first of these patterns, but in this case there is only one.)
          */
-        courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(0);
+        courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(1).trim();
         
     	try {
         	//look through the Skema Database - an entry here is mandantory!
@@ -127,11 +127,11 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	// The reason is the Skema database is structed slightly different than the rest and
         	// for this pattern to properly read every line, we have to include it.
         	// the formatting is explained in greater detail below.
-        	while(null == scan[DatabaseFiles.SKEMA.ordinal()].findInLine(courseID+"( ){1,3}( .{3}+)(( (januar|juni)){0,2})") ) {
+        	while(null == scan[DatabaseFiles.SKEMA.ordinal()].findInLine(courseID+"  (( [EF][12345][AB])*)(( (januar|juni)){0,2})") ) {
         		scan[DatabaseFiles.SKEMA.ordinal()].nextLine();
         	}
         	/*In this database, the course number is optionally followed by a -f or -e
-        	 ddddd(-c)? SSS( SSS)*
+        	 ddddd  SSS( SSS)*
         	 * Where ddddd are the digits in the course ID, (-c)? means the optional occurance of
         	 * a -f or a -e followed by whitespace and then the three lettered skema data. This
         	 * optional parameter character determines, which part of the year this course is 
@@ -153,9 +153,10 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	 * the " " delimited, it will now be an array of "Skema" details. 
         	 */
             MatchResult result = scan[DatabaseFiles.SKEMA.ordinal()].match();
+             
             skema = result.group(1).trim().split(" ");
+           
             period = result.group(3).trim().split(" ");
-            
             
         } catch(NoSuchElementException e) {
         	//Mandantory entry in this database - Critial data missing
@@ -168,10 +169,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         try {
         	//scan through the Dependency/Demand database and see if an entry appears.
         	//an entry in this database is not mandantory.
-        	while(null == scan[DatabaseFiles.KRAV.ordinal()].findInLine(courseID + " (\\d{5})+") ) {
+        	while(null == scan[DatabaseFiles.KRAV.ordinal()].findInLine("^" + courseID + "( (\\d{5})+)") ) {
         		scan[DatabaseFiles.KRAV.ordinal()].nextLine();
-        	}
-        	
+        	}        	
         	/*This time we search for the dependency courses and this database is formatted like this:
              ddddd rrrrr( rrrrr)* 
         	 * Where ddddd is the five digits in the course we wish to look up and rrrrr is(/are) the 
