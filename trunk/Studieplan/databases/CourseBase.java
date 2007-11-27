@@ -39,10 +39,11 @@ public class CourseBase {
 			allCourses.add(ilt.next());
 			i++;
 		}
-		long end = System.currentTimeMillis();
+		long finish = System.currentTimeMillis() - start;
 		amountOfCourses = i;
 		System.out.println("Done");
-		System.out.println("Loaded " + amountOfCourses +" courses in " + (end-start) + " milliseconds");
+		System.out.println("Loaded " + amountOfCourses +" courses in " + (finish) + " milliseconds");
+		System.out.println("Average: " + (amountOfCourses*1000/finish) + " courses per second");
 		
 	}
 	
