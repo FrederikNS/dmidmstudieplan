@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.FilePermissionException;
-import exceptions.StudyPlanDoesNotExistException;
 
 /**
  * @author Morten Sørensen
@@ -26,43 +25,48 @@ public class Dialog extends UI implements DialogInterface {
 	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
 	}
-	
+
 	public void start(){
 		intro();
+		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		indtastet = new String[10];
-		while(killSwitch==false) {
-			input(0);
-			switch(commandCheck()){
-			case COMMAND_NOT_RECOGNIZED:
-				continue;
-			case COMMAND_AFSLUT:
-				killSwitch = true;
-				break;
-			case COMMAND_HJAELP:
-				helpMe();
-				break;
-			case COMMAND_VIS_PLAN:
-				showPlan();
-				break;
-			case COMMAND_UDSKRIV_BASE:
-				printDatabaseList();
-				break;
-			case COMMAND_TILFØJ:
-				add();
-				break;
-			case COMMAND_FJERN:
-				remove();
-				break;
-			case COMMAND_HENT:
-				loadPlan();
-				break;
-			case COMMAND_GEM:
-				savePlan();
-				break;
-			case COMMAND_VIS_KURSUS:
-				
-				break;
+		try{
+			while(killSwitch==false) {
+				input(0);
+				switch(commandCheck()){
+				case COMMAND_NOT_RECOGNIZED:
+					continue;
+				case COMMAND_AFSLUT:
+					killSwitch = true;
+					break;
+				case COMMAND_HJAELP:
+					helpMe();
+					break;
+				case COMMAND_VIS_PLAN:
+					showPlan();
+					break;
+				case COMMAND_UDSKRIV_BASE:
+					printDatabaseList();
+					break;
+				case COMMAND_TILFØJ:
+					add();
+					break;
+				case COMMAND_FJERN:
+					remove();
+					break;
+				case COMMAND_HENT:
+					loadPlan();
+					break;
+				case COMMAND_GEM:
+					savePlan();
+					break;
+				case COMMAND_VIS_KURSUS:
+
+					break;
+				}
 			}
+		} catch (IOException e) {
+			System.err.println(e);
 		}
 		end();
 	}
@@ -81,32 +85,30 @@ public class Dialog extends UI implements DialogInterface {
 
 	/**
 	 * The main loop which keeps everything alive.
+	 * @throws IOException 
 	 */
-	
-	public void input(int offset) {
+
+	public void input(int offset) throws IOException {
 		String temp[];
 		String input;
 		temp = new String[10];
-		keyboard = new BufferedReader(new InputStreamReader(System.in));
-		
+
 		System.out.print("> ");
-		try {
-			if((input = this.readInput()) != null) {
-				if(input.contains(" ")) {
-					temp = input.split(" ");
-				} else {
-					temp[0] = input;
-				}
-				for(int rotation = 0;temp.length >= rotation+offset+1;rotation++) {
-					/*here there be errors*/
-					indtastet[offset+rotation] = temp[rotation];
-				}
+		if((input = this.readInput()) != null) {
+			if(input.contains(" ")) {
+				temp = input.split(" ");
+			} else {
+				temp[0] = input;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			for(int rotation = 0;temp.length >= rotation+offset+1;rotation++) {
+				/*here there be errors*/
+				indtastet[offset+rotation] = temp[rotation];
+			}
+		} else {
+			throw new IOException("Instream closed");
 		}
 	}
-	
+
 	public int commandCheck(){
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return 1;
@@ -130,13 +132,14 @@ public class Dialog extends UI implements DialogInterface {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
 	 * (eg. too high semester number, or the course ID contains letters).
 	 * @param the command "tilføj" along with data for course and semester (if any).
+	 * @throws IOException 
 	 */
-	private void add() {
+	private void add() throws IOException {
 		while(courseCheck()!=INPUT_ACCEPTED){
 			try {
 				indtastet[1].trim();	
@@ -163,7 +166,7 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		//getCore().
 	}
-	
+
 	/**
 	 * Checks if the form of courseID is a possible courseID
 	 * @return true if the form is correct, else false
@@ -182,7 +185,7 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		return 3;
 	}
-	
+
 	/**
 	 * Checks if the form of semester number is a possible semester number 
 	 * @return true if the form is correct, else false
@@ -200,7 +203,7 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		return 3;
 	}
-	
+
 	/**
 	 * Remove a course from the users study plan.
 	 * If the format of the inputted courseID is wrong, it will ask for a new courseID
@@ -329,7 +332,7 @@ public class Dialog extends UI implements DialogInterface {
 
 		}
 	}
-	
+
 	/**
 	 * Prints a possible study plan
 	 */
@@ -339,7 +342,7 @@ public class Dialog extends UI implements DialogInterface {
 		System.out.println("  Pause");
 		System.out.println("13:00-17:00      -----    -----   01005   01017    01005");
 	}
-	
+
 	private void savePlan(){
 		if(indtastet[1] != null) {
 			try {
@@ -352,7 +355,7 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		//TODO
 	}
-	
+
 	private void loadPlan(){
 		if(indtastet[1] != null) {
 			try {
