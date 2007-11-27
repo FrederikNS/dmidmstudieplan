@@ -51,9 +51,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	 */
 	private File openFile(String filename) throws FileNotFoundException, FilePermissionException {
 		File f = new File(filename);
-		if(f.exists() )
-			throw new FileNotFoundException(filename);
-		if(f.canRead() )
+		if(!f.exists() )
+			throw new FileNotFoundException(f.getAbsolutePath());
+		if(!f.canRead() )
 			throw new FilePermissionException("read");
 		return f;
 	}
@@ -268,9 +268,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	
     	public Iter() {
     		try {
-    			System.out.println(database[DatabaseFiles.NAVN.ordinal()]);
-    			System.out.println(database[DatabaseFiles.NAVN.ordinal()].getAbsoluteFile());
-    			
     			s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
     			s.useDelimiter("\n");
     		} catch(FileNotFoundException e){
