@@ -60,7 +60,7 @@ Udvidede krav til 3-mands grupper:
 
 Opgaven skal løses som den er specificeret ovenfor i afsnittet Opgaven, men med tilføjelse af mindst tre af nedenstående funktionalitetskrav:
 
-PLANNED  12. Ret i programmet så man kan lægge studieplaner med kurser der udbydes i 3-ugersperioderne januar og juni.
+TEST  12. Ret i programmet så man kan lægge studieplaner med kurser der udbydes i 3-ugersperioderne januar og juni.
   13. Ved definitionen af skemagrupper for de enkelte kurser forenklede vi modellen ved at tilføje -e eller -f til kursusnummeret for at lette håndteringen af kurser over to semestre og af kurser der blev udbudt såvel forår som efterår. Foretag de nødvendige rettelser så skemagruppefiler kan se sådan ud:
 
           01005 E5A E5B E3B F5A F5B F3B 
