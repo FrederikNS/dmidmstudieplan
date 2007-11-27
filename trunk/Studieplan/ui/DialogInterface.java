@@ -15,28 +15,4 @@ public interface DialogInterface {
 	public final static int COMMAND_HENT = 7;
 	public final static int COMMAND_GEM = 8;
 	public final static int COMMAND_VIS_KURSUS = 9;
-	
-	/*
-	 * if (indtastet[0].equalsIgnoreCase("afslut")) {
-			return 1;
-		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
-			return 2;
-		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			return 3;
-		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-			return 4;
-		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-			return 5;
-		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-			return 6;
-		} else if (indtastet[0].equalsIgnoreCase("hent")) {
-			return 7;
-		} else if (indtastet[0].equalsIgnoreCase("gem")) {
-			return 8;
-		} else if (indtastet[0].equalsIgnoreCase("viskursus")){
-			return 9;
-		} else {
-			return 0;
-		}
-	 */
 }

@@ -35,7 +35,6 @@ public class Dialog extends UI implements DialogInterface {
 			switch(commandCheck()){
 			case COMMAND_NOT_RECOGNIZED:
 				continue;
-				break;
 			case COMMAND_AFSLUT:
 				killSwitch = true;
 				break;
@@ -217,7 +216,7 @@ public class Dialog extends UI implements DialogInterface {
 			System.out.println("Indtast det korrekte kursusnummer:");
 			System.out.print("> ");
 			//changeCourse(input);
-			remove(indtastet);
+			remove();
 		} catch (Exception e) {
 
 		}
