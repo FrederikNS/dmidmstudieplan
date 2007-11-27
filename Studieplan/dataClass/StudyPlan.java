@@ -83,7 +83,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 				if(currentSemester > semester) {
 					break;
 				} 
-				if(planned[i].compareSkema(toAdd)) {
+				if(planned[i].conflictingSkema(toAdd)) {
 					throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 				}
 			}

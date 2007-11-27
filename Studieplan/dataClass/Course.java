@@ -29,6 +29,10 @@ public class Course implements CourseSkemaData {
 		this.courseID = courseID;
 	}
 	
+	public String skemaToString() {		
+		return "";
+	}
+	
 	/**
 	 * @return the courseName
 	 */
@@ -50,10 +54,11 @@ public class Course implements CourseSkemaData {
 		return dependencies;
 	}
 
-	public boolean compareSkema(Course compareTo) {
-		
-		
-		
+	/**
+	 * @param compareTo
+	 * @return true if
+	 */
+	public boolean conflictingSkema(Course compareTo) {		
 		return 0 != (compareTo.getInternalSkemaRepresentation() & internalSkema);
 	}
 	
@@ -71,11 +76,17 @@ public class Course implements CourseSkemaData {
 		return internalSkema & INTERNAL_ALL_DAYS;
 	}
 	
+	/**
+	 * @return
+	 */
 	public int getFullSkemaData() {
 		return internalSkema;
 	}
 
 	
+	/**
+	 * @param skema
+	 */
 	public void setFullSkemaData(int skema) {
 		this.internalSkema = skema;
 	}
@@ -84,25 +95,14 @@ public class Course implements CourseSkemaData {
 	 * 
 	 */
 	public void setInternalSkemaRepresentation(int newInteralSkema) {
-		internalSkema =  newInteralSkema & INTERNAL_ALL_DAYS;
+		internalSkema = newInteralSkema & INTERNAL_ALL_DAYS;
 	}
 
 	/**
 	 * @param skemagruppe the skemagruppe to set
 	 */
-	public void setSkemagruppe(String[] skemagruppe) {
-		Skema[] dat  = Skema.values();
-		internalSkema &= ~(INTERNAL_ALL_DAYS);
-		
-		
-		for(int i = 0 ; i < skemagruppe.length ; i++ ) {
-			for(int j = 0 ; j < dat.length ; j++ ) {
-				if(dat[j].isSameDTUSkema(skemagruppe[i])) {
-					internalSkema |= dat[j].getInteralRepresentation();
-					j = dat.length;
-				}
-			}
-		}
+	public void setSkemagruppe(String[] skemagruppe, String[] periodData ) {
+		internalSkema |= InternalSkema.parseDTUskema(skemagruppe, periodData);
 	}
 
 	/**
@@ -112,35 +112,7 @@ public class Course implements CourseSkemaData {
 		return internalSkema & INTERNAL_SEASON_ALL;
 	}
 
-	/**
-	 * @param season the season to set
-	 */
-	public void setSeason(String season, String period) {
-		int temp;
-		if(season.equalsIgnoreCase("-f")) {
-			temp = INTERNAL_SEASON_SPRING_LONG;
-		} else if(season.equalsIgnoreCase("-e")) {
-			temp = INTERNAL_SEASON_AUTUMN_LONG;
-		} else  {
-			temp = INTERNAL_SEASON_SPRING_LONG | INTERNAL_SEASON_AUTUMN_LONG;
-		}
-		
-		if(!(period == null || period.equals("") ) ) {
-			if(period.equalsIgnoreCase("")) {
-				if(0 != (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
-					temp &= (~INTERNAL_SEASON_AUTUMN_LONG);
-				}
-				temp |= INTERNAL_SEASON_AUTUMN_SHORT;
-			} else if(period.equalsIgnoreCase("juni")) {
-				if(0 != (temp & INTERNAL_SEASON_SPRING_SHORT) ) {
-					temp &= (~ INTERNAL_SEASON_SPRING_SHORT);
-				}				
-				temp |= INTERNAL_SEASON_SPRING_SHORT;				
-			}
 
-		}
-		this.internalSkema |= temp;
-	}
 	
 	/**
 	 * Test if the courses are the same.

@@ -9,11 +9,72 @@ package dataClass;
  */
 public interface CourseSkemaData {
 
-	public static final int INTERNAL_SEASON_SPRING_SHORT = 0x10000000;
-	public static final int INTERNAL_SEASON_SPRING_LONG = 0x20000000;
-	public static final int INTERNAL_SEASON_AUTUMN_LONG = 0x40000000;
-	public static final int INTERNAL_SEASON_AUTUMN_SHORT = 0x80000000;
-	public static final int INTERNAL_SEASON_ALL = 0xF0000000;
+	public static class InternalSkema {
+		public static int parseDTUskema(String[] DTUdata, String courseLength[]) {
+			int data = 0;
+			
+			for(int i = 0; i < DTUdata.length ; i++ ){
+				if(DTUdata[i].startsWith("E")) {
+					data |= INTERNAL_SEASON_AUTUMN;
+					data |= parseDTUskemaDay(DTUdata[i])<<12;
+				} else if(DTUdata[i].startsWith("F")) {
+					data |= INTERNAL_SEASON_SPRING;
+					data |= parseDTUskemaDay(DTUdata[i]);
+				}
+			}
+			
+			if( courseLength[0] != null) {
+				for(int i = 0 ; i < courseLength.length ; i++ ) {
+					if(courseLength[i].equalsIgnoreCase("januar")) {
+						data |= INTERNAL_SEASON_AUTUMN_SHORT;
+					}else if(courseLength[i].equalsIgnoreCase("juni")) {
+						data |= INTERNAL_SEASON_SPRING_SHORT;
+					}
+				}
+			}
+			
+			return data;
+		}
+		
+		public static String internalSkemaToExternString(int internalRepresentation) {
+			int flag;
+			String toReturn = "";
+			for(int i = 0 ; i < 10 ; i++) {
+				flag = 0x1 << i;
+				if(0 != (internalRepresentation & flag)) {
+					toReturn += "F" + Skema.intToEnum(i).getDTUplan() + " ";
+				}
+			}
+			
+			for(int i = 0 ; i < 10 ; i++) {
+				flag = 0x1000 << i;
+				if(0 != (internalRepresentation & flag)) {
+					toReturn += "E" + Skema.intToEnum(i).getDTUplan() + " ";
+				}
+			}
+			
+			return toReturn;
+		}
+		
+		public static int parseDTUskemaDay(String day) {
+			Skema[] dat  = Skema.values();
+			for(int j = 0 ; j < dat.length ; j++ ) {
+				if(dat[j].isSameDTUSkema(day)) {
+					return dat[j].getInteralRepresentation();
+				}
+			}
+			return 0;
+		}
+	}
+
+	public static final int INTERNAL_SEASON_SPRING_SHORT = 0x00000800;
+	public static final int INTERNAL_SEASON_AUTUMN_SHORT = 0x00800000;
+	public static final int INTERNAL_SEASON_SPRING = 0x00000400;
+	public static final int INTERNAL_SEASON_AUTUMN = 0x00400000;
+	public static final int INTERNAL_SEASON_ALL = 0x00C00C00;
+	
+	public static final int INTERNAL_SEASON_SPRING_DAYS = 0x000003ff;
+	public static final int INTERNAL_SEASON_AUTUMN_DAYS = 0x003ff000;
 	
 	public static final int INTERNAL_MANDAG_FORMIDDAG = 0x00000001;
 	public static final int INTERNAL_MANDAG_EFTERMIDDAG = 0x00000002;
@@ -64,6 +125,23 @@ public interface CourseSkemaData {
 	
 	public int getInteralRepresentation() { 
 		return internal;
+	}
+	
+	public String getDTUplan() {
+		return DTUplan;
+	}
+	
+	public String getDay() {
+		return day;
+	}
+	
+	
+	public static Skema intToEnum(int ordinal) {
+		Skema skema[] = Skema.values();
+		if(ordinal < 0 || ordinal > skema.length)
+			throw new IllegalArgumentException();
+		
+		return skema[ordinal];
 	}
 	
 	}

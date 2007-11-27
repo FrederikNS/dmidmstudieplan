@@ -100,7 +100,8 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         }
 
         
-        String courseName, dependencies[], skema[], season = "", period = "";
+        String courseName;
+		String[] period, dependencies, skema;
             
         /*The data in the Name database is formatted like this.
          ddddd c*
@@ -154,13 +155,10 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	 * if trimmed for trailing and (more importantly) leading whitespaces and then split with 
         	 * the " " delimited, it will now be an array of "Skema" details. 
         	 */
-        	scan[DatabaseFiles.SKEMA.ordinal()].next("\\d{5}(-\\w)?( .{3}+) (januar|juni)?");
+        	scan[DatabaseFiles.SKEMA.ordinal()].next("\\d{5}( .{3}+)(( (januar|juni)){0,2})");
             MatchResult result = scan[DatabaseFiles.SKEMA.ordinal()].match();
-            season = result.group(1);
-            // if the optional season specifier is missing, it will be assumed to "both" or "b"
-            if(season == null || season.equals("") ) season = "-b";
-            skema = result.group(2).trim().split(" ");
-            period = result.group(3).trim();
+            skema = result.group(1).trim().split(" ");
+            period = result.group(4).trim().split(" ");
             
             
         } catch(NoSuchElementException e) {
@@ -207,8 +205,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         if(dependencies[0] != null) 
             course.setDependencies(dependencies);
         
-        course.setSkemagruppe(skema);
-        course.setSeason(season, period);
+        course.setSkemagruppe(skema, period);
         return course;
     } 
     
