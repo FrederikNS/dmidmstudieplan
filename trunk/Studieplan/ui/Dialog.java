@@ -16,7 +16,7 @@ import exceptions.StudyPlanDoesNotExistException;
  * @author Morten Sørensen
  * Sets up the interface the user will see.
  */
-public class Dialog extends UI {
+public class Dialog extends UI implements DialogInterface {
 	BufferedReader keyboard;
 	String courseID;
 	String semesterNumber;
@@ -29,11 +29,11 @@ public class Dialog extends UI {
 	
 	public void start(){
 		intro();
+		indtastet = new String[10];
 		while(killSwitch==false) {
+			
 			input(0);
-			System.out.println("back in start!");
 			if(commandCheck()==true) {
-				System.out.println("Starting crossroads");
 				crossroads();
 			}
 		}
@@ -60,45 +60,27 @@ public class Dialog extends UI {
 		String temp[];
 		String input;
 		temp = new String[10];
-		if(offset==0) {
-			indtastet = new String[10];
-		}
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.print("> ");
 		try {
 			if((input = this.readInput()) != null) {
-				System.out.println("input was: "+input);
 				if(input.contains(" ")) {
 					temp = input.split(" ");
 				} else {
 					temp[0] = input;
 				}
-				for(int rotation = 0;temp.length >= rotation+2;rotation++) {
-					System.out.println("rotation: "+rotation);
-					System.out.println("offset: "+offset);
+				for(int rotation = 0;temp.length >= rotation+offset+1;rotation++) {
 					/*here there be errors*/
 					indtastet[offset+rotation] = temp[rotation];
-					System.out.println("rrr");
-					System.out.println("indtastning "+rotation+" var: "+indtastet[offset+rotation]);
 				}
-				System.out.println("whe?");
-				System.out.println("input: "+input);
-				
-				//
-				//DOESN'T WANT TO EXIT WHILE LOOP
-				//
-				
 			}
-			System.out.println("try ending");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("input done");
 	}
 	
 	public boolean commandCheck(){
-		System.out.println("indtastet[0] er: "+indtastet[0]);
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return true;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
@@ -124,7 +106,6 @@ public class Dialog extends UI {
 	
 	public void crossroads() {
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
-			end();
 			killSwitch = true;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
 			helpMe();
@@ -152,8 +133,11 @@ public class Dialog extends UI {
 	 * @param the command "tilføj" along with data for course and semester (if any).
 	 */
 	private void add() {
-		while(courseCheck()==false){
-			indtastet[1].trim();
+		while(courseCheck()!=INPUT_ACCEPTED){
+			try {
+				indtastet[1].trim();	
+			} catch(Exception e) {
+			}
 			if(indtastet[1]==null || indtastet.equals("")) {
 				System.out.println("Indtast venligst et CourseID:");
 			} else {
@@ -161,10 +145,13 @@ public class Dialog extends UI {
 			}
 			input(1);
 		}
-		while(semesterCheck()==false){
-			indtastet[2].trim();
+		while(semesterCheck()!=INPUT_ACCEPTED){
+			try {
+				indtastet[2].trim();	
+			} catch(Exception e) {
+			}
 			if(indtastet[2]==null || indtastet.equals("")) {
-				System.out.println("Indtast venligst et semesternummer");
+				System.out.println("Indtast venligst et semesternummer:");
 			} else {
 				System.out.println("The semester number you entered was incorrect, please try again");
 			}
@@ -177,138 +164,38 @@ public class Dialog extends UI {
 	 * Checks if the form of courseID is a possible courseID
 	 * @return true if the form is correct, else false
 	 */
-	private boolean courseCheck() {
-		boolean courseCorrect=false;
+	private int courseCheck() {
+		if(indtastet[1]==null)
+			return 1;
 		try {
 			int temp2 = Integer.parseInt(indtastet[1]);
-			if(indtastet[1].length() != 5 || temp2 > -1) {
-				courseCorrect = true;
+			if(indtastet[1].length() == 5 || temp2 > -1) {
+				return 0;
 			}
-		} catch (Exception e) {	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 2;
 		}
-		return courseCorrect;
+		return 3;
 	}
 	
 	/**
 	 * Checks if the form of semester number is a possible semester number 
 	 * @return true if the form is correct, else false
 	 */
-	private boolean semesterCheck() {
-		boolean semesterCorrect=false;
+	private int semesterCheck() {
+		if(indtastet[1]==null)
+			return 1;
 		try {
 			int temp2 = Integer.parseInt(indtastet[2]);
-			if(temp2 > -1 || temp2 < 20) {
-				System.out.println("temp2 passed!");
-				semesterCorrect = true;
-				System.out.println("semestercorrect true");
-			}
-			System.out.println("exiting try");
-		} catch (Exception e) {	
-			System.out.println("EXCEPTION");
-		}
-		System.out.println("SemesterCheck done");
-		return semesterCorrect;
-	}
-	
-	/*
-	private void add(String indtastet[]) {
-		System.out.println("add started!");
-		System.out.println("add initiated");
-		while(courseCheck()!=true||semesterCheck()!=true) {
-			System.out.println("while loop started");
-			switch (Array.getLength(indtastet)) {
-			case 1:
-				//Breaks the switch
-				System.out.println("only got command, changing CourseID");
-				changeCourse();
-				System.out.println("CourseID change complete");
-				break;
-			case 2:
-				//Checks if the format of course ID
-				courseCheck();
-				//System.out.println("Changin semester number");
-				changeSemester();
-				//System.out.println("Semester change complete");
-				break;
-			case 3:
-				//Checks the format of semester number
-				courseCheck();
-				semesterCheck();
-				break;
-			}
-		}
-		System.out.print("indtastet 0: ");
-		System.out.println(indtastet[0]);
-		System.out.print("indtastet 1: ");
-		System.out.println(indtastet[1]);
-		System.out.print("indtastet 2: ");
-		System.out.println(indtastet[2]);
-	}
-
-	private boolean courseCheck() {
-		String temp;
-		int temp2;
-		boolean courseCorrect=false;
-		try {
-			temp2 = Integer.parseInt(indtastet[1]);
-			System.out.println("CourseID is "+temp2+" characters long.");
-			while(indtastet[1].length() != 5 || temp2 > -1) {
-				System.out.println("CourseID incorrect, Changing CouseID");
-				changeCourse();
-				System.out.println("CourseID change complete");
-			}
-			courseCorrect=true;
-			System.out.println("CourseID format is: "+courseCorrect);
-		} catch (Exception e) {	
-		}
-		return courseCorrect;
-	}
-	
-	private boolean semesterCheck() {
-		boolean semesterCorrect=false;
-		String temp;
-		int temp2;
-		temp = indtastet[2];
-		//System.out.println("Semester number string is: "+temp);
-		try {
-			temp2 = Integer.parseInt(temp);
-			//System.out.println("Semester number int is: "+temp);
-			while(temp2 <= 0 || temp2 >= 20) {
-				//System.out.println("Changin semester number");
-				changeSemester();
-				//System.out.println("Semester change complete");
-			}
-			semesterCorrect=true;
-			//System.out.println("Semester format is: "+courseCorrect);
-		} catch (Exception e) {
-		}
-		return semesterCorrect;
-	}
-	
-	private void changeCourse() {
-		keyboard = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			System.out.print("> ");
-			while ((input = this.readInput()) != null) {
-				if(input.contains(" ")){
-					String indtastet2[];
-					indtastet2 = input.split(" ");
-					indtastet[1] = indtastet2[0];
-					indtastet[2] = indtastet2[1];
-				} else {
-					indtastet[1]=input;
-				}
+			if(temp2 > 0 || temp2 < 20) {
+				return 0;
 			}
 		} catch (Exception e) {
+			return 2;
 		}
+		return 3;
 	}
-
-	private void changeSemester() {
-		//unfunctional
-			System.out.println("Det indtastede data for semesternummeret var forkert.");
-			System.out.println("Indtast det korrekte semesternummer:");
-		//unfunctional
-	}*/
 	
 	/**
 	 * Remove a course from the users study plan.
