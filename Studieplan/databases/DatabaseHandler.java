@@ -29,10 +29,17 @@ public interface DatabaseHandler {
 	
 	private String filename;
 		
+	/**
+	 * Constructor for the enums
+	 * @param filename
+	 */
 	DatabaseFiles(String filename) {
 		this.filename = filename;
 	}
 		
+	/* (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
 	public String toString() {
 		return filename;
 	}
