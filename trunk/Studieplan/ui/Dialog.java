@@ -226,7 +226,8 @@ public class Dialog extends UI implements DialogInterface {
 	private void helpMe() {
 		if (indtastet[1].equalsIgnoreCase("afslut")) {
 			System.out.println("Kommandoen afslut sørger for at lukke programmet ned.");
-			System.out.println("FIX ME"); //TODO
+			System.out.println("Kommandoen tager ikke imod argumenter.");
+			System.out.println("Inden programmet bliver lukket ned, så bliver man spurgt om man vil gemme sin studie plan.");
 		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
 			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
 			System.out.println("Et eksempel på en studieplan kan se således ud: \n");
@@ -340,8 +341,7 @@ public class Dialog extends UI implements DialogInterface {
 			try {
 				getCore().saveStudyPlan(indtastet[1]);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				System.out.println(e);
 			}
 		} else {
 			//spørger efter filnavn/studienummer
@@ -354,17 +354,13 @@ public class Dialog extends UI implements DialogInterface {
 			try {
 				getCore().loadStudyPlan(indtastet[1]);
 			} catch (FilePermissionException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				System.out.println(e);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				System.out.println(e);
 			} catch (CorruptStudyPlanFileException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				System.out.println(e);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				System.out.println(e);
 			}
 		} else {
 			//spørger efter filnavn/studienummer
