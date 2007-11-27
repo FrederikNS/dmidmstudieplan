@@ -1,8 +1,771 @@
-01005 Matematik 1
+01005 Matematik 1 
+01007 Lineære og differentiable matematiske modeller
+01009 Matematik 1 - for sundhed og produktion
 01017 Diskret matematik og databaser
+01035 Matematik 2
+01141 Kompleks funktionsteori
+01227 Grafteori
+01234 Differentialgeometri med Anvendelser
+01246 Partielle differentialligninger - anvendt matematik
+01250 Funktionalanalyse og global analyse
+01259 Fejlrettende koder
+01319 Seminar course on Mathematical Biology: Models based on Differential Equations
+01410 Kryptologi 1
+01415 Computational Discrete Mathematics 
+01426 Kryptologi 2
+01450 Dynamiske systemer, ikke-lineariteter og solitoner
+01625 Nonlinear Dynamics in Engineering and Science
+01715 Funktionalanalyse
+01716 Videregående anvendt funktionalanalyse
+01815 Udvalgte emner i anvendt matematik
+01917 Diskret matematik og databaser for Diplom IT
+01931 Matematik og matematiske projekter 1
+01932 Matematik og matematiske projekter 2
 02101 Indledende programmering
+02102 Indledende programmering
 02105 Algoritmer og Datastrukturer I
-02121 Ingeniørarbejde
+02110 Algoritmer og Datastrukturer II
+02121 Ingeniørarbejde 
+02122 Fagprojekt - Bachelor i Softwareteknologi
+02131 Indlejrede systemer
+02141 Datalogisk Modellering
+02142 Semantik og inferenssystemer
+02151 Computerarkitektur
+02152 Parallelle systemer
+02153 Deklarativ Modellering 
+02156 Formelle Logiske Systemer
 02161 Software Engineering 1
-02402 Introduktion til statistik
+02162 Software Engineering 2
+02170 Database Systemer
+02180 Introduktion til kunstig intelligens
+02204 Design af asynkrone kredsløb
+02206 Design af integrerede kredsløb
+02207 Videregående teknikker for digital design
+02208 Test af integrerede kredsløb
+02216 Design af integrerede kredsløb
+02217 Design of Arithmetic Processors
+02221 Principper for distribuerede systemer
+02222 Distribuerede systemer
+02224 Tidstro systemer
+02227 Design og syntese af indlejrede systemer
+02229 Sikkerhedskritiske indlejrede systemer
+02232 Anvendt Kryptografi
+02233 Netværkssikkerhed
+02241 Robust Programmering i .NET
+02242 Program analyse
+02244 Sprog-baseret sikkerhed
+02248 Beregningsmæssigt hårde problemer
+02249 Beregningsmæssigt hårde problemer
+02263 Formelle Aspekter af Software Engineering
+02281 Data-logik
+02284 Videnbaserede systemer
+02291 System integration
+02292 Syntese
+02299 Analyse teknikker
+02311 Digitalteknik
+02312 Indledende programmering
+02318 Indledende programmering for Diplom-E
+02319 Videregående Programmering for Diplom-E
+02321 Hardware/software programmering
+02322 Signalanalyse
+02323 Sandsynlighedsregning og Statistik 
+02333 Parallelle og tidstro systemer
+02335 Netteknologi A
+02337 Basisuddannelse i mainframe - z/OS
+02340 Datamat arkitektur
+02344 OOAD og databaser
+02345 Datasikkerhed
+02348 Programmeringsteknikker
+02350 Windows Programming using C# and .Net
+02355 Netteknologi B
+02357 Array-baseret logik og systemer
+02358 Introduktion til kunstig intelligens
+02366 Neurale Netværk og Soft Computing
+02402 Introduktion til statistik 
 02405 Sandsynlighedsregning
+02407 Stokastiske processer
+02409 Multivariat statistik
+02411 Statistisk forsøgsplanlægning
+02413 Statistisk kvalitetskontrol
+02416 Likelihood og Lineære Modeller
+02417 Tidsrækkeanalyse
+02421 Stokastisk adaptiv regulering
+02424 Videregående dataanalyse og statistisk modellering
+02427 Videregående tidsrækkeanalyse
+02433 Statistik og forsøgsplanlægning 
+02434 Statistisk forsøgsplanlægning
+02451 Digital signalbehandling
+02454 Kognitive Systemer
+02457 Signalbehandling i ikke-lineære systemer
+02459 Machine Learning og Signalbehandling
+02501 Billedanalyse, vision og computer grafik
+02503 Videregående billedanalyse
+02505 Medicinsk billedanalyse
+02507 Kursusarbejde i billedanalyse og optimering
+02532 GPS, GIS og afsætning for civilingeniører (tidligere landmåling) 
+02545 Geografiske informationssystemer
+02547 Kortlægning fra fly- og satellitbilleder
+02549 Satellitpositionering
+02561 Computer grafik
+02563 Realtidsgrafik til spil og virtual reality
+02565 Computer Animation og Modellering
+02566 Rendering
+02569 Lys & Materialer
+02581 Computerintensiv Dataanalyse
+02585 Beregninger på geometrisk data
+02593 Statistik
+02601 Introduktion til numeriske algoritmer
+02603 Modellering og beregninger
+02605 Matrix beregninger
+02610 Optimering og datafitting
+02612 Optimering med bibetingelser
+02614 High-performance computing
+02616 Storskala modellering
+02617 Udvalgte emner i optimering
+02631 Indledende programmering med Matlab
+02637 Videregående Matlab programmering
+02685 Numerisk analyse af differentialligninger
+02689 Videregående metoder til løsning af  differentialligninger
+02701 Introduktion til operationsanalyse
+02711 Statisk og dynamisk optimering
+02713 Netværk og heltalsprogrammering
+02717 Optimering af store problemer med dekomposition
+02719 Optimering ved hjælp af metaheuristikker
+02722 Lokaliseringsteori
+02724 Finansiel optimering
+02735 Videregående emner i operationsanalyse
+02801 Ingeniørarbejde (Internetteknologi og Økonomi)
+02811 Interaktionsdesign - IT
+02815 Næste generations Internet-teknologier og -applikationer 
+02816 Fremtidens mobile net og tjenester
+02817 Personalisering med brug af XML teknologier
+02825 Computerspil Prototyper
+02827 Applikationsudvikling til mobile platforme
+02828 Sikre mobile tjenester
+02833 Organisationer og IKT
+02835 Kravspecifikation
+02836 Strategi og IKT
+02857 Informations- og kommunikationsteknologi - markeder og forretningsmodeller
+02865 Samfundsøkonomi og -politik
+02867 Telekommunikationsøkonomi og politik
+02913 Avancerede analyse teknikker
+02918 Spektroskopisk, multispektral og hyperspektral billedanalyse
+10020 Fysik 1
+10022 Fysik 1
+10024 Fysik 1
+10026 Fysik 1
+10028 Fysik 1
+10030 Introduktion til Fysik og Nanoteknologi
+10033 Mekanik og fysisk modellering
+10034 Termodynamik og statistisk fysik
+10036 Elektromagnetisme for fysikere
+10040 Fysik 2
+10042 Fysik 2
+10044 Fysik 2
+10046 Fysik 2
+10048 Fysik 2
+10102 Kvantemekanik
+10122 Statistisk fysik
+10302 Elektronstrukturmetoder i materialefysik, kemi og biologi
+10303 Faststoffysik og Nanoskala Materialefysik
+10304 Eksperimentel overfladefysik
+10307  Kvanteelektronik:  Fysik og devices
+10309 Unifying concepts in nanoscience: Size effects and self-assembly
+10313 Magnetisme og magnetiske materialer
+10336 Fundamentale Problemer i Fluiddynamik
+10344 Ikke-lineær dynamik og kaos
+10345 Introduktion til komplekse systemer og kaos
+10346 Kontinuumsfysik
+10347 Introduktion til biofysik
+10349 Neurofysik
+10351 Cellulær Biofysik
+10352 Modellering af komplekse biologiske systemer
+10355 Molekylær biofysik: Protein, struktur og dynamik
+10360 Plasmafysik
+10373 Optiske målemetoder
+10405 Relativitetsteori
+10412 Planeternes fysik 
+10501 Moderne Fysik
+10504 Lavtemperatur fysik
+10506 Journal club om nanostrukturer og reaktivitet
+10508 Journal club om elektronstruktur
+10914 Fysik 1
+10931 Fysik 1
+11000 Ingeniørarbejde
+11020 Brandsikkerhed i bygninger
+11022 Branddynamik
+11023 Konstruktionsbrandteknik
+11030 CAD i byggesektoren 1
+11033 CAD i byggesektoren 2
+11046 Industrielle produktionskoncepter i byggeriet
+11060 Facilities Management
+11066 Bygningsrenovering og ombygning
+11069 Studierejse til stort byggeprojekt
+11073 Byplanlægning og bæredygtig byudvikling
+11076 Bæredygtige boligområder
+11078 Planlægning og ledelse af byers infrastruktur
+11079 Læreanstalternes fælles byplankursus, LFB
+11080 Videregående bygningsprojektering
+11111 Bygningsenergi
+11112 Bygningsinstallationer 1
+11114 Bygningsinstallationer 2
+11115 Bygningsenergi og -installationer - Integreret design
+11116 Energirigtigt byggeri
+11117 Solvarmeanlæg
+11118 Numeriske beregningsmetoder i bygningsenergiteknik
+11119 Energibesparelser og miljø
+11120 Dagslys i bygninger
+11121 Termisk bygningsfysik
+11122 Varme- og stoftransport i bygninger
+11124 Computational Fluid Dynamics vedrørende bygninger 
+11125 Udvikling af solenergianlæg
+11305 Elementmetoden
+11311 Betonkonstruktioner
+11312 Stål- og trækonstruktioner
+11313 Bygningskonstruktioners modellering: plader, skiver og skaller
+11320 Konstruktionsanalyse af bygninger
+11330 Bygningskonstruktioner, projekt
+11351 Videregående betonstyrkel�re 
+11352 Videregående st�lkonstruktioner
+11353 Videreg�ende tr�konstruktioner
+11365 Glas og Glaskonstruktioner
+11371 Videreg�ende elementmetode: Materialemodellering
+11372 Jordsk�lvs- og vindteknik
+11411 Geoteknik. Grundkursus
+11413 Konstruktioner i jord
+11414 Videreg�ende geoteknik. Fors�g, teori og anvendelser
+11415 Videreg�ende bjergartsmekanik
+11418 Bjergartsfysik og Bjergartsmekanik
+11420 Ingeni�rarbejde i bjergomr�der - jord, sten og natur
+11430 Jord og sten i byggesektoren
+11451 Vejbef�stelser
+11560 Bygningsmaterialer
+11562 Materialefysik for bygningsingeni�rer
+11563 Betonteknologi
+11567 Tr�teknologi
+11691 Fagprojekt - Bachelor i Byggeteknologi
+11713 Fysisk planl�gning
+11715 Teknisk Tegning / CAD
+11735 Materialel�re 
+11737 Eksperimentel betonteknik
+11738 Projektering af bygningsenergi
+11739 Tekniske bygningsinstallationer 
+11742 Projektering og udf�relse af bygninger
+11743 Geoteknik
+11746 Konstruktioner i beton
+11747 Konstruktioner i st�l og tr�
+11771 Planl�gning og styring af byggeprojekter
+11911 Konstruktionselementer og deres virkem�de (1)
+11912 Byplan og bydesign
+11913 CAD, skitsering og 3D-modellering
+11915 Baggrund for architectural engineering 1
+11921 Konstruktionselementer og deres virkem�de (2)
+11924 Boligbyggeri og bygningsdesign
+11931 Konstruktionsudformning og beregningsmodeller (1)
+11932 Byens rum, den store konstruktion
+11933 Systematisk CAD-projektering og visualisering
+11935 Baggrund for architectural engineering (2)
+11937 Grundl�ggende indeklima-, installations- og energidesign (1)
+11941 Konstruktionsudformning og beregningsmodeller (2)
+11944 Bygningsdesign, koncertsal 
+11946 Materialel�re, materialefysik
+11947 Grundl�ggende indeklima-, installations- og energidesign (2)
+11961 Konstruktionsdesign
+11962 B�redygtige byer
+11968 Optimering, ressourcer og milj� 
+12102 Milj�tekniske processer
+12103 Lynkursus p� engelsk af milj�tekniske processer
+12121 Vandforsyning
+12130 Affaldssystemer og affaldsteknologi
+12131 Vandrensning
+12133 Milj�bioteknologi
+12134 Milj�teknisk Mikrobiologi
+12140 Integreret modellering af urban regnvandsafledning
+12202 Milj� og B�redygtighed
+12225 Luftforurening og milj�effekter.
+12230 Milj�kemi og �kotoksikologi
+12233 Vandforurening
+12235 Milj�vurdering af kemikalier
+12240 Milj�management og etik
+12242 Milj�management i troperne
+12301 Grundl�ggende hydraulik
+12320 Hydrologi
+12328 Modellering af stof transport i por�s media
+12329 Hydrogeologi
+12330 Jord- og grundvandsforurening - processer og afv�rgeteknologier
+12332 Grundvandsgeokemi
+12333 Integreret  vandressourceforvaltning
+12341 Overfladevandshydrologi
+12410 Geologi
+12411 Olie- og Gas Ressourcer
+12420 Ingeni�rgeologi
+12441 Reservoirgeologi og petrofysik
+12700 Hydraulik og milj�teknik
+13000 Grundkursus i veje og trafik
+13001 Grundkursus i godstransport og logistik
+13005 Grundkursus i ArcGIS og Vejtrafikplanl�gning
+13120 Kollektiv trafikplanl�gning
+13124 Jernbanetrafikteknik
+13130 Trafikmodeller
+13135 Diskrete valgmodeller
+13141 Rutevalgsmodeller
+13150 Godstransportmodeller
+13182 Artikelskrivning
+13231 Vurderingsmetoder
+13235 Planl�gningsteori
+13430 Matematisk modellering af godstransport
+13435 Optimering af operationelle transportsystemer
+13440 Ruteplanl�gning og schedulering inden for transport
+26000 Almen kemi
+26006 Uorganisk kemi
+26008 �velser i uorganisk kemi
+26010 Kemisk fagprojekt
+26020 Supplerende kemi
+26027 Grundl�ggende kemi
+26124 Koordinationskemi
+26126 Biouorganisk kemi
+26128 Industriel uorganisk kemi
+26130 Brintenergi og Br�ndselsceller
+26140 Keramiske processer og materialer
+26171 Almen kemi
+26173 Uorganisk kemi
+26201 Indledende fysisk kemi for kemikere
+26202 Indledende fysisk kemi for biovidenskaberne
+26222 Fysisk kemi 2
+26231 Fysisk Kemi 3
+26235 Videreg�ende fysisk kemi
+26240 Elektrokemi
+26250 Computermodellering i kemi
+26271 Fysisk kemi
+26290 Kemi i Nanoskala
+26301 Laboratoriemetodik
+26316 Analyse og Kromatografi
+26320 Struktur- og faststofkemi
+26325 Proteinkrystallografi
+26371 Uorganisk Kvalitativ Analyse
+26373 Anvendelse af analytisk kemi i uorganisk og fysisk  kemi, laboratoriekursus
+26400 Organisk kemi 1
+26405 Eksperimentel organisk kemi
+26407 �velser i organisk kemi
+26411 Organisk kemi 2
+26422 Biomolekyl�r kemi
+26426 Introduktion til medicinalkemi
+26428 Spektroskopi af organiske stoffer
+26433 Organisk kemi 3
+26438 NMR spektroskopi
+26444 Organisk kemi 4
+26471 Organisk kemi
+26473 Organisk syntese, laboratoriekursus
+26500 Datalogi for Kemikere og Bioteknologer
+26510 Nanokatalyse
+27002 Biovidenskab
+27004 Sundhed, Sygdom og Teknologi
+27006 Design af Bio- og Milj�teknologiske processer
+27009 Fagprojekt: Sundhed og Produktion
+27010 Bioteknologisk fagprojekt
+27022 Biokemi
+27023 Eksperimentel biokemi
+27025 Molekyl�r mikrobiologi
+27032 Fermenteringsteknologi
+27041 Introduktion til systembiologi
+27051 Anvendt biodiversitet
+27101 Framework Course in Biotechnology and Food Sciences
+27102 Innovation og ingeni�rarbejde rettet mod forskning
+27231 Molekyl�r Cellebiologi
+27253 Molekyl�r  Medicinsk Mikrobiologi
+27256 Molekyl�r bioteknologi
+27258 Generel medicinsk mikrobiologi
+27301 Videreg�ende Biokemi
+27311 Human fysiologi
+27321 Immunologi
+27335 Functionality of nutrients and food supplements beyond the nutritional value
+27403 Medicinalindustri
+27405 Metabolic Engineering og Functional Genomics
+27409 Industriel Mykologi
+27411 Biologisk dataanalyse og kemometri
+27412 Mikrobiel kemi
+27413 Eksperimentel anvendt biodiversitet
+27500 Levnedsmiddelbioteknologi
+27508 Enzyme Discovery
+27520 Design af Biotek- og F�devareproduktionssystemer
+27521 Hygiejnisk design af procesudstyr 
+27585 The Green Biorefinery
+27611 Introduktion til bioinformatik
+27614 Videreg�ende bioinformatik
+27615 Molekyl�r Evolution
+27617 Proteinstruktur: Modeller, analyser og beregninger
+27618 Kemoinformatik i l�gemiddelforskning
+27619 Perl og Unix for bioinformatikere
+27620 Metagenomanalyse - brug af bioinformatik til unders�gelse af mikrobielle samfund
+27710 F�devareproduktion
+27711 F�devareteknologi L
+27725 Globale regulatoriske netv�rk i mikroorganismer
+27732 Ern�ring
+27734 Biokemi L
+27764 TEMA: Integreret produktudvikling i levnedsmiddelindustrien
+27932 Biologisk Kemi
+27944 Bioteknologi og procesdesign
+27961 Bioteknologiske processer
+28001 Ingeni�rarbejde - Kemi og Teknologi
+28012 Kemisk og Bioteknologisk Produktion
+28013 Kemisk og Bioteknologisk Produktion, I
+28015 Matematiske modeller for kemiske og biokemiske systemer
+28020 Kemisk og biokemisk procesteknik
+28022 Kemisk og bioteknologisk procesteknik
+28110 Kemisk og biokemisk produktanalyse
+28140 Introduktion til Reaktionsteknik
+28150 Introduktion til Procesregulering
+28156 Proces- og produktdesign
+28160 Matematiske modeller for kemiske systemer
+28212 Polymerkemi
+28213 Polymerteknologi
+28221 Teknisk fysisk kemi
+28233 Bioteknologiske oprensningsprocesser
+28241 Reaktionskinetik og katalyse
+28244 Forbr�nding og h�jtemperaturprocesser
+28246 Anvendt enzymteknologi og kinetik
+28247 Videreg�ende Enzymteknologi
+28310 Kemisk og biokemisk produktdesign
+28312 Computer-Assisteret Produkt Design
+28315 'Soft' nanoteknologi i kolloid- og gr�nsefladekemi
+28321 Teknisk termodynamik
+28322 Teknisk termodynamik
+28341 Reaktionsteknik
+28342 Reaktionsteknik
+28345 Bioindustriel reaktionsteknik
+28350 Procesdesign: Principper og metoder
+28351 Regulering og Styringsteknik
+28352 Regulering og styring af kemiske processer
+28361 Modelanalyse for kemiingeni�rer
+28375 Luftforurening og luftrensning
+28415 Olie- og gasproduktion
+28420 Separationsprocesser
+28423 Faseligev�gte i separationsprocesser
+28434 Membranteknologi
+28443 Industriel reaktionsteknik
+28451 Optimerende drift af procesanl�g
+28515 Forbedret Olieindvinding
+28530 Transportprocesser
+28852 Risikovurdering i kemisk og biokemisk industri
+28885 Teknologi og �konomi i olie- og gasproduktion
+28904 Polymerfysik
+28908 Reologi af v�sker med mikrostruktur
+28910 L�sning og analyse af komplicerede modeller for kemiske systemer
+31002 Digital elektronik
+31004 Analog elektronik
+31013 Ingeni�rarbejde - Elektroteknologi
+31015 Fagprojekt - Elektroteknologi
+31021 Elektronik
+31022 Analog elektronik 1 
+31024 Kredsl�bsteknologi
+31028 Digitale systemer
+31032 Elektroteknik
+31034 Digital- og Datateknik
+31035 Anvendt Elektromagnetisme
+31037 Analog design
+31038 Line�re Systemer, Digital Signalbehandling og Signalprocessorer
+31200 Grundkursus i akustik og st�j
+31220 Elektroakustiske transducere og systemer
+31230 Akustisk kommunikation
+31232 Teknisk audiologi
+31236 Lydopfattelse og h�relsens signalbehandling
+31240 Bygnings- og rumakustik
+31241 Bygningsakustik
+31260 Videreg�ende akustik
+31270 Lyd og vibrationer
+31300 Reguleringsteknik 1
+31310 Reguleringsteknik 2
+31320 Robust og fejltolerant regulering
+31321 Emner indenfor advanceret regulering
+31330 Introduktion til Satellitsystemer
+31340 Datamatbaseret regulering
+31350 Grundl�ggende effektelektronik og elforsyning
+31351 Grundl�ggende Effektelektronik og Motorstyring
+31352 Effektelektronik 1
+31356 H�jeffektelektronik
+31362 Fuzzy og neural regulering
+31365 Styring og regulering af rumfart�jer
+31371 Industriel og indlejret automation
+31372 Hierarkiske og distribuerede automatiseringssystemer
+31380 Intelligente systemer
+31388 Avancerede Autonome Robotter
+31400 Elektromagnetisme
+31405 Tr�dl�s kommunikation
+31412 Antenne- og mikrob�lgeteknologi til tr�dl�s kommunikation
+31413 Anvendt mikrob�lgeteknik
+31415 HF-kommunikationskredsl�b
+31420 Mikrob�lgeteknik
+31425 Telem�ling
+31428 Videreg�ende elektromagnetisme
+31430 Antenner
+31435 Antennem�linger i radiod�de rum
+31440 Radar- og radiometersystemer
+31470 Advanced Microwave Integrated Devices and Circuits
+31510 Elektronik og m�leteknik
+31520 Kardiopulmonal biomekanik
+31525 Fysiologiske transportf�nomener
+31530 Elektrofysiologi
+31540 Indledende medicinsk billeddannelse
+31545 Medicinske billedsystemer
+31550 Biomaterialer
+31560 Videreg�ende signalbehandling med medicinske anvendelser
+31565 Avancerede emner i Medicinsk Signalbehandling 
+31570 Laboratoriekursus i Biomedicinsk Instrumentering 
+31590 Medikoteknisk produktudvikling
+31605 Signaler og line�re systemer i kontinuert  tid
+31606 Signaler og line�re systemer i diskret tid
+31610 Anvendt signalbehandling
+31611 Sandtids signalbehandling
+31620 Analoge og digitale filtre
+31630 Integreret analog elektronik
+31654 Introduktion til medikoteknik
+31658 Medicinsk Elektronik og Signalbehandling
+31661 Fra biologi til tekniske neurale systemer
+31720 Elteknik
+31730 Elforsyning, Grundkursus
+31742 Elforsyningsnet
+31750 Stabilitet og kontrol i elforsyningssystemer
+31770 H�jsp�ndingsteknik
+31773 Elteknisk design og diagnose 
+31778 Emerging Energy Technologies
+31782 Elektriske maskiner i vindm�llesystemer
+31783 Integration af vindkraft i elsystemet
+31784 Vindm�ller og m�leteknik
+31786 Design af vindm�ller
+31820 Elektronisk m�ling og instrumentering
+31830 Rumfartsinstrumentering
+31840 Billedanalyse p� mikrodatamat
+31860 Praktisk mikroprocessorteknik
+33206 Transport i nanostrukturer
+33236 LabChip-1: Bio/kemiske mikrosystemer p� chips
+33241 Teori for  lab-on-a-chip systemer
+33250 Halvlederkomponenters teknologi
+33251 Halvlederkomponenters fysik
+33253 Micro 1: Faststofelektronik og Mikroteknologi
+33254 Nano- og mikrofabrikation
+33255 Fabrikation af mikro og nanostrukturer
+33257 Visualisering af Mikro og Nanostrukturer
+33320 Nano-1: Introduktion til nanoteknologi
+33321 Nano-2: Nanosystems Engineering
+33322 Nano-3 - Advanced NEMS
+33323 Nano-1: Introduktion til nanoteknologi
+33334 Molekyl�r diagnostik
+33336 LabChip-2: At l�se udfordringerne i proteomics ved hj�lp af lab-on-a-chip teknologier
+33355 Mikro-2: Mikroteknologi og mikrosystemer
+33641 Emner i teoretisk mikro- og optofluidik
+34031 Anvendt matematik for fysikere
+34032 Moderne fotonik
+34033 Optik og fotonik
+34041 Fiber og integreret optik
+34051 Nanofotoniske komponenters fysik
+34052 Ikke-line�r optik
+34053 Numeriske metoder i fotonik
+34054 B�lgelederoptik i  praksis
+34057 Fabrikation af nanofotoniske komponenter
+34129 Experimentelt kursus i Optisk Kommunikation
+34130 Introduktion til Optisk Kommunikation
+34150 Optiske kommunikationssystemer
+34153 Fra Fotonik til Optisk Kommunikation
+34155 Aktuelle Emner indenfor Optisk Kommunikation
+34229 Fagprojekt  -  Bachelor i Kommunikationsteknologi
+34230 Digital Kommunikation
+34240 Datakompression
+34241 Digital videoteknologi
+34249 Synteseprojekt for Telekommunikation
+34250 Avanceret billed- og videokodning
+34302 IKT Ingeni�rarbejde
+34310 Introduktion til Kommunikationsteknologi
+34330 Introduktion til mobilkommunikation
+34340 Teletrafikteori og netplanl�gning
+34341 Videreg�ende datakommunikation
+34349 Integreret bredb�ndselektronik
+34350 Bredb�ndsnet
+34351 Access- og hjemmenet
+34352 Videreg�ende protokoller
+34353 Optiske netv�rk
+34354 Netv�rks modellering og simulering
+34355 Routing i datanet
+34357 Videreg�ende telekommunikation
+41000 Ingeni�rarbejde
+41010 Brugerorienteret design
+41012 Visuel kommunikation
+41015 Mekanik og materialer
+41025 Objektorienteret design og programmering
+41026 Elektronik design
+41030 Design af mekatronik
+41031 Industriel design
+41035 Dynamik og svingninger
+41045 Termodynamisk modellering
+41051 Produktliv og milj�forhold
+41065 Felter og str�mninger
+41071 Udviklingsprojekter i virksomheder
+41072 Betjeningsdesign
+41080 Designmetoder
+41083 Teknologiske platforme og arkitekturer
+41101 Str�mningsmekanik I
+41111 Str�mningsmekanik II
+41121 Marin vandbygning
+41127 Sedimenttransport i vandl�b og langs kyster
+41128 Turbulensteori
+41202 Grundl�ggende skibs- og offshoreteknik 1
+41205 Bygningsmekanik 
+41206 Analyse af Rammekonstruktioner
+41210 Belastninger og global struktural analyse af skibe
+41212 Risikoanalyse og beslutningsteori
+41214 Konstruktioners Dynamik: Teori og Analyse
+41215 Skiver, plader og skaller
+41220 Teoretisk skibshydrodynamik
+41223 Line�r og ikke-line�r b�lgedynamik
+41228 Kompositte letv�gtskonstruktioner
+41233 Ligev�gtsl�re
+41234 Bygningsmekanik I
+41235 Bygningsmekanik II
+41260 Yacht Performance - teori og praksis
+41271 Skibsprojektering
+41291 Ikke-line�r modelling og analyse af konstruktioner og faste medier
+41312 Fluid Mekanik
+41313 Vindkraft og aeroteknologi
+41319 Numerisk fluid mekanik
+41323 Videreg�ende fluid mekanik
+41327 Vindressourcer og Belastninger p� Vindm�ller
+41329 Aeroelasticitet for vindm�ller
+41401 Energiteknik
+41402 Simulering af energisystemer
+41411 K�ret�jsteknik
+41412 �kobil
+41414 Forbr�ndingsmotorer og transport
+41416 Energisystemer - Analyse, design og optimering
+41419 Kraftv�rksteknik 1
+41420 K�leteknik
+41421 Kraftv�rksteknik 2
+41431 Maskinteknisk Termodynamik 
+41501 Styrkel�re 1
+41502 Styrkel�re 2 (materialers styrkeforhold)
+41511 Styrkel�re 3 (fiberlaminater)
+41513 Maskinelementer
+41514 Maskindynamik
+41521 Videreg�ende svingnings- og stabilitetsl�re
+41522 Plasticitet og brudmekanik
+41524 Sm�ringsmekanik
+41525 FEM-Heavy
+41532 Mekanik
+41533 Dimensionering og styrke 1
+41534 Dimensionering og styrke 2
+41535 Dynamik
+41540 Maskinkonstruktion
+41541 Fra id� til produkt - produktudvikling
+41560 Svingningsl�re
+41603 Konstruktion og probleml�sning
+41612 Produktkonstruktion og dokumentation
+41615 Mekanismekonstruktion
+41621 Fysiologi for ingeni�rer
+41625 Robotteknik
+41628 Konceptualisering
+41629 Innovation i produktudvikling
+41630 Produkter og dokumentation
+41636 Elteknik
+41660 Anvendt mekatronik
+41662 Styring og Design af  Fluid Power  Systemer - oliehydraulik og vandhydraulik 
+41672 Design af Motion Control Systemer
+41701 Mennesket og de fysiske omgivelser
+41721 Ventilation og klimateknik
+41722 Indeklima
+41801 Fagprojekt
+41812 FEM-light (anvendt finite element modellering)
+41814 Varmetransmission
+41815 Varme-, k�le og klimateknik
+41816 CAD/CAM
+41817 Videreg�ende CAD/CAM
+41818 CAD/CAM for designingeni�rer
+41822 Eksperimentelle metoder i fluid mekanik
+41841 Programmering og automatisering
+41860 Design af energianl�g
+42011 Produkters brug og design
+42020 Produktanalyse og redesign
+42021 Teknologianalyse
+42040 Workspace Design 
+42041 Design af arbejdsprocesser
+42050 Produkt/service-systemer
+42061 Scenarier og koncepter
+42070 Helhedsdesign
+42073 Teknologiske systemer
+42075 Viden og innovation i netv�rk
+42085 Strategi, design og marked
+42091 Produkter og forbrug i hverdagen
+42095 Ledelseskoncepter og forandring 
+42110 Materialel�re
+42131 Metall�re (teori og �velser)
+42135 Korrosion (teori og teknologi)
+42150 Fysisk metallurgi
+42155 Avanceret overfladeteknologi
+42170 Materials in Advanced Applications and Products
+42201 Procesteknik
+42210 Industriel formgivning af metaller 
+42215 Geometrisk metrologi og maskintest
+42216 Procesteknisk Tribologi - Modellering og Testning
+42221 Metallurgi, design og fremstilling af st�bte komponenter
+42225 Termomekanisk Modellering i St�bning og Svejsning
+42227 Industriel laserteknologi
+42231 Plastprocesser
+42233 Plastdesign
+42261 Eksperimentel procesanalyse - videreg�ende kursus
+42301 Produktionsteknologi, teori
+42303 Produktionsteknologi
+42305 Produktionsteknologi, �velser (h�ndv�rkerkursus)
+42309 Produktionsteknologi, �velser
+42342 B�redygtig Produktion
+42371 Design af Lean Produktions- og Servicesystemer
+42372 Livscyklusvurdering af produkter og systemer
+42405 Introduktion til produktion - styring og ledelse
+42415 Teknisk �konomi
+42421 Ledelse og organisation
+42422 Ledelse og organisation
+42424 �rsregnskab og �konomistyring
+42430 Projektledelse
+42432 Strategisk Simulering af dynamiske systemer
+42435 Virksomhedsstart
+42440 Teknologi og �konomi
+42441 Ledelse af teknologi og viden
+42451 Mass Customization - anvendelse af produktkonfigurering
+42454 Kvalitetsstyring - TQM/Business Excellence
+42457 Supply Chain Management and Advanced Planning
+42458 Produktionsstyring - principper, systemer og modeller
+42460 Produktplanl�gning og marketing management
+42465 Industriel strategisk planl�gning
+42470 Introduktion til industriel milj�ledelse
+42490 Teknologi, �konomi, ledelse og organisation
+42532 Strategi og planl�gningsmetoder
+42535 Arbejdspsykologi og ledelse
+42542 Milj�- og arbejdsmilj�ledelse i netv�rksperspektiv
+42543 Forandringsledelse
+42610 Ingeni�rfagets videnskabsteori
+42640 Socioteknisk design
+42643 Teknologiopfattelser
+42644 Teknologi og internationalt udviklingssamarbejde
+42650 Sporbarhed og f�devarer
+42651 Industriel f�devareproduktion i globalt perspektiv
+42705 Knowledge based entrepreneurship
+42720 Mikromekanisk system design og produktion
+42801 Fagprojekt
+42901 Produktionsteknologi, teori
+42910 Materialel�re
+42911 Procesteknik
+42912 Produktionsteknologi, �velser
+42932 Introduktion til plastteknologi
+42955 Produktionsstyring 
+42960 Systemanalyse
+42968 Simulering af produktions- og logistiksystemer
+42983 Korrosion og materialevalg
+42984 Materialel�re
+88312 L�reanstalternes f�lles prejektleder- og innovationskursus
+88318 L�reanstalternes f�lles formidlingskursus, LFF
+88387 Teknologihistorie
+88388 Teknologihistorie
+88392 Videnskabshistorie
+88393 Videnskabshistorie
+88394 Ingeni�rkunstens historie og kultur
+88395 Ingeni�rkunstens historie og kultur
+88401 Patentkursus
+88533 Filosofisk etik
+88890 Engelsk 1
+88891 Engelsk 2
