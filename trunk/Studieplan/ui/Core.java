@@ -14,6 +14,7 @@ import exceptions.CourseDoesNotExistException;
 import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
 import dataClass.StudyPlan;
+import databases.CourseBase;
 import exceptions.StudyPlanDoesNotExistException;
 
 public interface Core {
@@ -30,7 +31,7 @@ public interface Core {
 	 * Get a List of all the valid courses in the database. 
 	 * @return an array of all Valid courses.
 	 */
-	public Course[] getAllCourses();
+	public CourseBase getCourseBase();
 	
 	/**
 	 * Generate a new StudyPlan to work on.
