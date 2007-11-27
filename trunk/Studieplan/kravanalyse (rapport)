@@ -1,0 +1,35 @@
+Kravanalyse
+
+Når et program skal skrives er der flere ting som skal overvejes. En af ting der skal gøres klart er hvad der er planlagt at programmet skal indeholde. I dette afsnit vil der blive kigget nærmere på hvilke krav gruppen forventer programmet kan opfylde, og hvordan nogle problemer skal håndteres. Der vil desuden blive overvejet mulige løsninger i nogle situationer.
+
+
+Overordnede krav
+
+Sådan de helt overordnede krav til programmet, er selvfølgelig at det kan de basale ting omkring det at lave en studieplan. Tilføje og fjerne fra et skema er nogle af de basale funktioner, samt at vise planen. Desuden skal programmet også kunne give en smule hjælp, men det bliver nok mest til hvilke funktioner der findes og om man får tastet noget forkert ind (et ikke eksisterende kursusnummer, bare for at tage et eksempel). Et udprint af hvilke kurser der er i databasen ville også være praktisk når studieplanen skal laves, så sådanne funktion skal den også have. Desuden, så ville det også være praktisk hvis man kunne gemme sin studieplan, så der er mulighed for at arbejde videre på den en anden dag, og hente den frem igen.
+
+I opgaven er der givet nogle forenklinger i forhold til kravene, nemlig at der i første omgang ikke skal tilføjes 3-ugers perioder. Dernæst, de kurser som har nogle forudsætninger, de kan i virkeligheden blive taget samtidig. I programmet er det ikke nødvendigt at tage højde for det. De kurser som strækker sig over 2 semestre, der må brugeren selv tilføje dem begge manuelt. Og til sidst, de kurser som tilbydes både forår og efterår, der må brugeren selv sørge for det kun er placeret en gang i studieplanen.
+
+
+Mere specifikke krav
+
+Bliver der kigget nærmere på hvad programmet skal kunne, så er der flere ting at tænke på. Til opgaven er der givet 3 filer som udgører kursusdatabasen. Disse filer er ikke bygget helt praktisk op, og vil volde nogle problemer. For eksempel der er i filen med kursusnumre og navne lavet mellemrum ikke bare mellem kursusnavn og nummer, men også inde i selve navnene. Dette gør at det ikke bare er muligt, at lave en split i forhold til mellemrum. Gør man det, så vil man få en collection hvor navnet, for nogle kurser, er splittet over flere pladser i collection. Vi benytter Regular Expression til at søge igennem databasefilerne, da det, i vores øjne, vil håndtere filerne bedre. Det vil være lettere end selv at dele hver linie op i mindre strings og teste dem, for om de er en del af navnet eller nummeret.
+   En anden ting er selve databasen, men gruppen har valgt ikke at indlæse den ind i memory. Java er i forvejen RAM krævende, og der er ingen grund til at indlæse det i memory. Sådan som vi opbygger programmet, så er det ikke nødvendigt at indlæse dem i memory. Vi bruger regular expression til søgningen i filerne. Dette kræver så at databasefilerne bliver distribueret med programmet, hvilket let kan lade sig gøre. Brugere er i forvejen vant til, at et program ikke fungerer ordenligt uden alle dens filer.
+
+
+Fejlhåndtering
+
+Bliver der kigget nærmere på fejlhåndtering, så er der flere mulige problemer der vil springe i øjnene. Nogle af problemerne ligger omkring de forskellige kommandoer.
+   Ved flere af kommandoerne, der bliver det krævet man taster data rigtigt. For eksempel ved både tilføj og fjern kursus, der skal man taste et specifikt kursusnummer for at kurset bliver fjernet/tilføjet. Der har gruppen valgt at der bliver kørt nogle checks. I de checks, der bliver der testet om det givne input for kursusnummer kan laves om til en integer (alle kursusnumre er tal) og om længden af kursusnummeret er mindre end 5 (den starter med at tælle fra 0, ikke 1). Ved de kurser (tilføj og visplan) hvor der kan indtastet hvilket semesternummer det er, der vil også blive kørt nogle checks. Nemlig, om det kan laves om til en integer, og om tallet er mellem 1 og 20. Gruppen antager, at folk bliver smidt ud efter at have studeret i 10 år uden at afslutte uddannelsen.
+   Fejler nogle af disse checks, vil man blive bedt om at indtaste kursus eller semester nummer igen.
+   Ved kommandoen visplan, der har gruppen besluttet at den også skal kunne vise hvilket årstid det er. Visplan får givet et semesternummer, og derfra kan den vise hvilke kurser der ligger på hvilke dage/tidspunkter. Den viser desuden hvilket semester det er for og hvilken årstid. For at det er muligt, så har gruppen antaget, at de studerende KUN starter om efteråret.
+   Ved kommandoerne gem vil man blive bedt om et navn man vil gemme sin plan under. Det navn er det samme man skal bruge når man vil finde sin plan igen. Indtaster man et ikke eksisterende navn, vil programmet bede en om at skrive et.
+
+Kigger vi nærmere på hvad der er planlagt omkring fejlhåndtering, så skal det primært foregå ved exceptions. Exceptions giver os mulighed for at redde programmet ved de mere fatale fejl. Hvis vi, for eksempel, får IOExceptions vil det normalt ligge programmet ned, og give en grim liste over fejlen. Sådan som vi har valgt at opbygge programmet, der er alle vores exceptions checked. Det vil sige, det er exceptions der vil komme under diverse checks. Hvis nu en RuntimeException vil dukke op, som der ikke er taget højde for, så vil væres core (mere forklaring om classes senere) catche alle exceptions.
+
+
+Krav til 3-mands grupper
+
+Siden gruppen består af 3 personer, så skal der også kigget på hvilke krav der yderligere kommer til.
+   Der er planer om at indføre i programmet, så man også kan planlægge 3-ugers perioden (3-mands krav, punkt 12). Siden vi i forvejen har planlagt at bruge regular expression,  så skulle det være enkelt nok at tilføje 3-ugers perioderne. Med dette er vi nød til at lave en antagelse, nemlig at det IKKE er muligt at have et fag på både 13- og 3-ugers perioden (det vil sige, fag som Ingeniørarbejde kan kun forekomme i en af perioderne).
+   Det næste krav vi vælger at inddrage, er udvidelse af databasen (punkt 16 og 17). Siden vi vil bruge regular expression, så er tilføjelsen af endnu en database enkelt nok. En kommando der fra terminalen kan tilføje et kursus skulle heller ikke være så problematisk igen.
+   Det sidste vi vælger at inddrage fra 3-mands krav listen er håndtering af flere studieplaner (punkt 20). Vores core vil holde styr på alle de aktive studieplaner.
