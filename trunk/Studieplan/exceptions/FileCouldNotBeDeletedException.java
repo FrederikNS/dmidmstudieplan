@@ -18,6 +18,7 @@ public class FileCouldNotBeDeletedException extends IOException {
 	 * 
 	 */
 	public FileCouldNotBeDeletedException(String filename) {
+		super("The file " + filename + " could not be deleted!");
 		this.filename = filename;
 	}
 	
