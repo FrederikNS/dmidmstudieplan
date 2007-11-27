@@ -25,6 +25,7 @@ public class Dialog extends UI implements DialogInterface {
 	String semesterNumber;
 	String indtastet[];
 	boolean killSwitch;
+	boolean studyPlanChanged;
 
 	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
@@ -69,10 +70,12 @@ public class Dialog extends UI implements DialogInterface {
 					break;
 				}
 			}
+			end();
 		} catch (IOException e) {
+			System.err.println("ARG!");
 			System.err.println(e);
+			
 		}
-		end();
 	}
 
 	/**
@@ -144,6 +147,7 @@ public class Dialog extends UI implements DialogInterface {
 	 * @throws IOException 
 	 */
 	private void add() throws IOException {
+		studyPlanChanged=true;
 		while(courseCheck()!=INPUT_ACCEPTED){
 			try {
 				indtastet[1].trim();	
@@ -178,6 +182,7 @@ public class Dialog extends UI implements DialogInterface {
 			System.err.println(e);
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
+			e.printStackTrace();
 		} catch (CritalCourseDataMissingException e) {
 			//Not going to happen
 		} catch (StudyPlanDoesNotExistException e) {
@@ -227,6 +232,7 @@ public class Dialog extends UI implements DialogInterface {
 	 * If the format of the inputted courseID is wrong, it will ask for a new courseID
 	 */
 	private void remove(){
+		studyPlanChanged=true;
 		int temp3;
 		try {
 			temp3 = Integer.parseInt(indtastet[1]);
@@ -404,8 +410,24 @@ public class Dialog extends UI implements DialogInterface {
 
 	/**
 	 * Exits the program.
+	 * @throws IOException 
 	 */
-	private void end() {
+	private void end(){
+		if(studyPlanChanged==true){
+			System.out.println("Vil du gemme din studieplan? (skriv \"gem\" for at gemme eller \"afslut\" for at afslutte uden at gemme");
+			indtastet[0]=null;
+			System.out.println("woot");
+			while(commandCheck()!=COMMAND_AFSLUT || commandCheck()!=COMMAND_GEM){
+				try {
+					input(0);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(commandCheck()==COMMAND_GEM)
+				savePlan();
+		}
 		System.out.println("Tak for idag.");
 	}
 }
