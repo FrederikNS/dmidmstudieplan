@@ -1,7 +1,7 @@
 DONE   1.  Kunne fortælle brugeren navnene på de ordrer programmet kender.
 DONE   2. Have en hjælpefacilitet der i terminalvinduet kan oplyse detaljer om ordrerne.
 TEST   3. Danne programmets kursusbase ud fra de tre filer som nævnt ovenfor.
-   4. Kunne give en tekstrepræsentation af kursusbasen - toString().
+TEST   4. Kunne give en tekstrepræsentation af kursusbasen - toString().
    muligvis:
    course[] = getAllCourses();
    for(...)  
@@ -9,7 +9,7 @@ TEST   3. Danne programmets kursusbase ud fra de tre filer som nævnt ovenfor.
    ellers kan vi lave en CourseList class med en overloaded toString metode.		
    
    
-   5. Vise i terminalvinduet den aktuelle studieplan som den ser ud her og nu.
+TEST   5. Vise i terminalvinduet den aktuelle studieplan som den ser ud her og nu.
    Mangler en overskrivning af toString metode til StudyPlan.
    
 TEST   6. Kunne indsætte i studieplanen på et angivet semester et kursus der står i kursusbasen.
@@ -61,7 +61,7 @@ Udvidede krav til 3-mands grupper:
 Opgaven skal løses som den er specificeret ovenfor i afsnittet Opgaven, men med tilføjelse af mindst tre af nedenstående funktionalitetskrav:
 
 TEST  12. Ret i programmet så man kan lægge studieplaner med kurser der udbydes i 3-ugersperioderne januar og juni.
-  13. Ved definitionen af skemagrupper for de enkelte kurser forenklede vi modellen ved at tilføje -e eller -f til kursusnummeret for at lette håndteringen af kurser over to semestre og af kurser der blev udbudt såvel forår som efterår. Foretag de nødvendige rettelser så skemagruppefiler kan se sådan ud:
+PLANNED  13. Ved definitionen af skemagrupper for de enkelte kurser forenklede vi modellen ved at tilføje -e eller -f til kursusnummeret for at lette håndteringen af kurser over to semestre og af kurser der blev udbudt såvel forår som efterår. Foretag de nødvendige rettelser så skemagruppefiler kan se sådan ud:
 
           01005 E5A E5B E3B F5A F5B F3B 
           01017 E1B
@@ -83,12 +83,12 @@ TEST  12. Ret i programmet så man kan lægge studieplaner med kurser der udbyde
           ... manglende forudsætningskurser
       Men det kan gøres endnu bedre:
           *** Kursus 02105 ej tilføjet - forudsætningskurset 01017 mangler ***
-PLANNED  16. Indfør en ordre, så man fra terminalvinduet kan indtaste et manglende kursus til kursusbasen.
-PLANNED  17. Indfør en ordre og en kursusfil så man kan få udvidet kursusbasen med de kurser der står i kursusfilen, hvori der er én linie pr. kursus, fx:
+  16. Indfør en ordre, så man fra terminalvinduet kan indtaste et manglende kursus til kursusbasen.
+  17. Indfør en ordre og en kursusfil så man kan få udvidet kursusbasen med de kurser der står i kursusfilen, hvori der er én linie pr. kursus, fx:
 
       02101;Indledende programmering;E3A;
       02161;Software Engineering 1;F2A;02101
 
   18. Indfør en ordre så man til sin studieplan kan tilføje en hel række af kurser på én gang i stedet for at skulle komme med ét kursus ad gangen.
   19. Indfør en ordre der i terminalvinduet kan udskrive alle de kurser fra kursusbasen som ligger i en bestemt skemagruppe.
-PLANNED  20. Indfør ordrer, så programmet kan håndtere flere studieplaner, enten for samme person, eller for flere personer. Dog naturligvis kun én studieplan ad gangen. Man skal i samme kørsel kunne afslutte en plan og skifte til en anden. Og kunne skifte mellem personerne. 
+TEST  20. Indfør ordrer, så programmet kan håndtere flere studieplaner, enten for samme person, eller for flere personer. Dog naturligvis kun én studieplan ad gangen. Man skal i samme kørsel kunne afslutte en plan og skifte til en anden. Og kunne skifte mellem personerne. 
