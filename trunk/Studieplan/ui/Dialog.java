@@ -472,10 +472,10 @@ public class Dialog extends UI {
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
-			} catch (IOException e) {
+			} catch (CorruptStudyPlanFileException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
-			} catch (CorruptStudyPlanFileException e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 			}
