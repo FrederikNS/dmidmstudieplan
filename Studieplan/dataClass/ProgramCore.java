@@ -59,9 +59,11 @@ public class ProgramCore implements Core {
 		try {
 			try {
 				courseDB = new CourseBase();
+				courseDB.reloadDatabase();
 			} catch (Exception e) {
-				System.err.println("Failed to initialize DatabaseReader.");
+				System.err.println("Failed to initialize CourseBase.");
 				System.err.println(e);
+				e.printStackTrace(System.err);
 				System.exit(1);
 			}
 			userDB = new UserDatabase();
