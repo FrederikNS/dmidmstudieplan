@@ -50,8 +50,9 @@ public interface Core {
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
+	 * @throws CourseAlreadyExistsException 
 	 */	
-	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException;
+	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
 	/**
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * Adds the Course to the current StudyPlan
@@ -85,8 +86,9 @@ public interface Core {
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
+	 * @throws CourseAlreadyExistsException 
 	 */
-	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException;
+	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
 	/**
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * @param studentID the student ID of the student, who's plan it should be added to.
