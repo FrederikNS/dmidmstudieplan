@@ -84,7 +84,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	
     	//load the parses.
         openFileScan();
-        
         try {
         	//parse through the Name database and see if the courseID appears.
         	//if it does not appear, the scanner will run out of lines and throw the
@@ -92,13 +91,12 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	//
         	//else if it exists, the condition for the while loop will be false and it will end
         	// before we run out of lines.
-        	while(!scan[DatabaseFiles.NAVN.ordinal()].hasNext(courseID + ".*") ) {
+        	while(null == scan[DatabaseFiles.NAVN.ordinal()].findInLine(courseID + " (.*)") ) {
         		scan[DatabaseFiles.NAVN.ordinal()].nextLine();
         	}
         } catch(NoSuchElementException e) {
         	throw new CourseDoesNotExistException(courseID);
         }
-
         
         String courseName;
 		String[] period, dependencies, skema;
@@ -121,8 +119,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
        	 * scan[enum.NAVN.ordinal()].match.group(1) returns the match of that pattern we specified as 
        	 * "interesting". (It returns the first of these patterns, but in this case there is only one.)
          */
-        scan[DatabaseFiles.NAVN.ordinal()].next("\\d{5} (.*)");
-        courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(1);
+        courseName = scan[DatabaseFiles.NAVN.ordinal()].match().group(0);
         
     	try {
         	//look through the Skema Database - an entry here is mandantory!
@@ -130,7 +127,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	// The reason is the Skema database is structed slightly different than the rest and
         	// for this pattern to properly read every line, we have to include it.
         	// the formatting is explained in greater detail below.
-        	while(!scan[DatabaseFiles.SKEMA.ordinal()].hasNext(courseID+"(-\\w)?.*")) {
+        	while(null == scan[DatabaseFiles.SKEMA.ordinal()].findInLine(courseID+"( ){1,3}( .{3}+)(( (januar|juni)){0,2})") ) {
         		scan[DatabaseFiles.SKEMA.ordinal()].nextLine();
         	}
         	/*In this database, the course number is optionally followed by a -f or -e
@@ -155,10 +152,9 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	 * if trimmed for trailing and (more importantly) leading whitespaces and then split with 
         	 * the " " delimited, it will now be an array of "Skema" details. 
         	 */
-        	scan[DatabaseFiles.SKEMA.ordinal()].next("\\d{5}( .{3}+)(( (januar|juni)){0,2})");
             MatchResult result = scan[DatabaseFiles.SKEMA.ordinal()].match();
             skema = result.group(1).trim().split(" ");
-            period = result.group(4).trim().split(" ");
+            period = result.group(3).trim().split(" ");
             
             
         } catch(NoSuchElementException e) {
@@ -172,7 +168,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         try {
         	//scan through the Dependency/Demand database and see if an entry appears.
         	//an entry in this database is not mandantory.
-        	while(!scan[DatabaseFiles.KRAV.ordinal()].hasNext(courseID + "(.*)+") ) {
+        	while(null == scan[DatabaseFiles.KRAV.ordinal()].findInLine(courseID + " (\\d{5})+") ) {
         		scan[DatabaseFiles.KRAV.ordinal()].nextLine();
         	}
         	
@@ -182,8 +178,6 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
         	 * course number of the required course(s). A course appearing in this database 
         	 * (as the first part of an entry) must have at least one dependency course. 
         	 */ 
-        	//Possible re-write with for loop and .group
-        	scan[DatabaseFiles.KRAV.ordinal()].next("\\d{5} (\\d{5})+");
             String depends = scan[DatabaseFiles.KRAV.ordinal()].match().group(1);
             //Since the regular expression simply fetches everything but the original course number
             // and the first whitespace after, the match will contain the dependency courses in a 
@@ -268,9 +262,7 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     			s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
     			s.useDelimiter("\n");
     		} catch(FileNotFoundException e){
-    			//System.err.println(e);
-    			//e.printStackTrace(System.err);
-    			System.exit(1);
+
     		}
 
     	}
@@ -281,22 +273,20 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	public boolean hasNext() {
     		//We already got an unread result cached. That is still the next entry. 
     		if(cached) return true;
-
     		boolean next = false;
-    		
-    		while(s.hasNext("(\\d{5}).*")) {
+    		while(null != s.findInLine("(\\d{5}) (.*)?")  ) {
 	        	try {
 	        		//Cache all the possible "nexts".
 	        		//Allows us to catch the exceptions and garantuee 
 	        		// that the getNextCourse* methods do not throw them.
-	    			s.next("(\\d{5}).*");
 	        		courseCache = findCourse(s.match().group(1));
 	        		cached = true;
 	        		next = true;
 	        		break;
-	        	} catch(Exception e) {
+	    		} catch (CourseDoesNotExistException e) {
+				} catch (CritalCourseDataMissingException e) {
 	        	}
-	        	
+	        	s.nextLine();
 	        }
     		// if no next exists, clean up (just in case)
     		if(!next) {
@@ -312,6 +302,10 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     			toReturn = courseCache;
     			courseCache = null;
     			cached = false;
+    			try {
+    				s.nextLine();
+    			} catch(NoSuchElementException e) {
+    			}
     		} else {
     			throw new NoSuchElementException(); 
     		}

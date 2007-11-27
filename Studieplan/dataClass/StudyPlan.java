@@ -28,6 +28,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	}
 	
 	public StudyPlan(String studentID) {
+		plan = new ArrayList<SelectedCourse>();
 		this.studentID = studentID;
 	}
 	
@@ -48,11 +49,21 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	}
 
 	public boolean contains(String courseID) {
-		return plan.contains(new Course(courseID));
+		if(plan.isEmpty())
+			return false;
+		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
+		
+		for(int i = 0 ; i < planned.length ; i++) {
+			if(planned[i].getCourseID().equals(courseID)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public boolean contains(Course course) {
-		return plan.contains(course);
+		return this.contains(course.getCourseID());
 	}
 	
 	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException {
@@ -61,30 +72,31 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 		}
 		int semester = toAdd.getSemester();
 		boolean doAdd = false;
+		if(!plan.isEmpty()) {
+			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
 		
-		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
-		
-		Arrays.sort( planned );
-		int i = 0, currentSemester = 0;
-		for( ; i < planned.length ; i++) {
-			currentSemester = planned[i].getSemester();
-			if(currentSemester == semester)
-				break;
-			if(currentSemester > semester) {
-				//If we get here, nothing is planned for that semester.
-				doAdd = true;
-				break;
-			}
-				
-		}
-		if(!doAdd) {
-			for( ; i < planned.length ; i++)  {
+			Arrays.sort( planned );
+			int i = 0, currentSemester = 0;
+			for( ; i < planned.length ; i++) {
 				currentSemester = planned[i].getSemester();
-				if(currentSemester > semester) {
+				if(currentSemester == semester)
 					break;
-				} 
-				if(planned[i].conflictingSkema(toAdd)) {
-					throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
+				if(currentSemester > semester) {
+				//	If we get here, nothing is planned for that semester.
+					doAdd = true;
+					break;
+				}
+				
+			}
+			if(!doAdd) {
+				for( ; i < planned.length ; i++)  {
+					currentSemester = planned[i].getSemester();
+					if(currentSemester > semester) {
+						break;
+					} 
+					if(planned[i].conflictingSkema(toAdd)) {
+						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
+					}
 				}
 			}
 		}

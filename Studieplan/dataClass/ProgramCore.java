@@ -290,6 +290,23 @@ public class ProgramCore implements Core {
 	public StudyPlan getStudyPlan() {
 		return currentPlan;
 	}
+
+	public void saveAllOpenStudyPlans() {
+		if(planList.isEmpty())
+			return;
+		
+		
+		
+		StudyPlan[] list = planList.toArray(new StudyPlan[1]);
+		try {
+			for(int i = 0 ; i < list.length ; i++ ) {
+				saveStudyPlan(list[i]);
+			}
+		} catch (CannotSaveStudyPlanException e) {
+		} catch (FilePermissionException e) {
+		}
+		
+	}
 	
 	
 }

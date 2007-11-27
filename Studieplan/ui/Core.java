@@ -153,6 +153,8 @@ public interface Core {
 	public void saveStudyPlan(String studentID) throws  CannotSaveStudyPlanException, FilePermissionException, StudyPlanDoesNotExistException;
 	public void saveStudyPlan(StudyPlan plan)  throws CannotSaveStudyPlanException, FilePermissionException ;
 	
+	//public void saveAllOpenStudyPlans();
+	
 	/**
 	 * Load a saved StudyPlan
 	 * @param studentID the unique Identifier of the of the StudyPlan (or the filename of it without a .plan extension)
