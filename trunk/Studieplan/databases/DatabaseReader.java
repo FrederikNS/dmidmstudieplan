@@ -266,12 +266,17 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
     	boolean cached = false;
     	Course courseCache;
     	
-    	private Iter() {
+    	public Iter() {
     		try {
-    		s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
-    		s.useDelimiter("\n");
+    			System.out.println(database[DatabaseFiles.NAVN.ordinal()]);
+    			System.out.println(database[DatabaseFiles.NAVN.ordinal()].getAbsoluteFile());
+    			
+    			s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
+    			s.useDelimiter("\n");
     		} catch(FileNotFoundException e){
-    			//since the file is already loaded into memory, it cannot be missing
+    			//System.err.println(e);
+    			//e.printStackTrace(System.err);
+    			System.exit(1);
     		}
 
     	}

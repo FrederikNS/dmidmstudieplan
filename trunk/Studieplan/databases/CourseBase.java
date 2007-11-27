@@ -21,8 +21,10 @@ public class CourseBase {
 	private DatabaseReader dbRead;
 	
 	public CourseBase() throws FileNotFoundException, FilePermissionException {
+		
 		dbRead = new DatabaseReader();
-		reloadDatabase();
+		
+		//reloadDatabase();
 	}
 	
 	
