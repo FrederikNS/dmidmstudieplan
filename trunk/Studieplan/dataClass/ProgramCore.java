@@ -59,7 +59,7 @@ public class ProgramCore implements Core {
 		try {
 			try {
 				dbRead = new DatabaseReader();
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				System.err.println("Failed to initialize DatabaseReader.");
 				System.err.println(e);
 				System.exit(1);
@@ -278,6 +278,18 @@ public class ProgramCore implements Core {
 	 */
 	public boolean isCourseInStudyPlan(String studentID, Course course) throws StudyPlanDoesNotExistException {
 		return this.isCourseInStudyPlan(studentID, course.getCourseID());
+	}
+
+	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException {
+		addCourseToStudyPlan("temp", courseID, semester);
+	}
+
+	public void addCourseToStudyPlan(Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException {
+		addCourseToStudyPlan("temp", course, semester);
+	}
+
+	public void addCourseToStudyPlan(SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException {
+		addCourseToStudyPlan("temp", course);
 	}
 	
 	
