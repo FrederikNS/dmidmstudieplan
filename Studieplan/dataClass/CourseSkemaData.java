@@ -9,9 +9,11 @@ package dataClass;
  */
 public interface CourseSkemaData {
 
-	public static final int INTERNAL_SEASON_SPRING = 0x10000000;
-	public static final int INTERNAL_SEASON_AUTHUM = 0x20000000;
-	public static final int INTERNAL_SEASON_BOTH = 0x30000000;
+	public static final int INTERNAL_SEASON_SPRING_SHORT = 0x10000000;
+	public static final int INTERNAL_SEASON_SPRING_LONG = 0x20000000;
+	public static final int INTERNAL_SEASON_AUTUMN_LONG = 0x40000000;
+	public static final int INTERNAL_SEASON_AUTUMN_SHORT = 0x80000000;
+	public static final int INTERNAL_SEASON_ALL = 0xF0000000;
 	
 	public static final int INTERNAL_MANDAG_FORMIDDAG = 0x00000001;
 	public static final int INTERNAL_MANDAG_EFTERMIDDAG = 0x00000002;

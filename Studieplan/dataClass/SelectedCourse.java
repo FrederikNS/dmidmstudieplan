@@ -32,7 +32,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		super(course.getCourseID());
 		setCourseName(course.getCourseName());
 		setDependencies(course.getDependencies());
-		setSeason(course.getSeason());
+		setFullSkemaData(course.getFullSkemaData());
 		setInternalSkemaRepresentation(course.getInternalSkemaRepresentation());
 		setSemester(semester);
 	}

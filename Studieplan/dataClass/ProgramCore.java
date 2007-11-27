@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import databaseHandler.DatabaseReader;
-import databaseHandler.UserDatabase;
+import databases.CourseBase;
+import databases.UserDatabase;
 import ui.Core;
 import ui.Dialog;
 import ui.UI;
@@ -31,7 +31,7 @@ import exceptions.StudyPlanDoesNotExistException;
 public class ProgramCore implements Core {
 
 	private UI ui;
-	private DatabaseReader dbRead;
+	private CourseBase courseDB;
 	private UserDatabase userDB;
 	private ArrayList<StudyPlan> planList;
 	private StudyPlan currentPlan;
@@ -58,7 +58,7 @@ public class ProgramCore implements Core {
 		
 		try {
 			try {
-				dbRead = new DatabaseReader();
+				courseDB = new CourseBase();
 			} catch (Exception e) {
 				System.err.println("Failed to initialize DatabaseReader.");
 				System.err.println(e);
@@ -90,7 +90,7 @@ public class ProgramCore implements Core {
 			userDB = null;
 			planList = null;
 			currentPlan = null;
-			dbRead = null;
+			courseDB = null;
 			
 			System.exit(returnCode);
 			
@@ -107,21 +107,15 @@ public class ProgramCore implements Core {
 	/* (non-Javadoc)
 	 * @see ui.Core#findCourse(java.lang.String)
 	 */
-	public Course findCourse(String courseID) throws CourseDoesNotExistException, CritalCourseDataMissingException {
-		return dbRead.findCourse(courseID);
+	public Course findCourse(String courseID) throws CourseDoesNotExistException {
+		return courseDB.findCourse(courseID);
 	}
 
 	/* (non-Javadoc)
 	 * @see ui.Core#getAllCourses()
 	 */
 	public Course[] getAllCourses() {
-		ArrayList<Course> list = new ArrayList<Course>();
-		Iterator<Course> ilt = dbRead.iterator();
-		
-		while(ilt.hasNext())
-			list.add(ilt.next());
-		
-		return list.toArray(new Course[1]);
+		return courseDB.getAllCourses();
 	}
 
 	/* (non-Javadoc)
@@ -233,7 +227,7 @@ public class ProgramCore implements Core {
 	 * @see ui.Core#search(java.lang.String)
 	 */
 	public Course[] search(String pattern) throws CourseDoesNotExistException { 
-		return dbRead.search(pattern);
+		return courseDB.search(pattern);
 	}
 
 	/* (non-Javadoc)
@@ -290,6 +284,11 @@ public class ProgramCore implements Core {
 
 	public void addCourseToStudyPlan(SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException {
 		addCourseToStudyPlan("temp", course);
+	}
+
+	public StudyPlan getStudyPlan() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
