@@ -148,7 +148,7 @@ public class Dialog extends UI implements DialogInterface {
 	 * @throws IOException 
 	 */
 	private void add() throws IOException {
-		studyPlanChanged=true;
+
 		while(courseCheck()!=INPUT_ACCEPTED){
 			try {
 				indtastet[1].trim();	
@@ -175,6 +175,8 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		try {
 			getCore().addCourseToStudyPlan(indtastet[1], Integer.parseInt(indtastet[2]));
+			System.out.println("Course added to plan");
+			studyPlanChanged = true;
 		} catch (NumberFormatException e) {
 			//Not going to happen
 		} catch (IllegalArgumentException e) {
@@ -233,7 +235,7 @@ public class Dialog extends UI implements DialogInterface {
 	 * Remove a course from the users study plan.
 	 * If the format of the inputted courseID is wrong, it will ask for a new courseID
 	 */
-	private void remove(){
+	private void remove() {
 		studyPlanChanged=true;
 		int temp3;
 		try {
