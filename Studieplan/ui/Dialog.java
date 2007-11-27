@@ -31,10 +31,38 @@ public class Dialog extends UI implements DialogInterface {
 		intro();
 		indtastet = new String[10];
 		while(killSwitch==false) {
-			
 			input(0);
-			if(commandCheck()==true) {
-				crossroads();
+			switch(commandCheck()){
+			case COMMAND_NOT_RECOGNIZED:
+				continue;
+				break;
+			case COMMAND_AFSLUT:
+				killSwitch = true;
+				break;
+			case COMMAND_HJAELP:
+				helpMe();
+				break;
+			case COMMAND_VIS_PLAN:
+				showPlan();
+				break;
+			case COMMAND_UDSKRIV_BASE:
+				printDatabaseList();
+				break;
+			case COMMAND_TILFØJ:
+				add();
+				break;
+			case COMMAND_FJERN:
+				remove();
+				break;
+			case COMMAND_HENT:
+				loadPlan();
+				break;
+			case COMMAND_GEM:
+				savePlan();
+				break;
+			case COMMAND_VIS_KURSUS:
+				
+				break;
 			}
 		}
 		end();
@@ -80,53 +108,30 @@ public class Dialog extends UI implements DialogInterface {
 		}
 	}
 	
-	public boolean commandCheck(){
+	public int commandCheck(){
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
-			return true;
+			return 1;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
-			return true;
+			return 2;
 		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			return true;
+			return 3;
 		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-			return true;
+			return 4;
 		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-			return true;
+			return 5;
 		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-			return true;
+			return 6;
 		} else if (indtastet[0].equalsIgnoreCase("hent")) {
-			return true;
+			return 7;
 		} else if (indtastet[0].equalsIgnoreCase("gem")) {
-			return true;
+			return 8;
 		} else if (indtastet[0].equalsIgnoreCase("viskursus")){
-			return true;
+			return 9;
 		} else {
-			return false;
+			return 0;
 		}
 	}
 	
-	public void crossroads() {
-		if (indtastet[0].equalsIgnoreCase("afslut")) {
-			killSwitch = true;
-		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
-			helpMe();
-		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			showPlan(indtastet);
-		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-			printDatabaseList();
-		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-			add();
-		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-			remove(indtastet);
-		} else if (indtastet[0].equalsIgnoreCase("hent")) {
-			loadPlan(indtastet);
-		} else if (indtastet[0].equalsIgnoreCase("gem")) {
-			savePlan(indtastet);
-		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			//TODO
-		}else {
-			System.out.println("Command not understood");
-		}
-	}
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
 	 * (eg. too high semester number, or the course ID contains letters).
