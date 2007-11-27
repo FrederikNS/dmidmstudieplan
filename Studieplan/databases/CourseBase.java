@@ -24,7 +24,7 @@ public class CourseBase {
 		
 		dbRead = new DatabaseReader();
 		
-		//reloadDatabase();
+		reloadDatabase();
 	}
 	
 	
