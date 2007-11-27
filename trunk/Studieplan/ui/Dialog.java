@@ -8,8 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
+import exceptions.CourseDoesNotExistException;
+import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
+import exceptions.StudyPlanDoesNotExistException;
 
 /**
  * @author Morten Sørensen
@@ -101,7 +105,7 @@ public class Dialog extends UI implements DialogInterface {
 				temp[0] = input;
 			}
 			for(int rotation = 0;temp.length >= rotation+offset+1;rotation++) {
-				/*here there be errors*/
+				/*here there be errors*/ //TODO
 				indtastet[offset+rotation] = temp[rotation];
 			}
 		} else {
@@ -164,7 +168,21 @@ public class Dialog extends UI implements DialogInterface {
 			}
 			input(2);
 		}
-		//getCore().
+		try {
+			getCore().addCourseToStudyPlan(indtastet[1], Integer.parseInt(indtastet[2]));
+		} catch (NumberFormatException e) {
+			//Not going to happen
+		} catch (IllegalArgumentException e) {
+			//Not going to happen
+		} catch (ConflictingCourseInStudyPlanException e) {
+			System.err.println(e);
+		} catch (CourseDoesNotExistException e) {
+			System.err.println(e);
+		} catch (CritalCourseDataMissingException e) {
+			//Not going to happen
+		} catch (StudyPlanDoesNotExistException e) {
+			System.err.println(e);
+		}
 	}
 
 	/**
@@ -307,7 +325,7 @@ public class Dialog extends UI implements DialogInterface {
 	}
 	//Prints the list over available courses
 	private void printDatabaseList(){
-		//kommando sendes til anden class
+		//TODO
 	}
 	//Prints the plan as it currently is
 	private void showPlan(){
@@ -315,7 +333,6 @@ public class Dialog extends UI implements DialogInterface {
 		String season;
 		try {
 			temp2 = Integer.parseInt(indtastet[1]);
-			//We expect people to only start at autumn semester
 			if ((temp2 & 1) == 1){
 				season = "e";
 			}

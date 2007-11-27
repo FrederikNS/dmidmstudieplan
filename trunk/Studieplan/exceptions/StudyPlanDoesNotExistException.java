@@ -6,7 +6,7 @@ public class StudyPlanDoesNotExistException extends Exception {
 	private String studentID;
 	
 	public StudyPlanDoesNotExistException(String studentID) {
-		super("The plan for " + studentID + " did not exist");
+		super("*** Studieplanen for " + studentID + " eksisterer ikke ***");
 		this.studentID = studentID;
 	}
 	
