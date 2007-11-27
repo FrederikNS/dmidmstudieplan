@@ -34,10 +34,14 @@ public class CourseBase {
 	public void reloadDatabase() {
 		allCourses = new ArrayList<Course>();
 	
-		Iterator<Course> ilt = dbRead.iterator();
 		
-		while(ilt.hasNext())
+		int i = 0;
+		Iterator<Course> ilt = dbRead.iterator();
+		while(ilt.hasNext()) {
 			allCourses.add(ilt.next());
+			++i;
+		}
+		System.err.println("Courses seens: " + i);
 	}
 	
 	/**
