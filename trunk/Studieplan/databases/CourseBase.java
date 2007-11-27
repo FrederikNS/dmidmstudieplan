@@ -59,7 +59,6 @@ public class CourseBase {
 	
 	public String toString() {
 		
-		//DØ I MOTHERFUCKING NAPLAM SYGE THYGE.
 		String toReturn = "Kursus list: \n";
 		Iterator<Course> ilt = allCourses.iterator();
 		while(ilt.hasNext()) {
