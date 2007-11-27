@@ -162,13 +162,6 @@ public class ProgramCore implements Core {
 	}
 	
 	/* (non-Javadoc)
-	 * @see ui.Core#getDatabaseReaderIterator()
-	 */
-	/*public Iterator<Course> getCourseDatabaseIterator() {
-		return dbRead.iterator();
-	}*/
-
-	/* (non-Javadoc)
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, java.lang.String, int)
 	 */
 	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException {
