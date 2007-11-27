@@ -20,6 +20,7 @@ public class CourseBase {
 	private ArrayList<Course> allCourses;
 	private DatabaseReader dbRead;
 	private int amountOfCourses;
+	private long loadTime;
 	
 	public CourseBase() throws FileNotFoundException, FilePermissionException {
 		
@@ -39,16 +40,24 @@ public class CourseBase {
 			allCourses.add(ilt.next());
 			i++;
 		}
-		long finish = System.currentTimeMillis() - start;
+		loadTime = System.currentTimeMillis() - start;
 		amountOfCourses = i;
 		System.out.println("Done");
-		System.out.println("Loaded " + amountOfCourses +" courses in " + finish + " milliseconds");
-		System.out.println("Average: " + ((amountOfCourses*1000)/finish) + " courses per second");
+		System.out.println("Loaded " + amountOfCourses +" courses in " + loadTime + " milliseconds");
+		System.out.println("Average: " + getLoadAverage() + " courses per second");
 		
 	}
 	
 	public int getAmountOfCourses() {
 		return amountOfCourses;
+	}
+	
+	public long getLoadAverage() {
+		return (amountOfCourses*1000)/loadTime;
+	}
+	
+	public long getLoadTime() {
+		return loadTime;
 	}
 	
 	public Course findCourse(String courseID) throws CourseDoesNotExistException {

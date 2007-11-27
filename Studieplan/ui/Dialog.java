@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import dataClass.Course;
+
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
@@ -67,7 +69,7 @@ public class Dialog extends UI implements DialogInterface {
 					savePlan();
 					break;
 				case COMMAND_VIS_KURSUS:
-
+					showCourse();
 					break;
 				}
 			}
@@ -119,23 +121,23 @@ public class Dialog extends UI implements DialogInterface {
 
 	public int commandCheck(){
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
-			return 1;
+			return COMMAND_AFSLUT;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
-			return 2;
+			return COMMAND_HJAELP;
 		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			return 3;
+			return COMMAND_VIS_PLAN;
 		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-			return 4;
+			return COMMAND_UDSKRIV_BASE;
 		} else if (indtastet[0].equalsIgnoreCase("tilføj")) {
-			return 5;
+			return COMMAND_TILFØJ;
 		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-			return 6;
+			return COMMAND_FJERN;
 		} else if (indtastet[0].equalsIgnoreCase("hent")) {
-			return 7;
+			return COMMAND_HENT;
 		} else if (indtastet[0].equalsIgnoreCase("gem")) {
-			return 8;
+			return COMMAND_GEM;
 		} else if (indtastet[0].equalsIgnoreCase("viskursus")){
-			return 9;
+			return COMMAND_VIS_KURSUS;
 		} else {
 			return 0;
 		}
@@ -335,7 +337,7 @@ public class Dialog extends UI implements DialogInterface {
 	}
 	//Prints the list over available courses
 	private void printDatabaseList(){
-		//TODO
+		System.out.println(getCore().getCourseBase().toString());
 	}
 	//Prints the plan as it currently is
 	private void showPlan(){
@@ -360,6 +362,29 @@ public class Dialog extends UI implements DialogInterface {
 		}
 	}
 
+	private void showCourse() throws IOException {
+		while(courseCheck()!=INPUT_ACCEPTED){
+			try {
+				indtastet[1].trim();	
+			} catch(Exception e) {
+			}
+			if(indtastet[1]==null || indtastet.equals("")) {
+				System.out.println("Indtast venligst et CourseID:");
+			} else {
+				System.out.println("The CourseID you entered was incorrect, please try again");
+			}
+			input(1);
+		}
+		try {
+			Course course = getCore().findCourse(indtastet[1]);
+			System.out.println(course);
+		} catch (CourseDoesNotExistException e) {
+			System.out.println(e);
+		}
+		
+
+	}
+	
 	/**
 	 * Prints a possible study plan
 	 */

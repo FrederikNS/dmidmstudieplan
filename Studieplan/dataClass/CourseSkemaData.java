@@ -38,6 +38,7 @@ public interface CourseSkemaData {
 		
 		public static String internalSkemaToExternString(int internalRepresentation) {
 			int flag;
+		
 			String toReturn = "";
 			for(int i = 0 ; i < 10 ; i++) {
 				flag = 0x1 << i;

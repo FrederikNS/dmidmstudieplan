@@ -30,7 +30,7 @@ public class Course implements CourseSkemaData {
 	}
 	
 	public String skemaToString() {		
-		return "";
+		return InternalSkema.internalSkemaToExternString(internalSkema);
 	}
 	
 	/**
