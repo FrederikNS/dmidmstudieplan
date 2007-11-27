@@ -49,18 +49,25 @@ public class ProgramCore implements Core {
 	 *  If no Runtime Exception is thrown, the Constructor will call System.exit(0); 
 	 * 
 	 * @param cmdLineArgs the Commandline arguments (if any)
+	 * @throws Exception 
 	 * @throws Exception If a ProgramCore has already been started. 
 	 */
-	public ProgramCore(String cmdLineArgs[]) throws Exception  {
+	public ProgramCore(String cmdLineArgs[]) throws Exception   {
 		if(onlyOneCore)
 			throw new Exception();
 		onlyOneCore = true;
 		
+		
 		try {
 			try {
 				courseDB = new CourseBase();
-			} catch (Exception e) {
-				System.err.println("Failed to initialize CourseBase.");
+			} catch (FileNotFoundException e) {
+				System.err.println("Failed to initialize CourseBase due to missing files.");
+				System.err.println(e);
+				e.printStackTrace(System.err);
+				System.exit(1);
+			} catch (FilePermissionException e) {
+				System.err.println("Failed to initialize CourseBase due to file permissions.");
 				System.err.println(e);
 				e.printStackTrace(System.err);
 				System.exit(1);
@@ -164,7 +171,7 @@ public class ProgramCore implements Core {
 	/* (non-Javadoc)
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, java.lang.String, int)
 	 */
-	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException {
+	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException {
 		addCourseToStudyPlan(studentID, findCourse(courseID), semester);
 	}
 	
@@ -275,7 +282,7 @@ public class ProgramCore implements Core {
 		return this.isCourseInStudyPlan(studentID, course.getCourseID());
 	}
 
-	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException {
+	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException {
 		addCourseToStudyPlan("temp", courseID, semester);
 	}
 
@@ -288,8 +295,7 @@ public class ProgramCore implements Core {
 	}
 
 	public StudyPlan getStudyPlan() {
-		// TODO Auto-generated method stub
-		return null;
+		return currentPlan;
 	}
 	
 	
