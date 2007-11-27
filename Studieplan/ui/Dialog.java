@@ -416,19 +416,25 @@ public class Dialog extends UI implements DialogInterface {
 	 */
 	private void end(){
 		if(studyPlanChanged==true){
+			killSwitch = false;
 			System.out.println("Vil du gemme din studieplan? (skriv \"gem\" for at gemme eller \"afslut\" for at afslutte uden at gemme");
-			indtastet[0]=null;
 			System.out.println("woot");
-			while(commandCheck()!=COMMAND_AFSLUT || commandCheck()!=COMMAND_GEM){
+			while (killSwitch==false) {
 				try {
 					input(0);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				switch(commandCheck()){
+				case COMMAND_AFSLUT:
+					killSwitch = true;
+					break;
+				case COMMAND_GEM:
+					savePlan();
+					break;
+				}
 			}
-			if(commandCheck()==COMMAND_GEM)
-				savePlan();
 		}
 		System.out.println("Tak for idag.");
 	}
