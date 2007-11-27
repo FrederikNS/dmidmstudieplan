@@ -10,13 +10,13 @@ import dataClass.StudyPlan;
  */
 public class CannotSaveStudyPlanException extends IOException {
 
-	private static final long serialVersionUID = 0L;
-
+	private static final long serialVersionUID = 2781269550038892353L;
+	
 	private StudyPlan studyPlan;
 	private String reason;
 	
 	public CannotSaveStudyPlanException(StudyPlan studyPlan, String reason) {
-		super();
+		super("Could not save study plan: " + studyPlan + ": " + reason);
 		this.studyPlan = studyPlan;
 		this.reason = reason;
 	}
