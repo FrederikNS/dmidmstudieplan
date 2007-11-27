@@ -25,7 +25,7 @@ public interface Core {
 	 * @throws CourseDoesNotExistException Thrown if no course has that ID.
 	 * @throws CritalCourseDataMissingException Thrown if a course have that ID, the data about it is incomplete.
 	 */
-	public Course findCourse(String courseID) throws CourseDoesNotExistException, CritalCourseDataMissingException;
+	public Course findCourse(String courseID) throws CourseDoesNotExistException;
 	/**
 	 * Get a List of all the valid courses in the database. 
 	 * @return an array of all Valid courses.
@@ -107,7 +107,26 @@ public interface Core {
 	 */
 	public void addCourseToStudyPlan(String studentID, SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException;
 	
+	/**
+	 * Get the current StudyPlan. There will always be a "current" StudyPlan, though it may be unnamed.
+	 * @return the StudyPlan
+	 */
+	public StudyPlan getStudyPlan();
+	/**
+	 * Get the StudyPlan related to the studentID
+	 * @param studentID the studentID related to the plan
+	 * @return the StudyPlan
+	 * @throws StudyPlanDoesNotExistException thrown if the StudyPlan does not exist.
+	 */
 	public StudyPlan getStudyPlan(String studentID) throws StudyPlanDoesNotExistException;
+
+	/**	
+	 * Get the StudyPlan related to the studentID
+	 * @param studentID the studentID related to the plan
+	 * @param createNewIfNotExists if true, the core will generate the StudyPlan rather than throwing an exception, if it does not exist.
+	 * @return the StudyPlan
+	 * @throws StudyPlanDoesNotExistException thrown if the createNewIfNotExists is false and the StudyPlan does not exist.
+	 */
 	public StudyPlan getStudyPlan(String studentID, boolean createNewIfNotExists) throws StudyPlanDoesNotExistException;
 	
 	/**
