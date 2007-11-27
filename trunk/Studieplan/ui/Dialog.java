@@ -17,8 +17,6 @@ import exceptions.StudyPlanDoesNotExistException;
  * Sets up the interface the user will see.
  */
 public class Dialog extends UI {
-
-	String input;
 	BufferedReader keyboard;
 	String courseID;
 	String semesterNumber;
@@ -33,6 +31,11 @@ public class Dialog extends UI {
 		intro();
 		while(killSwitch==false) {
 			input(0);
+			System.out.println("back in start!");
+			if(commandCheck()==true) {
+				System.out.println("Starting crossroads");
+				crossroads();
+			}
 		}
 		end();
 	}
@@ -55,34 +58,47 @@ public class Dialog extends UI {
 	
 	public void input(int offset) {
 		String temp[];
+		String input;
+		temp = new String[10];
+		if(offset==0) {
+			indtastet = new String[10];
+		}
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
+		
+		System.out.print("> ");
 		try {
-			System.out.print("> ");
-			while ((input = this.readInput()) != null) {
+			if((input = this.readInput()) != null) {
 				System.out.println("input was: "+input);
 				if(input.contains(" ")) {
 					temp = input.split(" ");
 				} else {
-					System.out.println("test");
 					temp[0] = input;
-					System.out.println("test");
 				}
-				for(int rotation = 0;temp.length > rotation;rotation++) {
+				for(int rotation = 0;temp.length >= rotation+2;rotation++) {
 					System.out.println("rotation: "+rotation);
+					System.out.println("offset: "+offset);
 					/*here there be errors*/
 					indtastet[offset+rotation] = temp[rotation];
+					System.out.println("rrr");
 					System.out.println("indtastning "+rotation+" var: "+indtastet[offset+rotation]);
 				}
-				if(commandCheck()==true) {
-					crossroads();
-				}
+				System.out.println("whe?");
+				System.out.println("input: "+input);
+				
+				//
+				//DOESN'T WANT TO EXIT WHILE LOOP
+				//
+				
 			}
+			System.out.println("try ending");
 		} catch (Exception e) {
-			System.out.println("Exception in input");
+			e.printStackTrace();
 		}
+		System.out.println("input done");
 	}
 	
 	public boolean commandCheck(){
+		System.out.println("indtastet[0] er: "+indtastet[0]);
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return true;
 		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
@@ -135,22 +151,26 @@ public class Dialog extends UI {
 	 * (eg. too high semester number, or the course ID contains letters).
 	 * @param the command "tilføj" along with data for course and semester (if any).
 	 */
-	//THIS IS A REWRITE OF ADD, CHANGESEMESTER, CHANGECOURSE, COURSECHECK AND SEMESTERCHECK
-	
 	private void add() {
 		while(courseCheck()==false){
-			System.out.println("The CourseID you entered was incorrect, please try again");
+			indtastet[1].trim();
+			if(indtastet[1]==null || indtastet.equals("")) {
+				System.out.println("Indtast venligst et CourseID:");
+			} else {
+				System.out.println("The CourseID you entered was incorrect, please try again");
+			}
 			input(1);
 		}
 		while(semesterCheck()==false){
-			System.out.println("The semester number you entered was incorrect, please try again");
+			indtastet[2].trim();
+			if(indtastet[2]==null || indtastet.equals("")) {
+				System.out.println("Indtast venligst et semesternummer");
+			} else {
+				System.out.println("The semester number you entered was incorrect, please try again");
+			}
 			input(2);
 		}
-		System.out.println("Command was: "+indtastet[0]);
-		System.out.println("CourseID was: "+indtastet[1]);
-		System.out.println("Semester was: "+indtastet[2]);
-		/*some code to actually set the course in the program core*/
-		//TODO
+		//getCore().
 	}
 	
 	/**
@@ -178,14 +198,17 @@ public class Dialog extends UI {
 		try {
 			int temp2 = Integer.parseInt(indtastet[2]);
 			if(temp2 > -1 || temp2 < 20) {
+				System.out.println("temp2 passed!");
 				semesterCorrect = true;
+				System.out.println("semestercorrect true");
 			}
+			System.out.println("exiting try");
 		} catch (Exception e) {	
+			System.out.println("EXCEPTION");
 		}
+		System.out.println("SemesterCheck done");
 		return semesterCorrect;
 	}
-	
-	//HERE ENDS THE REWRITE
 	
 	/*
 	private void add(String indtastet[]) {
