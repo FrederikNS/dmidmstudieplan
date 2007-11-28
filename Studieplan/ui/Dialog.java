@@ -40,6 +40,7 @@ public class Dialog extends UI implements DialogInterface {
 		indtastet = new String[10];
 		try{
 			while(killSwitch==false) {
+				System.out.println("Indtast venligst din kommando:");
 				input(0);
 				switch(commandCheck()){
 				case COMMAND_NOT_RECOGNIZED:
@@ -74,10 +75,8 @@ public class Dialog extends UI implements DialogInterface {
 				}
 			}
 			end();
-		} catch (IOException e) {
-			System.err.println("ARG!");
+		} catch (Exception e) {
 			System.err.println(e);
-			
 		}
 	}
 
@@ -90,7 +89,6 @@ public class Dialog extends UI implements DialogInterface {
 		System.out.println("Programmet kender følgende kommandoer:");
 		System.out.println("hjælp  tilføj  fjern  udskrivbase  visplan  gem  hent  viskursus  afslut");
 		System.out.println("");
-		System.out.println("Indtast dine kommandoer efter tegnet '>'");
 	}
 
 	/**
@@ -111,7 +109,6 @@ public class Dialog extends UI implements DialogInterface {
 				temp[0] = input;
 			}
 			for(int rotation = 0;temp.length >= rotation+offset+1;rotation++) {
-				/*here there be errors*/ //TODO
 				indtastet[offset+rotation] = temp[rotation];
 			}
 		} else {
@@ -139,7 +136,7 @@ public class Dialog extends UI implements DialogInterface {
 		} else if (indtastet[0].equalsIgnoreCase("viskursus")){
 			return COMMAND_VIS_KURSUS;
 		} else {
-			return 0;
+			return COMMAND_NOT_RECOGNIZED;
 		}
 	}
 
