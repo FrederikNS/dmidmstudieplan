@@ -117,10 +117,8 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 		Arrays.sort( planned );
 		int plannedSemester;
 		int skema = 0;
-		String[] courses = new String[10];
-		for(int i = 0 ; i < courses.length ; i++ ) {
-			courses[i] = "-----";
-		}
+		String[] courses = {"-----","-----","-----","-----","-----",
+							"-----","-----","-----","-----","-----"};
 		
 		String toReturn = "";
 		
@@ -132,7 +130,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 			if(plannedSemester == semester) {
 				skema = planned[i].getInternalSkemaRepresentation();
 				for(int x = 0 ; x < 10 ; x++) {
-					if(0 != (skema >> x) ) {
+					if(0 != ((skema >> x) & 1) ) {
 						courses[x] = planned[i].getCourseID();
 					}
 				}
