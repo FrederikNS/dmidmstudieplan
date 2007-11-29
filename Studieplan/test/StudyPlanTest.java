@@ -28,7 +28,7 @@ public class StudyPlanTest extends TestCase {
 
 	public void testAddPositive() {
 		SelectedCourse sc;
-		sc = new SelectedCourse("01005", 1);
+		sc = new SelectedCourse("01005", " ", 1);
 		try {
 			sp.add(sc);
 		} catch (Exception e) {
@@ -39,7 +39,7 @@ public class StudyPlanTest extends TestCase {
 	public void testAddNegative() {
 		testAddPositive();
 		SelectedCourse sc;
-		sc = new SelectedCourse("01005", 1);
+		sc = new SelectedCourse("01005", " ", 1);
 		try {
 			sp.add(sc);
 			fail("Should conflict with the already added course");
@@ -49,7 +49,7 @@ public class StudyPlanTest extends TestCase {
 			fail(e.toString());
 		}
 		SelectedCourse sc2;
-		sc2 = new SelectedCourse("01715", 1);
+		sc2 = new SelectedCourse("01715", " ", 1);
 		try {
 			sp.add(sc2);
 			fail("course conflict expected");
@@ -62,7 +62,7 @@ public class StudyPlanTest extends TestCase {
 
 	public void testContainsStringPositive() {
 		try {
-			sp.add(new SelectedCourse("01005", 1));
+			sp.add(new SelectedCourse("01005", " ", 1));
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -76,14 +76,14 @@ public class StudyPlanTest extends TestCase {
 	public void testContainsCoursePositive() {
 		SelectedCourse sc;
 		try {
-			sc = new SelectedCourse("01005", 1);
+			sc = new SelectedCourse("01005", " ", 1);
 			sp.add(sc);
 		} catch (Exception e) {
 			fail(e.toString());
 			sc = null;
 		}
 		boolean test1 = sp.contains(sc);
-		boolean test2 = sp.contains(new Course("01005"));
+		boolean test2 = sp.contains(new Course("01005", " "));
 		assertTrue(test1 && test2);
 	}
 
@@ -118,7 +118,7 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveCoursePositive() {
 		testAddPositive();
 		try {
-			assertTrue(sp.remove(new Course("01005")));
+			assertTrue(sp.remove(new Course("01005", " ")));
 		} catch (CourseDoesNotExistException e) {
 			fail(e.toString());
 		}
@@ -126,13 +126,13 @@ public class StudyPlanTest extends TestCase {
 
 	public void testRemoveCourseNegative() {
 		try {
-			sp.remove(new Course("01005"));
+			sp.remove(new Course("01005", " "));
 			fail("course ought not to exist");
 		} catch (CourseDoesNotExistException e) {
 			
 		}
 		try {
-			sp.remove(new Course(""));
+			sp.remove(new Course("", " "));
 			fail("no name");
 		} catch (CourseDoesNotExistException e) {
 			
