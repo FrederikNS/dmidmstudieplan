@@ -87,9 +87,9 @@ public class DatabaseReader implements Iterable<Course> {
 		database[DatabaseFiles.KRAV.ordinal()]  = openFile(DatabaseFiles.KRAV.toString());
 		database[DatabaseFiles.SKEMA.ordinal()] = openFile(DatabaseFiles.SKEMA.toString());
 		database[DatabaseFiles.NAVN.ordinal()]  = openFile(DatabaseFiles.NAVN.toString());
-		openFileScan(DatabaseFiles.KRAV);
-		openFileScan(DatabaseFiles.SKEMA);
-		openFileScan(DatabaseFiles.NAVN);
+		resetFileScanner(DatabaseFiles.KRAV);
+		resetFileScanner(DatabaseFiles.SKEMA);
+		resetFileScanner(DatabaseFiles.NAVN);
 	}
 
 	/**
@@ -109,10 +109,11 @@ public class DatabaseReader implements Iterable<Course> {
 	}
 
 	/**
-	 * Initialize the Scanner-objects, so we can parse the databases.
-	 * Used by any method that parses files. (e.g. findCourse )
+	 * This method is used to reset the file Scanner for a given DatabaseFile.
+	 * Also used to open the Scanners the first time.
+	 * @param db DatabaseFiles enum of the file that needs to be (re-)opened.
 	 */
-	private void openFileScan(DatabaseFiles db) {
+	private void resetFileScanner(DatabaseFiles db) {
 		try {
 			scan[db.ordinal()] = new Scanner(database[db.ordinal()]);
 			scan[db.ordinal()].useDelimiter("\n");
@@ -120,6 +121,7 @@ public class DatabaseReader implements Iterable<Course> {
 		} catch (FileNotFoundException e) {
 		}
 	}
+	
 	/**
 	 * Looks up a course using a Course ID and returns it with all the related data about the course.
 	 * @param courseID The ID to look up.
@@ -157,8 +159,7 @@ public class DatabaseReader implements Iterable<Course> {
 				courseName = scan[id].match().group(1).trim();
 				//All the (mandantory) data was successfully retrieved
 				//Create a Course object and fill it up with data
-				Course course = new Course(courseID);
-				course.setCourseName(courseName);
+				Course course = new Course(courseID, courseName);
 
 				course = findCourseSkema(course);
 				getNextLine(DatabaseFiles.NAVN);
@@ -170,6 +171,12 @@ public class DatabaseReader implements Iterable<Course> {
 		throw new CourseDoesNotExistException(courseID);
 	}
 
+	/**
+	 * Fetch the next line in the scanner related to DatabaseFile enum.
+	 * Updates the lineNumber[] variable.
+	 * In case of an "End of File", it will re-open the scanner and reset the lineNumber to 0.
+	 * @param db DatabaseFile enum related to the scanner that needs to advance to next line.
+	 */
 	private void getNextLine(DatabaseFiles db) {
 		
 		if(scan[db.ordinal()].hasNextLine()) {
@@ -179,11 +186,19 @@ public class DatabaseReader implements Iterable<Course> {
 			catch(NoSuchElementException e) {
 			}
 		} else {
-			openFileScan(db);
+			resetFileScanner(db);
 			lineNumber[db.ordinal()]=0;
 		}
 	}
 
+	/**
+	 * Private method called by findCourse() and the Iterator's hasNext() method to find the Skema data for a course in the database.
+	 * @param course The course that needs its skema data looked up.
+	 * @return The updated course.
+	 * @throws CritalCourseDataMissingException If the skema data for this course could not be found in the file.
+	 * @see databases.DatabaseReader#findCourse(String)
+	 * @see databases.DatabaseReader.Iter#hasNext()
+	 */
 	private Course findCourseSkema(Course course) throws CritalCourseDataMissingException {
 		String courseID = course.getCourseID();
 		String[] period, skema;
@@ -233,6 +248,14 @@ public class DatabaseReader implements Iterable<Course> {
 		throw new CritalCourseDataMissingException("Skema");        
 	}
 
+	/**
+	 * Private method called by findCourse() and the Iterator's hasNext() method to find the dependency data for a course in the database.
+	 * Note: Not all courses have dependencies, in such a case the dependencies field in the Course will be null (or contain null in the first index of the array)
+	 * @param course The course that needs its dependencies data looked up.
+	 * @return The updated course.
+	 * @see databases.DatabaseReader#findCourse(String)
+	 * @see databases.DatabaseReader.Iter#hasNext()
+	 */
 	private Course findCourseDependencies(Course course) {
 		String courseID = course.getCourseID();
 		String dependencies[];
@@ -264,8 +287,9 @@ public class DatabaseReader implements Iterable<Course> {
 		return course;
 	} 
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Iterable#iterator()
+	 * @see databases.DatabaseReader.Iter
 	 */
 	public Iterator<Course> iterator() {
 		return this.new Iter();
@@ -275,6 +299,8 @@ public class DatabaseReader implements Iterable<Course> {
 	 * Search through the Course data files for a pattern.
 	 * @param pattern searches for a pattern.
 	 * @return returns an array of courses which (somehow) matches this pattern.
+	 * @throws CourseDoesNotExistException If no course containing the pattern could be found
+	 * @deprecated It is slow and not a requirement.
 	 */
 	public Course[] search(String pattern) throws CourseDoesNotExistException {
 		ArrayList<Course> match = new ArrayList<Course>();
@@ -307,19 +333,33 @@ public class DatabaseReader implements Iterable<Course> {
 
 
 	/**
-	 * @author Niels Thykier
 	 * This inner class handles all interaction with the DatabaseReaderIterator.
 	 * Care should be used when using this class directly. It does not follow the 
 	 * Iterator standards (nor does it implements said interface).
 	 * 
 	 * If you need an Iterator for the Database readers, see the 
 	 * DatabaseReaderIterator class or the Iterator<Course> iterator() method of DatabaseReader.
+	 * @author Niels Thykier
+	 * @see java.util.Iterator
 	 */
 	public class Iter implements Iterator<Course> {
+		/**
+		 * The Iterators own scanner for the "NAVN" database.
+		 */
 		Scanner s;
+		/**
+		 * Whether or not a course has been cached.
+		 */
 		boolean cached = false;
+		/**
+		 * The course that has been cached
+		 */
 		Course courseCache;
 
+		/**
+		 * Contructor for the DatabaseReader Iterator.
+		 * Setups the scanner.
+		 */
 		public Iter() {
 			try {
 				s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
@@ -330,7 +370,12 @@ public class DatabaseReader implements Iterable<Course> {
 
 		}
 
-		/* (non-Javadoc)
+		/**
+		 * It will check if there are more courses in the databases that are yet to be read.
+		 * 
+		 * When a new course valid course is found, it will be cached and it will return.
+		 * 
+		 * @return true, if there is another course.
 		 * @see java.util.Iterator#hasNext()
 		 */
 		public boolean hasNext() {
@@ -343,8 +388,7 @@ public class DatabaseReader implements Iterable<Course> {
 					//Allows us to catch the exceptions and garantuee 
 					// that the getNextCourse* methods do not throw them.
 					MatchResult match = s.match();
-					Course course = new Course(match.group(1));
-					course.setCourseName(match.group(2));
+					Course course = new Course(match.group(1), match.group(2));
 					course = findCourseSkema(course);
 					courseCache = findCourseDependencies(course);
 					cached = true;
@@ -364,6 +408,12 @@ public class DatabaseReader implements Iterable<Course> {
 			return next;
 		}
 
+		/**
+		 * Get the Nnxt course in the databases.
+		 * @see java.util.Iterator#next()
+		 * @return The next course.
+		 * @throws NoSuchElementException if hasNext() would have returned false.
+		 */
 		public Course next() {
 			Course toReturn;
 			if(hasNext()) {
@@ -380,8 +430,12 @@ public class DatabaseReader implements Iterable<Course> {
 			return toReturn;
 		}
 
+		/**
+		 * Unsupported.
+		 * @see java.util.Iterator#remove()
+		 * @throws UnsupportedOperationException Consekvently thrown!
+		 */
 		public void remove() {
-			//Not supported... Follow the standard
 			throw new UnsupportedOperationException();
 		}
 

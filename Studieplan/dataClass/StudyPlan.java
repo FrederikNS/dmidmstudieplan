@@ -50,7 +50,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	}
 
 	public boolean contains(String courseID) {
-		return this.contains(new Course(courseID));
+		return this.contains(new Course(courseID, " "));
 	}
 	
 	public boolean contains(Course course) {
@@ -98,7 +98,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	}
 	
 	public boolean remove(String toRemove) throws CourseDoesNotExistException {
-		return remove(new Course(toRemove) );
+		return remove(new Course(toRemove, " ") );
 	}
 	
 	public boolean remove(Course toRemove) throws CourseDoesNotExistException {
