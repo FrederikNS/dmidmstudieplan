@@ -112,15 +112,18 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	public String printSemester(int semester) throws IllegalArgumentException {
 		if(semester < 0 || semester > 20) {
 			throw new IllegalArgumentException();
-		}
+		} 
 		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
 		Arrays.sort( planned );
 		int plannedSemester;
 		int skema = 0;
+		String toReturn;
+		
+		
 		String[] courses = {"-----","-----","-----","-----","-----",
 							"-----","-----","-----","-----","-----"};
 		
-		String toReturn = "";
+		toReturn = "";
 		
 		for(int i = 0 ; i < planned.length ; i ++) {
 			plannedSemester = planned[i].getSemester();
