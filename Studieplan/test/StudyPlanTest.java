@@ -112,6 +112,8 @@ public class StudyPlanTest extends TestCase {
 			fail("no name");
 		} catch (CourseDoesNotExistException e) {
 			
+		} catch (IllegalArgumentException e) {
+			
 		}
 	}
 
@@ -135,6 +137,8 @@ public class StudyPlanTest extends TestCase {
 			sp.remove(new Course("", " "));
 			fail("no name");
 		} catch (CourseDoesNotExistException e) {
+			
+		} catch (IllegalArgumentException e) {
 			
 		}
 	}
