@@ -1,5 +1,5 @@
 /**
- * 
+ * This is the part of the program which is used for user-input and also what is printed to the terminal window
  */
 package ui;
 
@@ -20,6 +20,8 @@ import exceptions.StudyPlanDoesNotExistException;
 
 /**
  * Sets up the interface the user will see.
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class Dialog extends UI {
 	/**
@@ -31,34 +33,89 @@ public class Dialog extends UI {
 	 */
 	String courseID;
 	/**
-	 * This is the variable which contains 
+	 * This is the variable which contains the semester number
 	 */
 	String semesterNumber;
 	/**
 	 * This is the String array which contains the users input
 	 */
 	String indtastet[];
+	/**
+	 * This is a variable we use to keep track of if the user wants to exit the program
+	 */
 	boolean killSwitch;
+	/**
+	 * This is a variable to keep track of if the user has changed the studyplan, incase the user exits, the program will ask to save
+	 */
 	boolean studyPlanChanged;
+	/**
+	 * A constant to compare to if input is null
+	 */
 	public final static int INPUT_NULL = 1;
+	/**
+	 * A constant to compare to if input is accepted
+	 */
 	public final static int INPUT_ACCEPTED = 0;
+	/**
+	 * A constant to compare to if input is not an integer
+	 */
 	public final static int INPUT_NOT_INT = 2;
+	/**
+	 * A constant to compare to if input is out of bounds
+	 */
 	public final static int INPUT_OUT_OF_BOUNDS = 3;
+	/**
+	 * A constant to compare to if the command is not recognized
+	 */
 	public final static int COMMAND_NOT_RECOGNIZED = 0;
+	/**
+	 * A constant to compare to if the command is "Afslut"
+	 */
 	public final static int COMMAND_AFSLUT = 1;
+	/**
+	 * A constant to compare to if the command is "Hjælp
+	 */
 	public final static int COMMAND_HJAELP = 2;
+	/**
+	 * A constant to compare to if the command is "VisPlan"
+	 */
 	public final static int COMMAND_VIS_PLAN = 3;
+	/**
+	 * A constant to compare to if the command is "UdskrivBase"
+	 */
 	public final static int COMMAND_UDSKRIV_BASE = 4;
+	/**
+	 * A constant to compare to if the command is "Tilføj
+	 */
 	public final static int COMMAND_TILFØJ = 5;
+	/**
+	 * A constant to compare to if the command is "Fjern"
+	 */
 	public final static int COMMAND_FJERN = 6;
+	/**
+	 * A constant to compare to if the command is "Hent"
+	 */
 	public final static int COMMAND_HENT = 7;
+	/**
+	 * A constant to compare to if the command is "Gem"
+	 */
 	public final static int COMMAND_GEM = 8;
+	/**
+	 * A constant to compare to if the command is "VisKursus"
+	 */
 	public final static int COMMAND_VIS_KURSUS = 9;
 
+	/**
+	 * @param core
+	 * @throws IllegalArgumentException
+	 */
 	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
 	}
 
+	/** This is a rewrite of {@link ui.UI#start()}
+	 * @see ui.UI#start()
+	 */
 	public void start(){
 		intro();
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
@@ -117,8 +174,9 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * The main loop which keeps everything alive.
-	 * @throws IOException 
+	 * This is the metheod which receives the input from the keyboard
+	 * @param offset serves to change where the input from the keyboard will be put in the "indtastet[]" string array
+	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 
 	public void input(int offset) throws IOException {
@@ -141,6 +199,10 @@ public class Dialog extends UI {
 		}
 	}
 
+	/**
+	 * Checks if the command is recognized by the program
+	 * @return is one of the constants defined at the start of the program, which is used by start() to trigger the part of the program the user wishes to use
+	 */
 	public int commandCheck(){
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return COMMAND_AFSLUT;
@@ -168,7 +230,7 @@ public class Dialog extends UI {
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
 	 * (eg. too high semester number, or the course ID contains letters).
-	 * @throws IOException 
+	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	private void add() throws IOException {
 
@@ -356,11 +418,17 @@ public class Dialog extends UI {
 			System.out.println("For at få en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjælp og dernæst kommandoen.");
 		}
 	}
-	//Prints the list over available courses
+	
+	/**
+	 * Prints the list of available courses
+	 */
 	private void printDatabaseList(){
 		System.out.println(getCore().getCourseBase().toString());
 	}
-	//Prints the plan as it currently is
+	
+	/**
+	 * Prints the plan as is
+	 */
 	private void showPlan(){
 		int temp2;
 		String season;
@@ -383,6 +451,10 @@ public class Dialog extends UI {
 		}
 	}
 
+	/**
+	 * Presents the data associated with a certain course given it's ID
+	 * @throws IOException
+	 */
 	private void showCourse() throws IOException {
 		while(courseCheck()!=INPUT_ACCEPTED){
 			try {
@@ -407,7 +479,7 @@ public class Dialog extends UI {
 	}
 	
 	/**
-	 * Prints a possible study plan
+	 * Prints a demo studyplan
 	 */
 	private void testPlan(){
 		System.out.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
@@ -416,6 +488,9 @@ public class Dialog extends UI {
 		System.out.println("13:00-17:00      -----    -----   01005   01017    01005");
 	}
 
+	/**
+	 * Saves the current studyplan
+	 */
 	private void savePlan(){
 		if(indtastet[1] != null) {
 			try {
@@ -429,6 +504,9 @@ public class Dialog extends UI {
 		//TODO
 	}
 
+	/**
+	 * Load a previously saved studyplan
+	 */
 	private void loadPlan(){
 		if(indtastet[1] != null) {
 			try {
@@ -460,7 +538,6 @@ public class Dialog extends UI {
 
 	/**
 	 * Exits the program.
-	 * @throws IOException 
 	 */
 	private void end(){
 		if(studyPlanChanged==true){
@@ -486,7 +563,4 @@ public class Dialog extends UI {
 		}
 		System.out.println("Tak for idag.");
 	}
-	/*
-	 * @author Morten Sørensen
-	 */
 }
