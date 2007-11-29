@@ -3,14 +3,17 @@
  */
 package dataClass;
 
+import java.io.Serializable;
+
 /**
  * @author Niels Thykier
  * This class is a course selected by a student. On top of all the information
  * in the Course class, this also contains the data on which semester this course is 
  * taken.
  */
-public class SelectedCourse extends Course implements Comparable<SelectedCourse> {
+public class SelectedCourse extends Course implements Comparable<SelectedCourse>, Serializable {
 
+	private static final long serialVersionUID = -2357834380866036780L;
 	private int semester = 0;
 
 	/**
