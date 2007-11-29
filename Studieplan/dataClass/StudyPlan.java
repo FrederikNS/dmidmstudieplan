@@ -56,7 +56,7 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	public boolean contains(Course course) {
 		if(plan.isEmpty())
 			return false;
-		return plan.contains(course.getCourseID());
+		return plan.contains(course);
 	}
 	
 	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException {
