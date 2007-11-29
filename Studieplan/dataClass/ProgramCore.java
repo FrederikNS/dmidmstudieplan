@@ -58,10 +58,11 @@ public class ProgramCore implements Core {
 		onlyOneCore = true;
 		
 		boolean makeUI = true;
-		
-		for(int i = 0 ; i < cmdLineArgs.length ; i++) {
-			if(cmdLineArgs[i].equalsIgnoreCase("--no-ui")) {
-				makeUI = false;
+		if(cmdLineArgs != null) {
+			for(int i = 0 ; i < cmdLineArgs.length ; i++) {
+				if(cmdLineArgs[i].equalsIgnoreCase("--no-ui")) {
+					makeUI = false;
+				}
 			}
 		}
 		
