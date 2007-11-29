@@ -113,6 +113,13 @@ public class Course implements CourseSkemaData {
 	}
 
 
+	public boolean equals(Object obj) {
+		if(obj instanceof Course) {
+			return equals((Course) obj);
+		}
+				
+		return false;
+	}
 	
 	/**
 	 * Test if the courses are the same.

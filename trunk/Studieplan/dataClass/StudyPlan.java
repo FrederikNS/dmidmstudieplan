@@ -40,17 +40,25 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 		return studentID;
 	}
 	
-	public boolean equals(String studentID) {
-		return studentID.equalsIgnoreCase(this.studentID);
+	public boolean equals(Object obj) {
+		if(obj instanceof StudyPlan) {
+			return equals((StudyPlan) obj);
+		}
+		
+		return false;
 	}
 	
 	public boolean equals(StudyPlan study) {
-		return equals(study.getStudent());
+		return equals(study.getStudent().equalsIgnoreCase(this.studentID));
 	}
 
 	public boolean contains(String courseID) {
 		if(plan.isEmpty())
 			return false;
+		if(plan.contains(new Course(courseID))) {
+			System.err.println("plan.contains works");
+			return true;
+		}
 		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
 		
 		for(int i = 0 ; i < planned.length ; i++) {

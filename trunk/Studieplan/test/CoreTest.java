@@ -2,6 +2,7 @@ package test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import ui.Core;
 
@@ -20,10 +21,13 @@ import junit.framework.TestCase;
 public class CoreTest extends TestCase {
 
 	Core core;
+	PrintStream stdout;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		String testSetup[] = {"--no-ui"};
+		stdout = new PrintStream("/dev/null");
+		System.setOut(stdout);
 		core = new ProgramCore(testSetup); 
 	}
 	
@@ -133,6 +137,7 @@ public class CoreTest extends TestCase {
 	}
 	
 	public void testLoadPositive() {
+		testSavePositive();
 		//TODO
 		try {
 			core.loadStudyPlan("testSavePositive");
