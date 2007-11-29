@@ -13,11 +13,25 @@ import java.io.Serializable;
  */
 public class SelectedCourse extends Course implements Comparable<SelectedCourse>, Serializable {
 
+	/**
+	 * serialVersionUID needed so that this class can be Serializable. 
+	 */
 	private static final long serialVersionUID = -2357834380866036780L;
+	
+	/**
+	 * The semester this course is taken on.
+	 */
 	private int semester = 0;
 
 	/**
-	 * @param courseID the ID number of the course.
+	 * Create a SelectedCourse from a courseID, courseName and a semester.
+	 * NB: This will NOT look up all the data from the databases.
+	 * 
+	 * Use the findCourse from Core or DatabaseReader and the {@link #SelectedCourse(Course, int)} Constructor
+	 * for that.
+	 * 
+	 * @param courseID The ID number of the course.
+	 * @param courseName The name of the Course.
 	 * @param semester the semester it is taken on.
 	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
 	 */
@@ -26,10 +40,15 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		setSemester(semester);
 		}
 	
+	/**
+	 * Contructor used when loading from this class from classes via the ObjectInputStream class.
+	 * @see databases.UserDatabase#loadStudyPlan(String, String)
+	 */
 	protected SelectedCourse() {
 	}
 	
 	/**
+	 * Create a SelectedCourse from a Course and a semester.
 	 * @param course An object of the Course type.
 	 * @param semester the semester it is taken on.
 	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
@@ -43,9 +62,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	
 	
 	
-	/*(non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 * 
+	/**
 	 * Follows the standards of the compareTo method.
 	 * 
 	 * This class is sorted first by the semester it appears in and secondarily the number of the 
@@ -53,9 +70,9 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * 
 	 * @param compareTo the object to compare to this one.
 	 * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(SelectedCourse compareTo) {
-		//TODO check if the return values have not been reversed.
 		int order = 0;
 		
 		if(semester < compareTo.getSemester() ) {
@@ -76,25 +93,24 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	}
 	
 	/**
-	 * @return the semester
+	 * Get the semester of this course.
+	 * @return The semester 
 	 */
 	public int getSemester() {
 		return semester ;
 	}
 	
 	/**
-	 * @param course the course to check.
-	 * @return true if the coures are the same.
+	 * Tests if the inputted semester is valid
+	 * @param semester The value to test
+	 * @return true of the semester is valid. (0 < semester < 21)
 	 */
-	public boolean equals(SelectedCourse course) {
-		return super.equals(course);
-	}
-
-	public boolean isValidSemester(int semester) {
+	public static boolean isValidSemester(int semester) {
 		return semester < 21 && semester > 0;
 	}
 	
 	/**
+	 * Update the semester of this course.
 	 * @param semester the semester to set
 	 * @throws IllegalArgumentException if the semester is less than 1 or greater than 20
 	 */

@@ -1,12 +1,9 @@
 package test;
 
-import java.io.FileNotFoundException;
-
+import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import databases.DatabaseReader;
-import exceptions.FilePermissionException;
-import junit.framework.TestCase;
 
 public class CourseTest extends TestCase {
 
@@ -48,7 +45,6 @@ public class CourseTest extends TestCase {
 	}
 	
 	public void testGetDependenciesPositive() {
-		String test[] = {"01035"};
 		String[] skema = cc.getDependencies();
 		for(int i = 0; i < skema.length ; i++) {
 			if(skema[i].contains("01035")) {

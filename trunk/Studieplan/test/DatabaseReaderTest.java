@@ -4,7 +4,7 @@ import dataClass.Course;
 import databases.DatabaseReader;
 import junit.framework.TestCase;
 
-public class TestDatabaseReader extends TestCase{
+public class DatabaseReaderTest extends TestCase{
 
 	private DatabaseReader reader;
 	
@@ -18,7 +18,7 @@ public class TestDatabaseReader extends TestCase{
 		}
 	}
 	
-	public void testFindCourse() {
+	public void testFindCoursePositive() {
 		Course course = null;
 		try {
 			course = reader.findCourse("01005");

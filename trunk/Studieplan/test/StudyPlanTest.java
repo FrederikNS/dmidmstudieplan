@@ -1,12 +1,12 @@
 package test;
 
+import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
+import databases.DatabaseReader;
 import exceptions.ConflictingCourseInStudyPlanException;
-import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
-import junit.framework.TestCase;
 
 /**
  * This test class tests the class StudyPlan by usint jUnit
@@ -48,8 +48,16 @@ public class StudyPlanTest extends TestCase {
 	 */
 	public void testAddPositive() {
 		//Sets up a course we want to add
+		DatabaseReader db;
 		SelectedCourse sc;
-		sc = new SelectedCourse("01005", " ", 1);
+		try {
+			db = new DatabaseReader();
+			sc = new SelectedCourse(db.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+		
 		try {
 			sp.add(sc);
 		} catch (Exception e) {
@@ -63,29 +71,18 @@ public class StudyPlanTest extends TestCase {
 	public void testAddNegative() {
 		//Sets up test data
 		testAddPositive();
-		SelectedCourse sc;
-		sc = new SelectedCourse("01005", " ", 1);
+		
+		DatabaseReader db;
+		SelectedCourse sc1;
 		try {
-			//Adds a course that already exists in the study plan
-			sp.add(sc);
-			fail("Should conflict with the already added course");
-		} catch (CourseAlreadyExistsException e) {
-			
+			db = new DatabaseReader();
+			sc1 = new SelectedCourse(db.findCourse("01715"), 1);
+			sp.add(sc1);
 		} catch (ConflictingCourseInStudyPlanException e) {
+			
+		} catch (Exception e) {
 			fail(e.toString());
 		}
-		SelectedCourse sc2;
-		sc2 = new SelectedCourse("01715", " ", 1);
-		try {
-			//Adds a course where there is an comflict in schema group
-			sp.add(sc2);
-			fail("course conflict expected");
-		} catch (ConflictingCourseInStudyPlanException e) {
-			
-		} catch (CourseAlreadyExistsException e) {
-			//Should not happen, the course should not alreay exist in the study plan
-			fail(e.toString());
-		} 
 	}
 
 	/**

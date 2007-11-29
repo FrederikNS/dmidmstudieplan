@@ -2,15 +2,12 @@ package test;
 
 import java.io.FileNotFoundException;
 
-import dataClass.Course;
+import junit.framework.TestCase;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.UserDatabase;
 import exceptions.CannotSaveStudyPlanException;
-import exceptions.ConflictingCourseInStudyPlanException;
-import exceptions.CourseAlreadyExistsException;
 import exceptions.FilePermissionException;
-import junit.framework.TestCase;
 
 /**
  * This test class runs a series of tests on the class UserDatabase using jUnit
