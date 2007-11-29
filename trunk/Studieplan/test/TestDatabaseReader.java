@@ -3,7 +3,6 @@ package test;
 import dataClass.Course;
 import databases.DatabaseReader;
 import junit.framework.TestCase;
-import dataClass.CourseSkemaData.InternalSkema;
 
 public class TestDatabaseReader extends TestCase{
 
@@ -29,7 +28,7 @@ public class TestDatabaseReader extends TestCase{
 		boolean navn = course.getCourseName().equals("Matematik 1");
 		String[] dtuSkema={"E5A","E5B","E3B","F5A","F5B","F3B"};
 		String[] length={null};
-		int i = InternalSkema.parseDTUskema(dtuSkema,length);
+		int i = Course.parseDTUSkema(dtuSkema,length);
 		boolean skema = course.getFullSkemaData()==i;
 		boolean deps = course.getDependencies() == null;
 		assertTrue(navn && skema && deps);

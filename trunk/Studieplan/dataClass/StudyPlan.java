@@ -15,7 +15,7 @@ import exceptions.CourseDoesNotExistException;
  * @author Niels Thykier
  * The correct StudyPlan for a user.
  */
-public class StudyPlan implements Serializable, CourseSkemaData {
+public class StudyPlan implements Serializable {
 
 	private static final long serialVersionUID = -6200618982406378220L;
 
