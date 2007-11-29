@@ -1,9 +1,14 @@
 package test;
 
 import java.io.FileNotFoundException;
+
+import dataClass.Course;
+import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.UserDatabase;
 import exceptions.CannotSaveStudyPlanException;
+import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CourseAlreadyExistsException;
 import exceptions.FilePermissionException;
 import junit.framework.TestCase;
 
@@ -63,6 +68,11 @@ public class UserDatabaseTest extends TestCase {
 	public void testSavePositive() {
 		StudyPlan testPlan = new StudyPlan("testSubject2");
 		try {
+			testPlan.add(new SelectedCourse("01005", "Matematik 1", 1));
+		} catch (Exception e) {
+			fail(e.toString());		
+		}
+		try {
 			usr.saveStudyPlan(testPlan);
 		} catch (Exception e) {
 			fail(e.toString());
@@ -100,11 +110,15 @@ public class UserDatabaseTest extends TestCase {
 	 */
 	public void testLoadPositive() {
 		testSavePositive();
+		StudyPlan plan = null;
 		try {
-			usr.loadStudyPlan("testSubject2");
+			plan = usr.loadStudyPlan("testSubject2");
+			
 		} catch (Exception e) {
 			fail(e.toString());
+			return;
 		}
+		System.out.println(plan.contains("01005"));
 	}
 	
 	/**

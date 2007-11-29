@@ -97,6 +97,10 @@ public class StudyPlan implements Serializable {
 		return plan.add(toAdd);
 	}
 	
+	public ArrayList<SelectedCourse> getCourses() {
+		return plan;
+	}
+	
 	public boolean remove(String toRemove) throws CourseDoesNotExistException {
 		return remove(new Course(toRemove, " ") );
 	}
@@ -129,8 +133,8 @@ public class StudyPlan implements Serializable {
 			plannedSemester = planned[i].getSemester();
 			
 			 
-			
-			if(plannedSemester == semester) {
+			//FIXME
+			/*if(plannedSemester == semester) {
 				skema = planned[i].getInternalSkemaRepresentation();
 				for(int x = 0 ; x < 10 ; x++) {
 					if(0 != ((skema >> x) & 1) ) {
@@ -140,7 +144,7 @@ public class StudyPlan implements Serializable {
 				
 			} else if(plannedSemester > semester) {
 				break;
-			}
+			}*/
 		}
 		
 		

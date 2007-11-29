@@ -2,8 +2,8 @@ package dataClass;
 
 
 /**
- * @author Kaffe
- *
+ * 
+ * @author Niels Thykier
  */
 public class Course {
 
@@ -23,7 +23,7 @@ public class Course {
 	public static final int INTERNAL_TIRSDAG_FORMIDDAG   = 0x00000004; //A3
 	public static final int INTERNAL_TIRSDAG_EFTERMIDDAG = 0x00000008; //A4
 	public static final int INTERNAL_ONSDAG_FORMIDDAG    = 0x00000010; //A5
-	
+
 	public static final int INTERNAL_TORSDAG_EFTERMIDDAG = 0x00000020; //1B
 	public static final int INTERNAL_TORSDAG_FORMIDDAG   = 0x00000040; //2B
 	public static final int INTERNAL_FREDAG_EFTERMIDDAG  = 0x00000080; //3B
@@ -32,8 +32,8 @@ public class Course {
 
 	public static final int INTERNAL_ALL_DAYS = 0x000002ff;
 	public static final int INTERNAL_ALL_SEASONS = 0x30000000;
-	
-	
+
+
 	public static int parseDTUSkema(String[] DTUdata, String courseLength[]) {
 		int data = 0;
 
@@ -54,24 +54,23 @@ public class Course {
 		return data;
 	}
 
-	
+
 	public static String internalSkemaToExternString(int internalRepresentation) {
 		int flag;
-
 		String toReturn = "";
 		for(int i = 0 ; i < 10 ; i++) {
 			flag = internalRepresentation >> i;
-			if(0 != (flag & 1)) {
-				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A");
+		if(0 != (flag & 1)) {
+			toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
 
-			}
+		}
 		}
 		internalRepresentation >>= 12;
 		for(int i = 0 ; i < 10 ; i++) {
 			flag = internalRepresentation >> i;
-			if(0 != (flag & 1)) {
-				toReturn += "E " + ((i%5)+1) + (1 == (i/5)?"B":"A");
-			}
+		if(0 != (flag & 1)) {
+			toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+		}
 		}
 
 		return toReturn.trim();
@@ -145,6 +144,10 @@ public class Course {
 		this.courseName = courseName;
 	}
 
+
+	protected Course() {
+	}
+	
 	/**
 	 * @return the courseID
 	 */
@@ -173,26 +176,23 @@ public class Course {
 		return dependencies;
 	}
 
-	/**
+	/*
 	 * @param compareTo
-	 * @return true if
+	 * @return true
 	 */
-	public boolean conflictingSkema(Course compareTo) {		
-		return 0 != (compareTo.getInternalSkemaRepresentation() & internalSkema);
+	public boolean conflictingSkema(Course compareTo) {
+		if(compareTo == null) 
+			return false;
+		int compare = compareTo.getFullSkemaData();
+		compare &= (INTERNAL_SEASON_SPRING_DAYS | INTERNAL_SEASON_AUTUMN_DAYS);
+		return 0 == (compare & internalSkema);
 	}
-
+	
 	/**
 	 * @param dependencies the dependencies to set
 	 */
 	public void setDependencies(String[] dependencies) {
 		this.dependencies = dependencies;
-	}
-
-	/**
-	 * @return the skemagruppe
-	 */
-	public int getInternalSkemaRepresentation() {
-		return internalSkema & INTERNAL_ALL_DAYS;
 	}
 
 	/**
@@ -210,17 +210,11 @@ public class Course {
 	}
 
 	/**
-	 * 
-	 */
-	public void setInternalSkemaRepresentation(int newInteralSkema) {
-		internalSkema = newInteralSkema & INTERNAL_ALL_DAYS;
-	}
-
-	/**
 	 * @param skemagruppe the skemagruppe to set
 	 */
 	public void setSkemagruppe(String[] skemagruppe, String[] periodData ) {
-		internalSkema |= parseDTUSkema(skemagruppe, periodData);
+		int i = parseDTUSkema(skemagruppe, periodData);
+		internalSkema = i;
 	}
 
 	/**
@@ -248,6 +242,8 @@ public class Course {
 	 * @return true if the courseID match.
 	 */
 	public boolean isSameCourseID(String courseID) {
+		if(courseID == null)
+			return false;
 		return courseID.equals(this.courseID);
 	}
 

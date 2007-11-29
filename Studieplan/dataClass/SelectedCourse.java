@@ -26,6 +26,9 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		setSemester(semester);
 		}
 	
+	protected SelectedCourse() {
+	}
+	
 	/**
 	 * @param course An object of the Course type.
 	 * @param semester the semester it is taken on.
@@ -35,7 +38,6 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		super(course.getCourseID(), course.getCourseName() );
 		setDependencies(course.getDependencies());
 		setFullSkemaData(course.getFullSkemaData());
-		setInternalSkemaRepresentation(course.getInternalSkemaRepresentation());
 		setSemester(semester);
 	}
 	

@@ -34,11 +34,9 @@ public class CourseTest extends TestCase {
 		String test[] = {"E5A","E5B","E3B","F5A","F5B","F3B"};
 		String skema = cc.skemaToString();
 		for(int i = 0; i < test.length ; i++) {
-			//TODO
-			/*if(-1 == skema.indexOf(test[i])) {
+			if(!skema.contains(test[i])) {
 				fail("did not contain " + test[i]);
-			}*/
-			System.out.println(skema);
+			}
 		}
 	}
 
@@ -54,8 +52,8 @@ public class CourseTest extends TestCase {
 		String test[] = {"01035"};
 		String[] skema = cc.getDependencies();
 		for(int i = 0; i < skema.length ; i++) {
-			if(skema[i].contains(test[0])) {
-				fail("did not contain " + test[i]);
+			if(skema[i].contains("01035")) {
+				assertTrue(true);
 			}
 		}
 	}
@@ -66,11 +64,10 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testSetDependencies() {
-		cc.setDependencies("01005");
-	}
-
-	public void testGetInternalSkemaRepresentation() {
-		assertTrue(cc.getInternalSkemaRepresentation() == 0);
+		String depends[] = {"01005", "02101"};
+		cc.setDependencies(depends);
+		String test[] = cc.getDependencies();
+		assertTrue(test.equals(depends));
 	}
 
 	public void testGetFullSkemaData() {
@@ -79,10 +76,6 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testSetFullSkemaData() {
-		fail("Not yet implemented");
-	}
-
-	public void testSetInternalSkemaRepresentation() {
 		fail("Not yet implemented");
 	}
 
@@ -100,5 +93,10 @@ public class CourseTest extends TestCase {
 
 	public void testIsSameCourseID() {
 		fail("Not yet implemented");
+	}
+	
+	protected void tearDown() throws Exception  {
+		super.tearDown();
+		cc = null;
 	}
 }
