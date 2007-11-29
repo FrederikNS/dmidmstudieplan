@@ -42,14 +42,11 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	
 	public boolean equals(Object obj) {
 		if(obj instanceof StudyPlan) {
-			return equals((StudyPlan) obj);
+			StudyPlan plan = (StudyPlan) obj;
+			return plan.getStudent().equalsIgnoreCase(this.studentID);
 		}
 		
 		return false;
-	}
-	
-	public boolean equals(StudyPlan study) {
-		return equals(study.getStudent().equalsIgnoreCase(this.studentID));
 	}
 
 	public boolean contains(String courseID) {
