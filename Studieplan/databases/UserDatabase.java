@@ -10,18 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.GenericDeclaration;
-import java.util.ArrayList;
-import java.util.Iterator;
 
-import exceptions.ConflictingCourseInStudyPlanException;
-import exceptions.CorruptStudyPlanFileException;
-import exceptions.CourseAlreadyExistsException;
-import exceptions.FileCouldNotBeDeletedException;
-import exceptions.FilePermissionException;
-import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import exceptions.CannotSaveStudyPlanException;
+import exceptions.CorruptStudyPlanFileException;
+import exceptions.FileCouldNotBeDeletedException;
+import exceptions.FilePermissionException;
 
 /**
  * Handles the saving and loading of StudyPlans.
