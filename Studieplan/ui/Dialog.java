@@ -19,7 +19,6 @@ import exceptions.FilePermissionException;
 import exceptions.StudyPlanDoesNotExistException;
 
 /**
- * @author Morten Sørensen
  * Sets up the interface the user will see.
  */
 public class Dialog extends UI implements DialogInterface {
@@ -143,7 +142,6 @@ public class Dialog extends UI implements DialogInterface {
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
 	 * (eg. too high semester number, or the course ID contains letters).
-	 * @param the command "tilføj" along with data for course and semester (if any).
 	 * @throws IOException 
 	 */
 	private void add() throws IOException {
@@ -462,4 +460,7 @@ public class Dialog extends UI implements DialogInterface {
 		}
 		System.out.println("Tak for idag.");
 	}
+	/*
+	 * @author Morten Sørensen
+	 */
 }
