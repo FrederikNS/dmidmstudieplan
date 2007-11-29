@@ -7,15 +7,29 @@ import exceptions.CannotSaveStudyPlanException;
 import exceptions.FilePermissionException;
 import junit.framework.TestCase;
 
+/**
+ * This test class runs a series of tests on the class UserDatabase using jUnit
+ * @author Morten Sørensen
+ */
 public class UserDatabaseTest extends TestCase {
 	
+	/**
+	 * Sets up the class variable usr
+	 */
 	UserDatabase usr;
 
+	/**
+	 * Initialises the UserDatabase
+	 * @see junit.framework.TestCase#setUp()
+	 */
 	protected void setUp() throws Exception {
 		super.setUp();
 		usr = new UserDatabase();
 	}
 
+	/**
+	 * A positive test to see if a saved study plan exists
+	 */
 	public void testExistsPositive() {
 		try {
 			usr.exists("UserDBTest");
@@ -24,8 +38,12 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * A negative test to see if a saved study plan exists
+	 */
 	public void testExistsNegative() {
 		try {
+			//User added the file extension by himself
 			usr.exists("UserDBTest.plan");
 			fail("File ought not exist");
 		} catch (FileNotFoundException e) {
@@ -39,6 +57,9 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 
+	/**
+	 * A positive test of the save function
+	 */
 	public void testSavePositive() {
 		StudyPlan testPlan = new StudyPlan("testSubject2");
 		try {
@@ -48,7 +69,11 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * A negative test of the save function
+	 */
 	public void testSaveNegative() {
+		//User types in an empty name
 		StudyPlan testPlan = new StudyPlan("");
 		try {
 			usr.saveStudyPlan(testPlan);
@@ -60,6 +85,7 @@ public class UserDatabaseTest extends TestCase {
 		}
 		StudyPlan testPlan2 = new StudyPlan("PermissionDenied");
 		try {
+			//User tries to save to a file he doesn't have permissions to write in
 			usr.saveStudyPlan(testPlan2);
 			fail("Permission Denied");
 		} catch (FilePermissionException e) {
@@ -69,6 +95,9 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 
+	/**
+	 * A positive test of the load function
+	 */
 	public void testLoadPositive() {
 		testSavePositive();
 		try {
@@ -78,9 +107,13 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * A negative test of the load function
+	 */
 	public void testLoadNegative() {
 		testSavePositive();
 		try {
+			//User types in a plan that doesn't exists
 			usr.loadStudyPlan("testFail");
 			fail("File ought not to exists");
 		} catch (FileNotFoundException e) {
@@ -89,6 +122,7 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 		}
 		try {
+			//User tries to load a plan without the required read permission
 			usr.loadStudyPlan("PermissionDenied");
 			fail("Permission denied");
 		} catch (FilePermissionException e) {
@@ -98,7 +132,11 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * A positive test of deleting a study plan
+	 */
 	public void testDeletePositive() {
+		//Sets up some test data
 		testSavePositive();
 		try {
 			usr.deleteFile("testSubject2");
@@ -107,9 +145,12 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * A negative test of deleting a study plan
+	 */
 	public void testDeleteNegative() {
-		testSavePositive();
 		try {
+			//User forgot to type in a name
 			usr.deleteFile("");
 			fail("no name");
 		} catch (FileNotFoundException e) {
@@ -118,6 +159,7 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 		}
 		try {
+			//Usere typed in an non-existing study plan
 			usr.deleteFile("testFail");
 			fail("File ought not to exist");
 		} catch (FileNotFoundException e) {
@@ -126,6 +168,7 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 		}
 		try {
+			//User tries to delete a studyplan without the required permission
 			usr.deleteFile("PermissionDenied");
 			fail("Permission Denied");
 		} catch (FilePermissionException e) {
@@ -135,6 +178,10 @@ public class UserDatabaseTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * Tears down everything the test has created, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		usr = null;
