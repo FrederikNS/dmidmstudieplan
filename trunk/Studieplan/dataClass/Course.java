@@ -1,14 +1,21 @@
 package dataClass;
 
+import java.io.Serializable;
+
 
 /**
  * 
  * @author Niels Thykier
  */
-public class Course {
+public class Course implements Serializable{
 
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4491280720903309211L;
+	
 	public static final int INTERNAL_SEASON_SPRING_SHORT = 0x00000800;
 	public static final int INTERNAL_SEASON_AUTUMN_SHORT = 0x00800000;
 	public static final int INTERNAL_SEASON_SPRING = 0x00000400;
@@ -54,6 +61,13 @@ public class Course {
 		return data;
 	}
 
+	public void setCourseID(String courseID) {
+		this.courseID = courseID;
+	}
+	
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
 
 	public static String internalSkemaToExternString(int internalRepresentation) {
 		int flag;

@@ -112,13 +112,13 @@ public class UserDatabaseTest extends TestCase {
 		testSavePositive();
 		StudyPlan plan = null;
 		try {
-			plan = usr.loadStudyPlan("testSubject2");
-			
+			plan = usr.loadStudyPlan("testSubject2");			
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
 		}
-		System.out.println(plan.contains("01005"));
+		
+		assertTrue(plan.contains("01005"));
 	}
 	
 	/**
