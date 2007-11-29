@@ -17,6 +17,11 @@ import dataClass.StudyPlan;
 import databases.CourseBase;
 import exceptions.StudyPlanDoesNotExistException;
 
+
+/**
+ * This is an interface which acts as a middleman for the outer parts of the program and the core of the program
+ * @author
+ */
 public interface Core {
 	
 	/**
@@ -24,7 +29,6 @@ public interface Core {
 	 * @param courseID the ID of the course to find
 	 * @return the Course with that ID.
 	 * @throws CourseDoesNotExistException Thrown if no course has that ID.
-	 * @throws CritalCourseDataMissingException Thrown if a course have that ID, the data about it is incomplete.
 	 */
 	public Course findCourse(String courseID) throws CourseDoesNotExistException;
 	/**
@@ -49,6 +53,7 @@ public interface Core {
 	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
+	 * @throws CritalCourseDataMissingException 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 */	
 	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
@@ -82,6 +87,7 @@ public interface Core {
 	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
+	 * @throws CritalCourseDataMissingException Thrown if critical course data is missing 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 */
 	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
@@ -143,10 +149,36 @@ public interface Core {
 	 */
 	public void removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
 
+	/**
+	 * @param studentID this is the student ID
+	 * @param newName this is the filename the user wants to save as
+	 * @throws CannotSaveStudyPlanException Thrown if the studyplan could not be saved
+	 * @throws FilePermissionException Thrown if the user does not have the permissions required to write to the file
+	 * @throws StudyPlanDoesNotExistException Thrown if the studyplan does not exist
+	 */
 	public void saveStudyPlanAs(String studentID, String newName) throws  CannotSaveStudyPlanException, FilePermissionException, StudyPlanDoesNotExistException;
+	
+	/**
+	 * @param plan This is the studyplan
+	 * @param newName This is the name of the file the use wants to save the studyplan to
+	 * @throws CannotSaveStudyPlanException Thrown if the studyplan could not be saved
+	 * @throws FilePermissionException Thrown if the user does not have the permissions required to write to the file
+	 */
 	public void saveStudyPlanAs(StudyPlan plan, String newName)  throws CannotSaveStudyPlanException, FilePermissionException ;
 	
+	/**
+	 * @param studentID This is the students ID
+	 * @throws CannotSaveStudyPlanException Thrown if the studyplan could not be saved
+	 * @throws FilePermissionException Thrown if the user does not have the permissions required to write to the file
+	 * @throws StudyPlanDoesNotExistException Thrown if the studyplan does not exist
+	 */
 	public void saveStudyPlan(String studentID) throws  CannotSaveStudyPlanException, FilePermissionException, StudyPlanDoesNotExistException;
+	
+	/**
+	 * @param plan This is the Studyplan
+	 * @throws CannotSaveStudyPlanException Thrown if the studyplan could not be saved
+	 * @throws FilePermissionException Thrown if the user does not have the permissions required to write to the file
+	 */
 	public void saveStudyPlan(StudyPlan plan)  throws CannotSaveStudyPlanException, FilePermissionException ;
 	
 	//public void saveAllOpenStudyPlans();
