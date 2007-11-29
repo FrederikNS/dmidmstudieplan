@@ -9,13 +9,18 @@ package exceptions;
  */
 public class CritalCourseDataMissingException extends Exception {
 
+	/**
+	 * This is a serialized id used for the input/output streams
+	 */
 	private static final long serialVersionUID = -5832061883441907911L;
+	
 	/**
 	 * Name of the data type that is missing 
 	 */
 	private String missingData;
 	
 	/**
+	 * Prints the error message
 	 * @param missingData Name of the data type that is missing.
 	 */
 	public CritalCourseDataMissingException(String missingData) {
@@ -23,6 +28,10 @@ public class CritalCourseDataMissingException extends Exception {
 		this.missingData = missingData;
 	}
 	
+	/**
+	 * gets the "missing data"
+	 * @return the "missing data"
+	 */
 	public String getMissingData() {
 		return missingData;
 	}

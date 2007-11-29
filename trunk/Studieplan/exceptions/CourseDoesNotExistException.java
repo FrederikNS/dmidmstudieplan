@@ -10,9 +10,13 @@ package exceptions;
  */
 public class CourseDoesNotExistException extends CourseException {
 
+	/**
+	 * This is a serialized id used for the input/output streams
+	 */
 	private static final long serialVersionUID = 2980651101109614877L;
 	
 	/**
+	 * Prints the error message
 	 * @param courseDescription the description or the ID of the course that could not be found 
 	 */
 	public CourseDoesNotExistException(String courseDescription) {
