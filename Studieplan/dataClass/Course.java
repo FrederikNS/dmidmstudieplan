@@ -12,7 +12,7 @@ public class Course implements Serializable{
 
 
 	/**
-	 * 
+	 * serialVersionUID needed so that this class can be Serializable. 
 	 */
 	private static final long serialVersionUID = 4491280720903309211L;
 	
@@ -61,13 +61,6 @@ public class Course implements Serializable{
 		return data;
 	}
 
-	public void setCourseID(String courseID) {
-		this.courseID = courseID;
-	}
-	
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
 
 	public static String internalSkemaToExternString(int internalRepresentation) {
 		int flag;
@@ -195,11 +188,9 @@ public class Course implements Serializable{
 	 * @return true
 	 */
 	public boolean conflictingSkema(Course compareTo) {
-		if(compareTo == null) 
-			return false;
 		int compare = compareTo.getFullSkemaData();
-		compare &= (INTERNAL_SEASON_SPRING_DAYS | INTERNAL_SEASON_AUTUMN_DAYS);
-		return 0 == (compare & internalSkema);
+		compare &= ~(INTERNAL_SEASON_SPRING_DAYS | INTERNAL_SEASON_AUTUMN_DAYS);
+		return 0 != (compare & internalSkema);
 	}
 	
 	/**
@@ -226,16 +217,8 @@ public class Course implements Serializable{
 	/**
 	 * @param skemagruppe the skemagruppe to set
 	 */
-	public void setSkemagruppe(String[] skemagruppe, String[] periodData ) {
-		int i = parseDTUSkema(skemagruppe, periodData);
-		internalSkema = i;
-	}
-
-	/**
-	 * @return the season
-	 */
-	public int getSeason() {
-		return internalSkema & INTERNAL_SEASON_ALL;
+	public void setSkemagruppe(String[] skemagruppe, String[] periodData) {
+		internalSkema = parseDTUSkema(skemagruppe, periodData);
 	}
 
 	/* (non-Javadoc)
