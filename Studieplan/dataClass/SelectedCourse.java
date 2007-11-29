@@ -17,12 +17,12 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	private int semester = 0;
 
 	/**
-	 * @param CourseID the ID number of the course.
+	 * @param courseID the ID number of the course.
 	 * @param semester the semester it is taken on.
 	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
 	 */
-	public SelectedCourse(String CourseID, int semester) throws IllegalArgumentException{
-		super(CourseID);
+	public SelectedCourse(String courseID, String courseName, int semester) throws IllegalArgumentException{
+		super(courseID, courseName);
 		setSemester(semester);
 		}
 	
@@ -32,8 +32,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
 	 */
 	public SelectedCourse(Course course, int semester) throws IllegalArgumentException {
-		super(course.getCourseID());
-		setCourseName(course.getCourseName());
+		super(course.getCourseID(), course.getCourseName() );
 		setDependencies(course.getDependencies());
 		setFullSkemaData(course.getFullSkemaData());
 		setInternalSkemaRepresentation(course.getInternalSkemaRepresentation());
