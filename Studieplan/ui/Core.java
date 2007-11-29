@@ -141,7 +141,7 @@ public interface Core {
 	public void removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
 	/**
 	 * @param studentID the unique identifier of the StudyPlan
-	 * @param courseID the ID of the course to look for.
+	 * @param course to look for.
 	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
 	 */
