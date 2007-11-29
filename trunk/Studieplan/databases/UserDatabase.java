@@ -106,19 +106,30 @@ public class UserDatabase {
 	 * @throws CorruptStudyPlanFileException If a file was saved for that student, but it contained garbage.
 	 * @throws FilePermissionException If needed permissions were missing.
 	 */
-	public StudyPlan loadStudyPlan(String file, String extension) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException {
+	public StudyPlan loadStudyPlan(String file, String extension) throws FilePermissionException, FileNotFoundException, CorruptStudyPlanFileException {
 		
 		//throws FileNotFoundException if it does not exist.
 		exists(file, extension);
 		
+		
 		File f = new File(file + "." + extension);
 		if(!f.canRead()) 
 			throw new FilePermissionException("read");
-		ObjectInputStream ois = new ObjectInputStream(new ObjectInputStream(new FileInputStream(f)) );
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new ObjectInputStream(new FileInputStream(f)) );
+		} catch (IOException e1) {
+			System.err.println(e1);
+			throw new CorruptStudyPlanFileException(file + "." + extension);
+		}
+		
 		Object obj;
 		try {
 			obj = ois.readObject();
 		} catch (ClassNotFoundException e) {
+			throw new CorruptStudyPlanFileException(file + "." + extension);
+		} catch (IOException e) {
+			System.err.println(e);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		}
 		if(!(obj instanceof StudyPlan)) 
