@@ -17,12 +17,15 @@ import dataClass.StudyPlan;
 import exceptions.CannotSaveStudyPlanException;
 
 /**
+ * Handles the saving and loading of StudyPlans.
  * @author Niels Thykier
- *
  */
 public class UserDatabase {
 	
 	
+	/**
+	 * Constuctor
+	 */
 	public UserDatabase() {
 	}
 
@@ -49,6 +52,7 @@ public class UserDatabase {
 	}
 	
 	/**
+	 * Saves a StudyPlan using the studentID as name using a ".plan" extension
 	 * @param plan The StudyPlan you wish to save. (it will be stored as the "studentID.plan")
 	 * @throws CannotSaveStudyPlanException if the plan could not be saved.
 	 * @throws FilePermissionException if the needed permissions were missing.
@@ -102,7 +106,6 @@ public class UserDatabase {
 	 * @param extension the extension of the file without leading dot.
 	 * @return The StudyPlan
 	 * @throws FileNotFoundException if no filed has been saved for that student.
-	 * @throws IOException if Java classes failed.
 	 * @throws CorruptStudyPlanFileException If a file was saved for that student, but it contained garbage.
 	 * @throws FilePermissionException If needed permissions were missing.
 	 */
