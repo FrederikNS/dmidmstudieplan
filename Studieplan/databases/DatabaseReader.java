@@ -263,7 +263,7 @@ public class DatabaseReader implements Iterable<Course> {
 		final int runStart = lineNumber[id];
 		do {
 
-			if(null != scan[id].findInLine("^" + courseID + "( (\\d{5})+)") ) {
+			if(null != scan[id].findInLine("^" + courseID + "( (\\d{5})*)") ) {
 				/*This time we search for the dependency courses and this database is formatted like this:
 	             ddddd rrrrr( rrrrr)* 
 				 * Where ddddd is the five digits in the course we wish to look up and rrrrr is(/are) the 
@@ -271,6 +271,8 @@ public class DatabaseReader implements Iterable<Course> {
 				 * (as the first part of an entry) must have at least one dependency course. 
 				 */ 
 				String depends = scan[id].match().group(1);
+				if(depends == null) 
+					return course;
 				//Since the regular expression simply fetches everything but the original course number
 				// and the first whitespace after, the match will contain the dependency courses in a 
 				// String, where they are delimited by a single whitespace. Hench we split it, using " " 
