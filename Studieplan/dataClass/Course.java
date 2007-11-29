@@ -23,12 +23,8 @@ public class Course implements CourseSkemaData {
 	}
 
 	/**
-	 * @param courseID the courseID to set
+	 * @return
 	 */
-	public void setCourseID(String courseID) {
-		this.courseID = courseID;
-	}
-	
 	public String skemaToString() {		
 		return InternalSkema.internalSkemaToExternString(internalSkema);
 	}
@@ -83,7 +79,6 @@ public class Course implements CourseSkemaData {
 		return internalSkema;
 	}
 
-	
 	/**
 	 * @param skema
 	 */
@@ -112,7 +107,9 @@ public class Course implements CourseSkemaData {
 		return internalSkema & INTERNAL_SEASON_ALL;
 	}
 
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object obj) {
 		if(obj instanceof Course) {
 			Course course = (Course) obj;
@@ -131,6 +128,9 @@ public class Course implements CourseSkemaData {
 		return courseID.equals(this.courseID);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		String s = courseID  + " " + courseName + ", skemagruppe: " + skemaToString();
 		if(dependencies != null){
