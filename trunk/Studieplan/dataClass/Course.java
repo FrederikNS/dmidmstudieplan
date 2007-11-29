@@ -77,7 +77,7 @@ public class Course implements CourseSkemaData {
 	}
 	
 	/**
-	 * @return
+	 * @return internalSkema
 	 */
 	public int getFullSkemaData() {
 		return internalSkema;

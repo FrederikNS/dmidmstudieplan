@@ -43,20 +43,18 @@ public interface Core {
 	/**
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * Adds the Course to the current StudyPlan
-	 * @param course The course to be added.
+	 * @param courseID The ID of the course to be added.
 	 * @param semester The semester the course should be added too.
 	 * @throws CourseDoesNotExistException Thrown if no course had that course ID.
 	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
-	 * @throws CourseAlreadyExistsException 
 	 */	
 	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
 	/**
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * Adds the Course to the current StudyPlan
-	 * @param studentID the student ID of the student, who's plan it should be added to.
 	 * @param course The course to be added.
 	 * @param semester The semester the course should be added too.
 	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
@@ -68,7 +66,6 @@ public interface Core {
 
 	/**
 	 * Adds the course to the selected StudyPlan.
-	 * @param studentID the student ID of the student, who's plan it should be added to.
 	 * @param course The course to be added.
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
@@ -79,14 +76,13 @@ public interface Core {
 	/**
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * @param studentID the student ID of the student, who's plan it should be added to.
-	 * @param course The course to be added.
+	 * @param courseID The ID of the course to be added.
 	 * @param semester The semester the course should be added too.
 	 * @throws CourseDoesNotExistException Thrown if no course had that course ID.
 	 * @throws IllegalArgumentException Thrown if semester is less than 0 or greater than 20
 	 * @throws CourseAlreadyExistsException Thrown if the course is already in the StudyPlan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
-	 * @throws CourseAlreadyExistsException 
 	 */
 	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, CritalCourseDataMissingException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException;
 	/**

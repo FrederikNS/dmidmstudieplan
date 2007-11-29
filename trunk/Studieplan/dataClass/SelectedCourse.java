@@ -27,7 +27,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		}
 	
 	/**
-	 * @param An object of the Course type.
+	 * @param course An object of the Course type.
 	 * @param semester the semester it is taken on.
 	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
 	 */
