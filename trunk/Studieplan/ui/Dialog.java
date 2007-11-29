@@ -22,9 +22,21 @@ import exceptions.StudyPlanDoesNotExistException;
  * Sets up the interface the user will see.
  */
 public class Dialog extends UI {
-	BufferedReader keyboard;
+	/**
+	 * This is the variable for the Buffered reader
+	 */
+	BufferedReader keyboard; 
+	/**
+	 * This is the variable which contains the Course ID
+	 */
 	String courseID;
+	/**
+	 * This is the variable which contains 
+	 */
 	String semesterNumber;
+	/**
+	 * This is the String array which contains the users input
+	 */
 	String indtastet[];
 	boolean killSwitch;
 	boolean studyPlanChanged;
