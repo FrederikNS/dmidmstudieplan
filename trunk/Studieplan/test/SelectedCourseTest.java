@@ -29,8 +29,7 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2.setCourseID("01005");
-		sc2.setSemester(1);
+		sc2 = new SelectedCourse("01005", 1);
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
@@ -42,8 +41,7 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2.setCourseID("02101");
-		sc2.setSemester(1);
+		sc2 = new SelectedCourse("02101", 1);
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
