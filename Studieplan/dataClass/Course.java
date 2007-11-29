@@ -115,19 +115,11 @@ public class Course implements CourseSkemaData {
 
 	public boolean equals(Object obj) {
 		if(obj instanceof Course) {
-			return equals((Course) obj);
+			Course course = (Course) obj;
+			return isSameCourseID(course.getCourseID());
 		}
 				
 		return false;
-	}
-	
-	/**
-	 * Test if the courses are the same.
-	 * @param course the course you wish to compare it to.
-	 * @return true if the courseID of the two courses match.
-	 */
-	public boolean equals(Course course) {
-		return isSameCourseID(course.getCourseID());
 	}
 	
 	/**
