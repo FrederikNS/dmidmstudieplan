@@ -9,12 +9,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import dataClass.Course;
-
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
-import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
 import exceptions.StudyPlanDoesNotExistException;
 
@@ -274,9 +272,7 @@ public class Dialog extends UI {
 			System.err.println(e);
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
-		} catch (CritalCourseDataMissingException e) {
-			//Not going to happen
-		} catch (StudyPlanDoesNotExistException e) {
+		}  catch (StudyPlanDoesNotExistException e) {
 			System.err.println(e);
 		} catch (CourseAlreadyExistsException e) {
 			System.err.println(e);
