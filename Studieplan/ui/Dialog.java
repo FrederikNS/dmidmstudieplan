@@ -106,6 +106,7 @@ public class Dialog extends UI {
 	public final static int COMMAND_VIS_KURSUS = 9;
 
 	/**
+	 * This is the constructor
 	 * @param core
 	 * @throws IllegalArgumentException
 	 */
@@ -115,6 +116,7 @@ public class Dialog extends UI {
 
 	/** This is a rewrite of {@link ui.UI#start()}
 	 * @see ui.UI#start()
+	 * @author Frederik Nordahl Sabroe
 	 */
 	public void start(){
 		intro();
@@ -175,10 +177,10 @@ public class Dialog extends UI {
 
 	/**
 	 * This is the metheod which receives the input from the keyboard
+	 * @author Frederik Nordahl Sabroe
 	 * @param offset serves to change where the input from the keyboard will be put in the "indtastet[]" string array
 	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
-
 	public void input(int offset) throws IOException {
 		String temp[];
 		String input;
@@ -201,6 +203,7 @@ public class Dialog extends UI {
 
 	/**
 	 * Checks if the command is recognized by the program
+	 * @author Frederik Nordahl Sabroe
 	 * @return is one of the constants defined at the start of the program, which is used by start() to trigger the part of the program the user wishes to use
 	 */
 	public int commandCheck(){
@@ -230,6 +233,7 @@ public class Dialog extends UI {
 	/**
 	 * When adding a new course, it checks if there are any of the data in a wrong format
 	 * (eg. too high semester number, or the course ID contains letters).
+	 * @author Frederik Nordahl Sabroe
 	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	private void add() throws IOException {
@@ -281,6 +285,7 @@ public class Dialog extends UI {
 
 	/**
 	 * Checks if the form of courseID is a possible courseID
+	 * @author Frederik Nordahl Sabroe
 	 * @return true if the form is correct, else false
 	 */
 	private int courseCheck() {
@@ -299,7 +304,8 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * Checks if the form of semester number is a possible semester number 
+	 * Checks if the form of semester number is a possible semester number
+	 * @author Frederik Nordahl Sabroe 
 	 * @return true if the form is correct, else false
 	 */
 	private int semesterCheck() {
@@ -538,6 +544,7 @@ public class Dialog extends UI {
 
 	/**
 	 * Exits the program.
+	 * @author Frederik Nordahl Sabroe
 	 */
 	private void end(){
 		if(studyPlanChanged==true){
