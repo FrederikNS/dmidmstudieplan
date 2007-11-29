@@ -37,13 +37,6 @@ public class Course implements CourseSkemaData {
 	}
 
 	/**
-	 * @param courseName the courseName to set
-	 */
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
-
-	/**
 	 * @return the dependencies
 	 */
 	public String[] getDependencies() {
