@@ -11,8 +11,9 @@ public class Course implements CourseSkemaData {
 	private String courseName;
 	private int internalSkema;
 	
-	public Course(String CourseID) {
+	public Course(String CourseID, String courseName) {
 		this.courseID = CourseID;
+		this.courseName = courseName;
 	}
 	
 	/**
