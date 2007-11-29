@@ -6,7 +6,6 @@ import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.DatabaseReader;
 import exceptions.ConflictingCourseInStudyPlanException;
-import exceptions.CourseDoesNotExistException;
 
 /**
  * This test class tests the class StudyPlan by usint jUnit
@@ -134,28 +133,21 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveStringPositive() {
 		//Sets up test data
 		testAddPositive();
-		try {
-			assertTrue(sp.remove("01005"));
-		} catch (CourseDoesNotExistException e) {
-			fail(e.toString());
-		}
+		assertTrue(sp.remove("01005"));
 	}
 
 	/**
 	 * A negative test of removing a specific string from a study plan
 	 */
 	public void testRemoveStringNegative() {
-		try {
-			sp.remove("01005");
+	
+	    if(sp.remove("01005")) {
 			fail("course ought not to exist");
-		} catch (CourseDoesNotExistException e) {
-			
-		}
+	    }
 		try {
-			sp.remove("");
-			fail("no string given");
-		} catch (CourseDoesNotExistException e) {
-			
+			if(sp.remove("")) {
+				fail("no string given");
+			}
 		} catch (IllegalArgumentException e) {
 			
 		}
@@ -167,28 +159,22 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveCoursePositive() {
 		//Sets up test data
 		testAddPositive();
-		try {
-			assertTrue(sp.remove(new Course("01005", " ")));
-		} catch (CourseDoesNotExistException e) {
-			fail(e.toString());
-		}
+		assertTrue(sp.remove(new Course("01005", " ")));
 	}
 
 	/**
 	 * A negative test of removing a specific course from a study plan
 	 */
 	public void testRemoveCourseNegative() {
-		try {
-			sp.remove(new Course("01005", " "));
+
+		if(sp.remove(new Course("01005", " "))) {
 			fail("course ought not to exist");
-		} catch (CourseDoesNotExistException e) {
-			
 		}
+
 		try {
-			sp.remove(new Course("", " "));
-			fail("no name");
-		} catch (CourseDoesNotExistException e) {
-			
+			if(sp.remove(new Course("", " "))) {
+				fail("no name");
+			}
 		} catch (IllegalArgumentException e) {
 			
 		}

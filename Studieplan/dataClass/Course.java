@@ -377,9 +377,9 @@ public class Course implements Serializable{
 
 	/**
 	 * Overloading of the Object.equals method. 
-	 * This specifies that two courses are the same if they courseID is the same.
+	 * This specifies that two courses are the same if their courseIDs are equal.
 	 * 
-	 * This overloading couses the ArrayList<Course>.contains(course) to return true 
+	 * This overloading couses the ArrayList<Course>.contains(Course) to return true 
 	 * if a course with the same ID is already in that ArrayList.
 	 * 
 	 * @see dataClass.StudyPlan#contains(Course)
