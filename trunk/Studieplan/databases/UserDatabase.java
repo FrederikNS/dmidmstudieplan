@@ -119,7 +119,7 @@ public class UserDatabase {
 		try {
 			ois = new ObjectInputStream(new FileInputStream(f)) ;
 		} catch (IOException e1) {
-			System.err.println(e1);
+			System.err.println("1: " + e1);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		}
 		
@@ -129,7 +129,7 @@ public class UserDatabase {
 		} catch (ClassNotFoundException e) {
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		} catch (IOException e) {
-			System.err.println(e);
+			System.err.println("2: " + e);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		}
 		if(!(obj instanceof StudyPlan)) 

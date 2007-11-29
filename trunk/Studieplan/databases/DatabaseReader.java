@@ -20,7 +20,7 @@ import exceptions.FilePermissionException;
  * @author Niels Thykier
  *
  */
-public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
+public class DatabaseReader implements Iterable<Course> {
 
 	/**
 	 * Files objects, the databases loaded into memory.
@@ -31,6 +31,43 @@ public class DatabaseReader implements DatabaseHandler, Iterable<Course> {
 	 */
 	private Scanner scan[] = new Scanner[3];
 	private int lineNumber[] = {0,0,0};
+
+	/**
+	 * @author Niels Thykier
+	 * enum that handles the (file-)name (and the type) of the databases.
+	 */
+	enum DatabaseFiles {
+		/**
+		 * The dependency database
+		 */
+		KRAV("kursuskrav.txt"),
+		/**
+		 * The name database 
+		 */
+		NAVN("kursusnavne.txt"),
+		/**
+		 * The Skema database
+		 */
+		SKEMA("kursusskema.txt");
+
+		private String filename;
+
+		/**
+		 * Constructor for the enums
+		 * @param filename
+		 */
+		DatabaseFiles(String filename) {
+			this.filename = filename;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Enum#toString()
+		 */
+		public String toString() {
+			return filename;
+		}
+
+	}
 
 	/**
 	 * Opens the three database files for reading.
