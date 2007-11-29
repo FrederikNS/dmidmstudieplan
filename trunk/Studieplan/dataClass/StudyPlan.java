@@ -12,8 +12,8 @@ import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
 
 /**
+ * A StudyPlan containing a list of courses and a studentID.
  * @author Niels Thykier
- * The correct StudyPlan for a user.
  */
 public class StudyPlan implements Serializable {
 
