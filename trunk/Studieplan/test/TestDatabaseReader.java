@@ -12,7 +12,7 @@ public class TestDatabaseReader extends TestCase{
 	protected void setUp() throws Exception {
 		super.setUp();
 		try{
-		reader = new DatabaseReader();
+			reader = new DatabaseReader();
 		} catch (Exception e) {
 			fail(e.toString());
 		}
