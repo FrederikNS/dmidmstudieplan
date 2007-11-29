@@ -57,6 +57,13 @@ public class ProgramCore implements Core {
 			throw new Exception();
 		onlyOneCore = true;
 		
+		boolean makeUI = true;
+		
+		for(int i = 0 ; i < cmdLineArgs.length ; i++) {
+			if(cmdLineArgs[i].equalsIgnoreCase("--no-ui")) {
+				makeUI = false;
+			}
+		}
 		
 		try {
 			try {
@@ -83,24 +90,25 @@ public class ProgramCore implements Core {
 			
 			ui = new Dialog(this);
 			int returnCode = 0;
-			try {
-				ui.start();
-			} catch(RuntimeException e) {
-				System.err.println("Runtime Exception happened in the UI: " + ui.getClass().getName() );
-				System.err.println(e);
-				System.err.println("\n");
-				e.printStackTrace(System.err);
-				returnCode = 1;
-				System.exit(1);
+			if(makeUI) {
+				try {
+					ui.start();
+				} catch(RuntimeException e) {
+					System.err.println("Runtime Exception happened in the UI: " + ui.getClass().getName() );
+					System.err.println(e);
+					System.err.println("\n");
+					e.printStackTrace(System.err);
+					returnCode = 1;
+					System.exit(returnCode);
+				}
+				ui = null;
+				userDB = null;
+				planList = null;
+				currentPlan = null;
+				courseDB = null;
+				
+				System.exit(returnCode);
 			}
-			
-			ui = null;
-			userDB = null;
-			planList = null;
-			currentPlan = null;
-			courseDB = null;
-			
-			System.exit(returnCode);
 			
 		}catch(RuntimeException e) {
 			System.err.println("Runtime Exception happened in outside ui.start().");
