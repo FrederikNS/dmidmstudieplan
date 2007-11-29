@@ -1,8 +1,11 @@
 package test;
 
+import java.io.FileNotFoundException;
+
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import databases.DatabaseReader;
+import exceptions.FilePermissionException;
 import junit.framework.TestCase;
 
 public class CourseTest extends TestCase {
@@ -23,7 +26,7 @@ public class CourseTest extends TestCase {
 		assertFalse(cc.getCourseID() != "01715");
 	}
 
-	public void testSkemaToStringPositive() {
+	public void testSkemaToString() {
 		try {
 			DatabaseReader db = new DatabaseReader();
 			cc = new SelectedCourse(db.findCourse("01005"), 1);
@@ -40,10 +43,6 @@ public class CourseTest extends TestCase {
 		}
 	}
 
-	public void testSkemaToStringNegative() {
-		fail("Not yet implemented");
-	}
-
 	public void testGetCourseName() {
 		assertTrue(cc.getCourseName().equals("Funktionalanalyse"));
 	}
@@ -58,8 +57,16 @@ public class CourseTest extends TestCase {
 		}
 	}
 
-	public void testConflictingSkema() {
-		Course cc2 = new Course("01715", " ");
+	public void testConflictingSkemaPositive() {
+		Course cc2;
+		try {
+			DatabaseReader db = new DatabaseReader();
+			cc2 = db.findCourse("01005");
+		} catch (Exception e) {
+			fail("Course not found");
+			return;
+		}
+
 		assertTrue(cc.conflictingSkema(cc2));
 	}
 
@@ -83,16 +90,18 @@ public class CourseTest extends TestCase {
 		fail("Not yet implemented");
 	}
 
-	public void testGetSeason() {
-		fail("Not yet implemented");
-	}
-
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		boolean test1 = cc.equals(new Course(cc.getCourseID(),cc.getCourseName()));
+		boolean test2 = cc.equals(new SelectedCourse(cc.getCourseID(), cc.getCourseID(),1 ));
+		assertTrue(test1 && test2);
 	}
 
-	public void testIsSameCourseID() {
-		fail("Not yet implemented");
+	public void testIsSameCourseIDPositive() {
+		assertTrue(cc.isSameCourseID(cc.getCourseID()));
+	}
+	
+	public void testIsSameCourseIDNegative() {
+		assertFalse(cc.isSameCourseID("01005") || cc.isSameCourseID("0"));
 	}
 	
 	protected void tearDown() throws Exception  {
