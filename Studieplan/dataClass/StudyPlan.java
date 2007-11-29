@@ -50,24 +50,12 @@ public class StudyPlan implements Serializable, CourseSkemaData {
 	}
 
 	public boolean contains(String courseID) {
-		if(plan.isEmpty())
-			return false;
-		if(plan.contains(new Course(courseID))) {
-			System.err.println("plan.contains works");
-			return true;
-		}
-		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
-		
-		for(int i = 0 ; i < planned.length ; i++) {
-			if(planned[i].getCourseID().equals(courseID)) {
-				return true;
-			}
-		}
-		
-		return false;
+		return this.contains(new Course(courseID));
 	}
 	
 	public boolean contains(Course course) {
+		if(plan.isEmpty())
+			return false;
 		return this.contains(course.getCourseID());
 	}
 	
