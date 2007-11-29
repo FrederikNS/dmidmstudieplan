@@ -33,7 +33,8 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * @param courseID The ID number of the course.
 	 * @param courseName The name of the Course.
 	 * @param semester the semester it is taken on.
-	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
+	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1). or in case the base class Constructor would throw an exception
+	 * @see dataClass.Course#Course(String, String)
 	 */
 	public SelectedCourse(String courseID, String courseName, int semester) throws IllegalArgumentException{
 		super(courseID, courseName);
