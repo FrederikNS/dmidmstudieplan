@@ -84,9 +84,13 @@ public class ProgramCore implements Core {
 			
 			planList = new ArrayList<StudyPlan>();
 			
-			currentPlan = new StudyPlan("temp");
+			try{
+				currentPlan = getStudyPlan("temp",true);
+			} catch (Exception e) {
+				
+			}
 			
-			planList.add(currentPlan);
+			//planList.add(currentPlan);
 			
 			
 			ui = new Dialog(this);
@@ -221,7 +225,7 @@ public class ProgramCore implements Core {
 		Iterator<StudyPlan> ilt = planList.iterator();
 		while(ilt.hasNext()) {
 			sp = ilt.next();
-			if(sp.equals(studentID) ) {
+			if(sp.equals(new StudyPlan(studentID)) ) {
 				return sp;
 			}
 		}
