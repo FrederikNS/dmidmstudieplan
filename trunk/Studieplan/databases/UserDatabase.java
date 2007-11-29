@@ -117,7 +117,7 @@ public class UserDatabase {
 			throw new FilePermissionException("read");
 		ObjectInputStream ois;
 		try {
-			ois = new ObjectInputStream(new ObjectInputStream(new FileInputStream(f)) );
+			ois = new ObjectInputStream(new FileInputStream(f)) ;
 		} catch (IOException e1) {
 			System.err.println(e1);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
