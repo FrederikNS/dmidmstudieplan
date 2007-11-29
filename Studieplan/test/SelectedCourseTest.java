@@ -149,7 +149,7 @@ public class SelectedCourseTest extends TestCase {
 	 * Checks if a semester is valid
 	 */
 	public void testIsValidSemesterPositive() {
-		assertTrue(sc.isValidSemester(2));
+		assertTrue(SelectedCourse.isValidSemester(2));
 	}
 
 	/**
@@ -158,8 +158,8 @@ public class SelectedCourseTest extends TestCase {
 	public void testIsValidSemesterNegative() {
 		boolean test1;
 		boolean test2;
-		test1 = sc.isValidSemester(-1);
-		test2 = sc.isValidSemester(21);
+		test1 = SelectedCourse.isValidSemester(-1);
+		test2 = SelectedCourse.isValidSemester(21);
 		//If just one passes, the test will fail
 		assertFalse(test1 || test2);
 	}

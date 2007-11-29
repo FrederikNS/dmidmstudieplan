@@ -4,7 +4,7 @@ import databases.CourseBase;
 import exceptions.CourseDoesNotExistException;
 import junit.framework.TestCase;
 
-public class TestCourseBase extends TestCase {
+public class CourseBaseTest extends TestCase {
 
 	private CourseBase base;
 	
@@ -26,11 +26,6 @@ public class TestCourseBase extends TestCase {
 	}
 	
 	public void testSearch() {
-		try {
-			System.out.println(base.search("mat").length);
-		} catch (CourseDoesNotExistException e1) {
-			e1.printStackTrace();
-		}
 		try {
 			assertTrue(base.search("mat").length>0);
 		} catch (CourseDoesNotExistException e) {
