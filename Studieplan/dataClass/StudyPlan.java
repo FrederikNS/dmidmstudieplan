@@ -97,10 +97,6 @@ public class StudyPlan implements Serializable {
 		return plan.add(toAdd);
 	}
 	
-	public ArrayList<SelectedCourse> getCourses() {
-		return plan;
-	}
-	
 	public boolean remove(String toRemove) throws CourseDoesNotExistException {
 		return remove(new Course(toRemove, " ") );
 	}

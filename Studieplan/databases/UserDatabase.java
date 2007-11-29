@@ -93,15 +93,6 @@ public class UserDatabase {
 		} catch(IOException e) {
 			throw new CannotSaveStudyPlanException(plan, "ObjectOutputStream failed to store StudyPlan object");	
 		}
-		ArrayList<SelectedCourse> list = plan.getCourses();
-		try {
-			oos.writeObject(list);
-		} catch (IOException e) {
-			System.out.println("Saving a course caused IO Exception");
-			System.out.println(e);
-		}
-
-
 	}
 
 	/**
@@ -156,59 +147,8 @@ public class UserDatabase {
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		if(!(obj instanceof StudyPlan)) 
 			throw new CorruptStudyPlanFileException(file + "." + extension);
-
-		StudyPlan toReturn = (StudyPlan) obj;
-		System.out.println("loading courses...");
-		try {
-			obj = ois.readObject();
-			System.out.println("Found something");
-
-			System.out.println(obj.getClass().getName());
-			if(obj instanceof ArrayList) {
-				ArrayList arrayList = (ArrayList) obj;
-				System.out.println("ArrayList " + arrayList.size());
-
-				for(int i = 0 ; i < arrayList.size() ; i++) {
-					System.out.println("Item: " + i);	
-					try {
-						Object loop = arrayList.get(i);
-						if(loop == null) {
-							System.out.println("is null");
-						}
-						else if(loop instanceof SelectedCourse) {
-							try {
-								System.out.println("Selected Course");
-								SelectedCourse toAdd = null;
-								try {
-									toAdd = (SelectedCourse) loop;
-								}catch(Throwable e){
-									System.err.println(e);
-								}
-								try{
-									toReturn.add(toAdd);
-									System.out.println("Added");
-								}catch(Throwable e){
-									System.err.println(e);
-								}
-							} catch (Exception e) {
-								System.out.println(e);
-
-							}
-						}
-					} catch(Throwable e) {
-						System.out.println(e);
-					}
-				}
-
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return toReturn;
+		
+		return (StudyPlan) obj;
 		}
 
 		/**
