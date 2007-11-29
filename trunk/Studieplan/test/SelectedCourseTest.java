@@ -5,6 +5,10 @@ import dataClass.SelectedCourse;
 import databases.DatabaseReader;
 import junit.framework.TestCase;
 
+/**
+ * Tests the class SelectedCourses by usint jUnit
+ * @author Morten Sørensen
+ */
 public class SelectedCourseTest extends TestCase {
 
 	SelectedCourse sc;
@@ -16,7 +20,7 @@ public class SelectedCourseTest extends TestCase {
 	}
 
 	public void testCompareToPositive() {
-		SelectedCourse sc2 = new SelectedCourse("01715", 1);
+		SelectedCourse sc2 = new SelectedCourse("01715", " ", 1);
 		int test = 0;
 		if(sc.compareTo(sc2) == 1) {
 			test++;
@@ -29,7 +33,7 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("01005", 1);
+		sc2 = new SelectedCourse("01005", " ", 1);
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
@@ -41,7 +45,7 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("02101", 1);
+		sc2 = new SelectedCourse("02101", " ", 1);
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
@@ -65,7 +69,7 @@ public class SelectedCourseTest extends TestCase {
 			
 		}
 		try {
-			SelectedCourse sc2 = (SelectedCourse) new Course("01005");
+			SelectedCourse sc2 = (SelectedCourse) new Course("01005", " ");
 			sc.compareTo(sc2);
 			fail("uncompareble objects");
 		} catch(Exception e) {
@@ -102,12 +106,12 @@ public class SelectedCourseTest extends TestCase {
 	}
 
 	public void testEqualsSelectedCoursePositive() {
-		SelectedCourse sc2 = new SelectedCourse("01715", 2);
+		SelectedCourse sc2 = new SelectedCourse("01715", " ", 2);
 		assertTrue(sc.equals(sc2));
 	}
 
 	public void testEqualsSelectedCourseNegative() {
-		SelectedCourse sc2 = new SelectedCourse("01005", 2);
+		SelectedCourse sc2 = new SelectedCourse("01005", " ", 2);
 		assertFalse(sc.equals(sc2));
 	}
 
