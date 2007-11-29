@@ -32,8 +32,7 @@ public class Dialog extends UI implements DialogInterface {
 	public Dialog(Core core) throws IllegalArgumentException {
 		super(core);
 	}
-	
-	//woot
+
 	public void start(){
 		intro();
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
