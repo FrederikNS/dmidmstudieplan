@@ -9,37 +9,69 @@ import java.util.Arrays;
 
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CourseAlreadyExistsException;
-import exceptions.CourseDoesNotExistException;
 
 /**
  * A StudyPlan containing a list of courses and a studentID.
  * @author Niels Thykier
  */
 public class StudyPlan implements Serializable {
-
+	
+	/**
+	 * serialVersionUID needed so that this class can be Serializable. 
+	 */
 	private static final long serialVersionUID = -6200618982406378220L;
 
+	/**
+	 * ID of the student (or otherwise unique identifier) linking the plan to the student.
+	 */
 	private String studentID;
 
+	/**
+	 * The list of Courses taken.
+	 */
 	private ArrayList<SelectedCourse> plan;
 
-	public StudyPlan() {
-		plan = new ArrayList<SelectedCourse>();
+	/**
+	 * Contructor used when loading from this class from classes via the ObjectInputStream class.
+	 * @see databases.UserDatabase#loadStudyPlan(String, String)
+	 */
+	protected StudyPlan() {
 	}
 
+	/**
+	 * Create a new StudyPlan using studentID as creditentials
+	 * @param studentID The studentID of the student, who is making the plan.
+	 */
 	public StudyPlan(String studentID) {
 		plan = new ArrayList<SelectedCourse>();
 		this.studentID = studentID;
 	}
 
+	/**
+	 * Rename the owner of this StudyPlan.
+	 * @param studentID The ID of the new owner.
+	 */
 	public void setStudent(String studentID) {
 		this.studentID = studentID;
 	}
 
+	/**
+	 * Get the ID of the student, who is making this plan.
+	 * @return The student ID.
+	 */
 	public String getStudent() {
 		return studentID;
 	}
 
+	/**
+	 * Overloading of the Object.equals method. 
+	 * This specifies that two StudyPlans are the same if they studenID fields are equal.
+	 * 
+	 * This overloading couses the ArrayList<StudyPlan>.contains(StudyPlan) to return true 
+	 * if a StudyPlan with the same studentID is already in that ArrayList.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object obj) {
 		if(obj instanceof StudyPlan) {
 			StudyPlan plan = (StudyPlan) obj;
@@ -49,16 +81,33 @@ public class StudyPlan implements Serializable {
 		return false;
 	}
 
+	/**
+	 * Test if a course has already been added to the plan.
+	 * @param courseID The ID of the course to test for.
+	 * @return true if the course is already in the plan.
+	 */
 	public boolean contains(String courseID) {
 		return this.contains(new Course(courseID, " "));
 	}
 
+	/**
+	 * Test if a course has already been added to the plan.
+	 * @param course The course to test for.
+	 * @return true if the course is already in the plan.
+	 */
 	public boolean contains(Course course) {
 		if(plan.isEmpty())
 			return false;
 		return plan.contains(course);
 	}
 
+	/**
+	 * Adds a course to the StudyPlan
+	 * @param toAdd The SelectedCourse to add.
+	 * @return True if the course was added.
+	 * @throws CourseAlreadyExistsException Thrown if the course was already added to the plan.
+	 * @throws ConflictingCourseInStudyPlanException Thrown if another course had at least one lession at the same time as the one to be added.
+	 */
 	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException {
 		if(this.contains(toAdd)) {
 			throw new CourseAlreadyExistsException(toAdd.getCourseID());
@@ -88,18 +137,27 @@ public class StudyPlan implements Serializable {
 		return plan.add(toAdd);
 	}
 
-	public boolean remove(String toRemove) throws CourseDoesNotExistException {
+	/**
+	 * Removes a course from the plan, if it was added.
+	 * @param toRemove The ID of the course to remove.
+	 * @return true if the course was in the list.
+	 */
+	public boolean remove(String toRemove) {
 		return remove(new Course(toRemove, " ") );
 	}
 
-	public boolean remove(Course toRemove) throws CourseDoesNotExistException {
-		if(!this.contains(toRemove) ) {
-			throw new CourseDoesNotExistException(toRemove.getCourseID());
-		}
-
+	/**
+	 * Removes a course from the plan, if it was added.
+	 * @param toRemove The course to remove.
+	 * @return true if the course was in the list.
+	 */
+	public boolean remove(Course toRemove) {
 		return plan.remove(toRemove);
 	}
 
+	/**
+	 * <b>FIXME FIXME FIXME</b>
+	 */
 	public String printSemester(int semester) throws IllegalArgumentException {
 //		FIXME
 		if(semester < 0 || semester > 20) {
@@ -145,6 +203,14 @@ public class StudyPlan implements Serializable {
 		return toReturn;
 	}
 
+	/**
+	 * Generates a short String containing who this study plan belongs too.
+	 * 
+	 * To see the courses on a given semester, use printSemester()
+	 * 
+	 * @see #printSemester(int)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return "StudyPlan for " + studentID;
 	}
