@@ -135,8 +135,9 @@ public class CourseBase {
 	}
 	
 	/**
-	 * Prints a list of all the Courses in the CourseBase.
+	 * Prints a list of all the courses in the CourseBase.
 	 * @see java.lang.Object#toString()
+	 * @return A list of all the courses in the CourseBase
 	 */
 	public String toString() {
 		

@@ -17,8 +17,8 @@ import exceptions.CritalCourseDataMissingException;
 import exceptions.FilePermissionException;
 
 /**
+ * Reads and parses all the database files. This is used by CourseBase to load all the courses.
  * @author Niels Thykier
- *
  */
 public class DatabaseReader implements Iterable<Course> {
 
@@ -30,11 +30,15 @@ public class DatabaseReader implements Iterable<Course> {
 	 * Scanner objects, used to parse the database files
 	 */
 	private Scanner scan[] = new Scanner[3];
+	/**
+	 * The line number in each of the files.  
+	 */
 	private int lineNumber[] = {0,0,0};
 
 	/**
-	 * @author Niels Thykier
 	 * enum that handles the (file-)name (and the type) of the databases.
+	 * Each enum contains a filename of one of the databasefiles.
+	 * @author Niels Thykier
 	 */
 	enum DatabaseFiles {
 		/**
@@ -50,6 +54,9 @@ public class DatabaseReader implements Iterable<Course> {
 		 */
 		SKEMA("kursusskema.txt");
 
+		/**
+		 * The filename related to the given enum.
+		 */
 		private String filename;
 
 		/**
@@ -60,7 +67,9 @@ public class DatabaseReader implements Iterable<Course> {
 			this.filename = filename;
 		}
 
-		/* (non-Javadoc)
+		/**
+		 * Used to get the filename related to the enum.
+		 * @return The filename
 		 * @see java.lang.Enum#toString()
 		 */
 		public String toString() {
