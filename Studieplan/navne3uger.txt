@@ -1,0 +1,130 @@
+01036 Matematiske metoder i konstruktionsmekanik
+01257 Videregående modellering - anvendt matematik
+01330 Matematik 3: Introduktion til Videregående Matematik
+01458 Videregående modellering - partielle differentialligninger
+01530 Kinematisk Geometri med Anvendelser
+02137 Laboratoriekursus i computerarkitektur
+02165 Udvikling af Software Produkter
+02238 Biometriske Systemer
+02243 Adgangskontrol
+02261 Usability engineering
+02329 Datateknisk produktudvikling
+02403 Introduktion til statistik 
+02431 Risikomanagement
+02441 Anvendt statistik og statistisk programmel
+02443 Stokastisk simulation
+02507 Kursusarbejde i billedanalyse og optimering
+02532 GPS, GIS og afsætning for civilingeniører (tidligere landmåling) 
+02567 Digital grafisk produktion
+02623 Elementmetoden for partielle differentialligninger
+02625 Computational Science in Imaging
+02627 Videregående high-performance computing
+02633 Indledende programmering med Matlab
+02709 Matematisk Programmering med Modellerings Software
+02818 Projekt i personaliseret design baseret på XML-modellering
+02832 IT-støttet kommunikation og distribueret samarbejde
+02838 Kreativitet og problemløsning
+02855 Introduktion til E-business (projektkursus)
+02917 Avancerede Emner i Indlejrede systemer
+10322 Eksperimentel Mössbauer spektroskopi
+10330 Brint: produktion, lagring og anvendelse i brændselsceller
+10467 Metoder og instrumenter til fysiske målinger
+11010 Byggeteknik
+11040 Design af bygningskomponenter
+11052 Projektledelse i byggeriet
+11055 Teknologi og arbejdsmiljø  i byggesektoren
+11070 Grundkursus i byplanlægning
+11086 Planlægning og ledelse af byggeri
+11123 Eksperimentelle metoder i bygningsenergi og indeklima
+11330 Bygningskonstruktioner, projekt
+11425 Arktisk teknologi - introduktionskursus
+11452 Vejbefæstelser (teknisk kursus)
+11561 Bygningsmaterialer - anvendelse og forsøg
+11570 Anvendelse af elektrokemiske transportprocesser i byggeriet
+11715 Teknisk Tegning / CAD
+11737 Eksperimentel betonteknik
+11745 Projekteringspraktik i træ, stål og beton
+11762 Projekteringspraktik
+12122 Afløbssystemer
+12210 Miljøteknik i U-lande
+12231 Anvendt miljøkemisk analyseteknik
+12331 Feltundersøgelser i jord og grundvand
+12401 Geologi, introducerende feltkursus
+12444 Geofysisk efterforskning
+12500 Naturlige energiressourcer
+13004 Transporteffekter
+13220 Vejsimulering
+13321 Geometrisk vejprojektering
+26003 Kemisk syntese
+26120 Brint- og brændselscellekemi - eksperimentelt kursus
+26122 Eksperimentalkursus i koordinationskemi og biouorganisk kemi
+26232 Fysisk Kemi, øvelser
+26312 Instrumentel analyse (øvelseskursus)
+26322 Krystalstrukturanalyse
+26330 Katalyse, spektroskopi og struktur
+26405 Eksperimentel organisk kemi
+26416 Øvelser i syntese af organiske stoffer
+26435 Computerbaseret design af lægemidler
+27005 Introduktion til eksperimentel biomedicin
+27232 Molekylær biologiske øvelser i prokaryoter og eukaryoter
+27233 Industrielle bakteriers molekylære genetik
+27254 Experimentel Molekylær Medicinsk Mikrobiologi
+27302 Videregående eksperimentel biokemi
+27334 Bioaktive stoffer og nutrigenomics
+27503 Kvalitetsforringende processer i muskelbaserede levnedsmidler
+27612 DNA Microarrayanalyse
+27616 Bioinformatik og Gene Discovery
+27685 Immunologisk bioinformatik
+28231 Videregående øvelser i kemisk og biokemisk procesteknik
+28316 Kolloid- og grænsefladekemi, øvelser
+28811 Polymerer i processer og produkter
+28845 Øvelser i reaktionsteknik
+28851 Drift af kemiske procesanlæg
+28909 Fundamentale og beregningsmæssige aspekter ved termodynamiske modeller
+31012 Programmeringsprojekt
+31033 Projektarbejde i Elektroteknik
+31070 Hands-on mikrodatamat programmering
+31221 Videregående højttalermodellering
+31232 Teknisk audiologi
+31250 Miljøakustik
+31305 Projekter i praktisk regulering
+31353 Effektelektronik 2. Laboratoriekursus
+31355 EMC - Elektromagnetisk Kompatibilitet
+31385 Autonome robotsystemer
+31435 Antennemålinger i radiodøde rum
+31700 Elteknologi - økonomi, politik og teknik
+31745 Beregninger i elektriske energisystemer
+31825 Elektronisk måling og instrumentering. Laboratorieprojekt
+31875 Hybrid Mikroelektronik
+33422 Nanolitografi
+33432 Microarray teknologi og applikationer
+33435 LabChip-3W: Experimentelt arbejde med lab-on-a-chip systemer
+33442 Kvantemekanisk modellering af molekylær elektronik
+33443 Anvendelser af teoretisk mikro- og optofluidik
+33470 Mikro-3W: Eksperimentel halvlederteknologi
+33471 Nano-3W: Eksperimentel mikro- og nanoteknologi
+34047 Projekt i Optik og Fotonik
+34048 Forskningsprojekter i nanofotonik
+34319 Programmeringsprojekt  i IT og Kommunikationsteknologi
+41112 Strømningsmekanik - teknisk kursus
+41114 Numerisk hydrodynamik med frie overflader
+41263 Grundlæggende skibs- og offshoreteknik 2
+41272 Økonomi og miljø for transportsystemer
+41326 Design og analyse af systemer til isbeskyttelse af vindmøller
+41328 Planlægning og udvikling af vindmølleparker
+41390 Eksperimentel fluid dynamik og data fortolkning
+41409 Introduktion til Køleteknik, teori og praksis
+41418 Forbrændingsmotorer og luftforurening
+41429 "Egenskaber af væske, pumpbar is (""Binaeris, Sjapis"")"
+41811 Eksperimentel mekanik
+41822 Eksperimentelle metoder i fluid mekanik
+42120 Øvelseskursus i metallære
+42202 Eksperimentel analyse af bearbejdningsprocesser- Grundkursus
+42234 Eksperimentel plastteknologi
+42250 Øvelseskursus i processimulering
+42343 Nanoteknologi, design, samfund og miljø
+42411 Simulering af produktions- og servicesystemer
+42630 Miljø og samfund
+42646 Feltkursus i udviklingslande
+42961 Analyse af veje til at øge virksomhedens performance
+88383 Søgning efter teknisk information

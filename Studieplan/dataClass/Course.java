@@ -338,7 +338,9 @@ public class Course implements Serializable{
 	 * @param dependencies A string containing all the dependencies.
 	 */
 	public void setDependencies(String dependencies) {
-		this.dependencies = dependencies.trim();
+		if(dependencies != null) {
+			this.dependencies = dependencies.trim();
+		} else this.dependencies = "";
 	}
 
 	/**

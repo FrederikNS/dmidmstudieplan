@@ -160,7 +160,7 @@ public class StudyPlan implements Serializable {
 					dependencies = dependencies.replaceFirst(metArray[1], "").trim();
 				}
 			}
-			throw new CourseIsMissingDependenciesException(dependencies);
+			throw new CourseIsMissingDependenciesException(toAdd.getCourseID(), dependencies);
 		}
 		dependencyCourses.addAll(temp);
 		return plan.add(toAdd);
@@ -279,7 +279,11 @@ public class StudyPlan implements Serializable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "StudyPlan for " + studentID;
+		String s= "StudyPlan for " + studentID;
+		for(int i = 0 ; i < plan.size(); i++) {
+			s+= "\n" + plan.get(i).toString();
+		}	 
+		return s;  
 	}
 
 }
