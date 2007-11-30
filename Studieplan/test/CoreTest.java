@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 import ui.Core;
-import dataClass.Course;
 import dataClass.ProgramCore;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;

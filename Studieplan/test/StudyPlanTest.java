@@ -1,7 +1,5 @@
 package test;
 
-import java.io.FileNotFoundException;
-
 import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
@@ -9,11 +7,7 @@ import dataClass.StudyPlan;
 import databases.DatabaseReader;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
-import exceptions.CourseAlreadyExistsException;
-import exceptions.CourseDoesNotExistException;
 import exceptions.CourseIsMissingDependenciesException;
-import exceptions.CritalCourseDataMissingException;
-import exceptions.FilePermissionException;
 
 /**
  * This test class tests the class StudyPlan by usint jUnit
