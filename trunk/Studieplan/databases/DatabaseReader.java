@@ -40,15 +40,17 @@ public class DatabaseReader {
 		 */
 		NAVNB("navne3uger.txt"),
 		/**
+		 * The cross semester databases for courses extending more than one period/semester.
+		 */
+		SEMESTER("flerperioder.txt"),
+		/**
 		 * The Skema database
 		 */
 		SKEMA("skgrpKrav13.txt"),
 		/**
 		 * The dependency database
 		 */
-		KRAV("forud.txt"),
-		
-		;
+		KRAV("forud.txt");
 
 		/**
 		 * The filename related to the given enum.

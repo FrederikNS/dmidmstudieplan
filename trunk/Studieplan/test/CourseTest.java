@@ -108,7 +108,7 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testSetFullSkemaData() {
-		int newSkema = Course.INTERNAL_WEDNEYSDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
+		long newSkema = Course.INTERNAL_WEDNEYSDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
 		cc.setFullSkemaData(newSkema);
 		assertTrue( cc.getFullSkemaData() == newSkema);
 	}
