@@ -313,7 +313,7 @@ public class Dialog extends UI {
 			return INPUT_NULL;
 		try {
 			int temp2 = Integer.parseInt(indtastet[2]);
-			if(temp2 > 0 || temp2 < 21) {
+			if(temp2 > 0 && temp2 < 21) {
 				return INPUT_ACCEPTED;
 			}
 		} catch (Exception e) {

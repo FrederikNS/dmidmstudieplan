@@ -12,6 +12,7 @@ import databases.UserDatabase;
 import ui.Core;
 import ui.Dialog;
 import ui.UI;
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.CannotSaveStudyPlanException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
@@ -270,9 +271,14 @@ public class ProgramCore implements Core {
 	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
 	 */
-	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException  {
-		return removeCourseFromStudyPlan(studentID, course.getCourseID());		
+	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, AnotherCourseDependsOnThisCourseException  {
+		StudyPlan plan = getStudyPlan(studentID, false);
+		if(!plan.remove(course)) {
+			throw new CourseDoesNotExistException(course.getCourseID());
+		}
+		return true;		
 	}
 	
 	/**
@@ -281,16 +287,41 @@ public class ProgramCore implements Core {
 	 * @param courseID the ID of the course to look for.
 	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
-	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws StudyPlanDoesNotExistException Thrown if a StudyPlan with that studentID did not exist
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 * @throws IllegalArgumentException Thrown if the ID of the course would cause the Course(String, String) constructor to fail.
+	 * @see dataClass.Course#Course(String, String) 
 	 */
-	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException {
-		StudyPlan plan = getStudyPlan(studentID, false);
-		if(!plan.remove(courseID)) {
-			throw new CourseDoesNotExistException(courseID);
-		}
-		return true;
+	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, IllegalArgumentException, AnotherCourseDependsOnThisCourseException {
+		return removeCourseFromStudyPlan(studentID, new Course(courseID, " " ));
 	}
 
+	/**
+	 * Remove a course from the current StudyPlan
+	 * @param courseID the ID of the course to look for.
+	 * @return true if the course was in the list.
+	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
+	 * @throws StudyPlanDoesNotExistException Thrown if a StudyPlan with that studentID did not exist
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 * @throws IllegalArgumentException Thrown if the ID of the course would cause the Course(String, String) constructor to fail.
+	 * @see dataClass.Course#Course(String, String) 
+	 */
+	public boolean removeCourseFromStudyPlan(String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, IllegalArgumentException, AnotherCourseDependsOnThisCourseException {
+		return removeCourseFromStudyPlan(currentPlan.getStudent(), new Course(courseID, " " ));
+	}
+	
+	/**
+	 * Remove a course from the current StudyPlan
+	 * @param course to look for.
+	 * @return true if the course was in the list.
+	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
+	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 */
+	public boolean removeCourseFromStudyPlan(Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, AnotherCourseDependsOnThisCourseException  {
+		return removeCourseFromStudyPlan(currentPlan.getStudent(), course);
+	}
+	
 	/**
 	 * Get the StudyPlan related to the studentID
 	 * @param studentID the studentID related to the plan
@@ -412,7 +443,7 @@ public class ProgramCore implements Core {
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 */	
 	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException, CourseIsMissingDependenciesException {
-		addCourseToStudyPlan("temp", courseID, semester);
+		addCourseToStudyPlan(currentPlan.getStudent(), courseID, semester);
 	}
 	
 	/**
@@ -427,7 +458,7 @@ public class ProgramCore implements Core {
 	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 */
 	public void addCourseToStudyPlan(Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
-		addCourseToStudyPlan("temp", course, semester);
+		addCourseToStudyPlan(currentPlan.getStudent(), course, semester);
 	}
 
 	/**
@@ -439,7 +470,7 @@ public class ProgramCore implements Core {
 	 * @throws CourseIsMissingDependenciesException 
 	 */
 	public void addCourseToStudyPlan(SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
-		addCourseToStudyPlan("temp", course);
+		addCourseToStudyPlan(currentPlan.getStudent(), course);
 	}
 
 	/**

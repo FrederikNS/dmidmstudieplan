@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import dataClass.Course;
 import dataClass.SelectedCourse;
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.CannotSaveStudyPlanException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
@@ -150,8 +151,10 @@ public interface Core {
 	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws AnotherCourseDependsOnThisCourseException 
+	 * @throws IllegalArgumentException 
 	 */
-	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
+	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, IllegalArgumentException, AnotherCourseDependsOnThisCourseException;
 	
 	/**
 	 * Remove a course from a StudyPlan
@@ -160,9 +163,33 @@ public interface Core {
 	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws AnotherCourseDependsOnThisCourseException 
+	 * @throws IllegalArgumentException 
 	 */
-	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
+	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, IllegalArgumentException, AnotherCourseDependsOnThisCourseException;
 
+	/**
+	 * Remove a course from the current StudyPlan
+	 * @param courseID the ID of the course to look for.
+	 * @return true if the course was in the list.
+	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
+	 * @throws StudyPlanDoesNotExistException Thrown if a StudyPlan with that studentID did not exist
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 * @throws IllegalArgumentException Thrown if the ID of the course would cause the Course(String, String) constructor to fail.
+	 * @see dataClass.Course#Course(String, String) 
+	 */
+	public boolean removeCourseFromStudyPlan(String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, IllegalArgumentException, AnotherCourseDependsOnThisCourseException;
+	
+	/**
+	 * Remove a course from the current StudyPlan
+	 * @param course to look for.
+	 * @return true if the course was in the list.
+	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
+	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 */
+	public boolean removeCourseFromStudyPlan(Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException, AnotherCourseDependsOnThisCourseException;
+	
 	/**
 	 * Saves a StudyPlan under a different name
 	 * @param studentID this is the student ID

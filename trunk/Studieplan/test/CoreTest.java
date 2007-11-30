@@ -2,11 +2,15 @@ package test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import ui.Core;
 
+import junit.framework.TestCase;
+import ui.Core;
 import dataClass.ProgramCore;
+import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.CourseBase;
+import databases.DatabaseReader;
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.CannotSaveStudyPlanException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
@@ -14,7 +18,6 @@ import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
 import exceptions.FilePermissionException;
 import exceptions.StudyPlanDoesNotExistException;
-import junit.framework.TestCase;
 
 /**
  * Tests the class Core by using jUnit
@@ -257,6 +260,10 @@ public class CoreTest extends TestCase {
 		} catch (StudyPlanDoesNotExistException e) {
 			fail(e.toString());
 		} catch (CourseDoesNotExistException Success) {
+			
+		}  catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
 		}
 		try {
 			//Tries to remove a course from a non-existing study plan
@@ -267,9 +274,34 @@ public class CoreTest extends TestCase {
 			fail(e.toString());
 		} catch (StudyPlanDoesNotExistException e) {
 			
+		} catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
 		}
 		
-		fail("Missing test (Removal of course that another depends on)");
+		DatabaseReader db;
+		try {
+			db = new DatabaseReader();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			core.addCourseToStudyPlan(new SelectedCourse(db.findCourse("01035"), 2));
+			core.addCourseToStudyPlan(new SelectedCourse(db.findCourse("01250"), 3));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			core.removeCourseFromStudyPlan("01035");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
+			return;
+		}
 	}
 
 	/**
