@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseIsMissingDependenciesException;
@@ -31,6 +32,10 @@ public class StudyPlan implements Serializable {
 	 * The list of Courses taken.
 	 */
 	private ArrayList<SelectedCourse> plan;
+	/**
+	 * The list of Courses, that is depended on.
+	 */
+	private ArrayList<Course> dependencyCourses;
 
 	/**
 	 * Contructor used when loading from this class from classes via the ObjectInputStream class.
@@ -45,6 +50,7 @@ public class StudyPlan implements Serializable {
 	 */
 	public StudyPlan(String studentID) {
 		plan = new ArrayList<SelectedCourse>();
+		dependencyCourses = new ArrayList<Course>();
 		this.studentID = studentID;
 	}
 
@@ -118,6 +124,7 @@ public class StudyPlan implements Serializable {
 		int missingDependencies = toAdd.getAmountOfDependencies();
 		String dependencies = toAdd.getDependencies();
 		String met = null;
+		ArrayList<Course> temp = new ArrayList<Course>();
 		
 		if(!plan.isEmpty()) {
 			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
@@ -130,6 +137,7 @@ public class StudyPlan implements Serializable {
 					if(dependencies.contains(planned[i].getCourseID())) {
 						missingDependencies--;
 						met += planned[i].getCourseID()+ " ";
+						temp.add(planned[i]);
 					}
 				}
 				else if(currentSemester == semester) {
@@ -154,7 +162,7 @@ public class StudyPlan implements Serializable {
 			}
 			throw new CourseIsMissingDependenciesException(dependencies);
 		}
-
+		dependencyCourses.addAll(temp);
 		return plan.add(toAdd);
 	}
 
@@ -162,18 +170,56 @@ public class StudyPlan implements Serializable {
 	 * Removes a course from the plan, if it was added.
 	 * @param toRemove The ID of the course to remove.
 	 * @return true if the course was in the list.
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
+	 * @throws IllegalArgumentException Thrown if the ID of the course would cause the Course(String, String) constructor to fail.
+	 * @see dataClass.Course#Course(String, String) 
 	 */
-	public boolean remove(String toRemove) {
+	public boolean remove(String toRemove) throws IllegalArgumentException, AnotherCourseDependsOnThisCourseException {
 		return remove(new Course(toRemove, " ") );
 	}
 
 	/**
+	 * Used by StudyPlan to recalculate the dependencies stucture.
+	 */
+	private void recalculateDependencies() {
+		SelectedCourse[] list = plan.toArray(new SelectedCourse[1]);
+		if(list[0] == null) 
+			return;
+		Arrays.sort(list);
+		String dependencyList = "";
+		dependencyCourses = new ArrayList<Course>();
+		for(int i = list.length-1 ; i > -1 ; i--) {
+			System.out.println("["+i+"]"+list[i]);
+			if(list[i].hasDependencies()) {
+				dependencyList += list[i].getCourseID();
+			}
+			if(dependencyList.contains(list[i].getCourseID())) {
+				dependencyCourses.add(list[i]);
+			}
+		}
+		
+		System.out.println(studentID + " - " + dependencyList);
+		for(int i = 0 ; i < dependencyCourses.size(); i++) {
+			System.out.println("["+i+"] "+ dependencyCourses.get(i));
+		}
+	}
+	
+	/**
 	 * Removes a course from the plan, if it was added.
 	 * @param toRemove The course to remove.
 	 * @return true if the course was in the list.
+	 * @throws AnotherCourseDependsOnThisCourseException Thrown if another course depends on the course that was to be removed. 
 	 */
-	public boolean remove(Course toRemove) {
-		return plan.remove(toRemove);
+	public boolean remove(Course toRemove) throws AnotherCourseDependsOnThisCourseException {
+		if(!plan.contains(toRemove)) {
+			return false;
+		}
+		if(dependencyCourses.contains(toRemove)) {
+			throw new AnotherCourseDependsOnThisCourseException(toRemove.getCourseID(), "");
+		}
+		boolean toReturn = plan.remove(toRemove);
+		recalculateDependencies();
+		return toReturn;
 	}
 
 	/**

@@ -1,19 +1,26 @@
 package test;
 
+import java.io.FileNotFoundException;
+
 import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.DatabaseReader;
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseDoesNotExistException;
 import exceptions.CourseIsMissingDependenciesException;
+import exceptions.CritalCourseDataMissingException;
+import exceptions.FilePermissionException;
 
 /**
  * This test class tests the class StudyPlan by usint jUnit
  * @author Morten Sørensen
  */
 public class StudyPlanTest extends TestCase {
-	
+
 	/**
 	 * Sets up an class variable
 	 */
@@ -35,7 +42,7 @@ public class StudyPlanTest extends TestCase {
 		Object obj = new StudyPlan("testSubject3");
 		assertTrue(sp.equals(obj));
 	}
-	
+
 	/**
 	 * A negative of comparing to objects
 	 */
@@ -57,7 +64,7 @@ public class StudyPlanTest extends TestCase {
 			fail(e.toString());
 			return;
 		}
-		
+
 		try {
 			sp.add(sc);
 		} catch (Exception e) {
@@ -71,7 +78,7 @@ public class StudyPlanTest extends TestCase {
 	public void testAddNegative() {
 		//Sets up test data
 		testAddPositive();
-		
+
 		DatabaseReader db;
 		SelectedCourse sc1, sc2;
 		try {
@@ -80,12 +87,12 @@ public class StudyPlanTest extends TestCase {
 
 			sp.add(sc1);
 		} catch (ConflictingCourseInStudyPlanException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
 		}
-		
+
 		try {
 			db = new DatabaseReader();
 			sc2 = new SelectedCourse(db.findCourse("01450"), 2);
@@ -93,7 +100,7 @@ public class StudyPlanTest extends TestCase {
 				fail("Allowed course to be added without the dependencies being met!");
 			}
 		} catch (CourseIsMissingDependenciesException Success) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -148,23 +155,77 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveStringPositive() {
 		//Sets up test data
 		testAddPositive();
-		assertTrue(sp.remove("01005"));
+		DatabaseReader db;
+		try {
+			db = new DatabaseReader();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			sp.add(new SelectedCourse(db.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(db.findCourse("01250"), 3));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+
+		try {
+			assertTrue(sp.remove("01250") && sp.remove("01035"));
+		} catch (Exception e) {
+			fail("No Exception ought to happen: " + e.toString() );
+			return;
+		}
 	}
 
 	/**
 	 * A negative test of removing a specific string from a study plan
 	 */
 	public void testRemoveStringNegative() {
-	
-	    if(sp.remove("01005")) {
-			fail("course ought not to exist");
-	    }
+
+		try {
+			if(sp.remove("01005")) {
+				fail("course ought not to exist");
+			}
+		} catch (Exception e) {
+			fail("No Exception ought to happen: " + e.toString() );
+			return;
+		}
+		
 		try {
 			if(sp.remove("")) {
 				fail("no string given");
 			}
 		} catch (IllegalArgumentException e) {
-			
+
+		} catch (Exception e) {
+			fail("Wrong Exception: " + e.toString() );
+			return;
+		}
+
+		DatabaseReader db;
+		try {
+			db = new DatabaseReader();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			sp.add(new SelectedCourse(db.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(db.findCourse("01250"), 3));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			sp.remove("01035");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
+			return;
 		}
 	}
 
@@ -174,7 +235,11 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveCoursePositive() {
 		//Sets up test data
 		testAddPositive();
-		assertTrue(sp.remove(new Course("01005", " ")));
+		try {
+			assertTrue(sp.remove(new Course("01005", " ")));
+		} catch (Exception e) {
+			fail("No exception ought to be thrown: " + e.toString());
+		}
 	}
 
 	/**
@@ -182,8 +247,13 @@ public class StudyPlanTest extends TestCase {
 	 */
 	public void testRemoveCourseNegative() {
 
-		if(sp.remove(new Course("01005", " "))) {
-			fail("course ought not to exist");
+		try {
+			if(sp.remove(new Course("01005", " "))) {
+				fail("course ought not to exist");
+			}
+		} catch (Exception e) {
+			fail("Exception ought not to happen: " + e.toString());
+			return;
 		}
 
 		try {
@@ -191,7 +261,10 @@ public class StudyPlanTest extends TestCase {
 				fail("no name");
 			}
 		} catch (IllegalArgumentException e) {
-			
+
+		} catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
 		}
 	}
 
@@ -217,7 +290,7 @@ public class StudyPlanTest extends TestCase {
 			sp.printSemester(21);
 			fail("Exception expected");
 		} catch (IllegalArgumentException e) {
-			
+
 		}
 	}
 
