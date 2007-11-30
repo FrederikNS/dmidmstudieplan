@@ -5,7 +5,6 @@ package exceptions;
 
 /**
  * @author Niels Thykier
- *
  */
 public class CourseIsMissingDependenciesException extends Exception {
 
@@ -23,7 +22,7 @@ public class CourseIsMissingDependenciesException extends Exception {
 	 * @param missing The missing courses. 
 	 */
 	public CourseIsMissingDependenciesException(String missing) {
-		super("*** Kurset kunne ikke tilføjes, følgende kurser kræves " + missing);
+		super("*** Kurset kunne ikke tilføjes, følgende kurser kræves " + missing + " ***");
 		this.missing = missing;
 	}
 	
