@@ -15,14 +15,10 @@ public class CourseTest extends TestCase {
 		cc = new SelectedCourse(db.findCourse("01715"), 2);
 	}
 
-	public void testGetCourseIDPositive() {
-		assertTrue(cc.getCourseID() == "01715");
+	public void testGetCourseID() {
+		assertTrue(cc.getCourseID().equals("01715"));
 	}
-
-	public void testGetCourseIDNegative() {
-		assertFalse(cc.getCourseID() != "01715");
-	}
-
+	
 	public void testSkemaToString() {
 		try {
 			DatabaseReader db = new DatabaseReader();
@@ -70,12 +66,13 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testGetFullSkemaData() {
-		//TODO
-		cc.getFullSkemaData();
+		assertTrue( cc.getFullSkemaData() == Course.INTERNAL_WEDNEYSDAY_MORNING);
 	}
 
 	public void testSetFullSkemaData() {
-		fail("Not yet implemented");
+		int newSkema = Course.INTERNAL_WEDNEYSDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
+		cc.setFullSkemaData(newSkema);
+		assertTrue( cc.getFullSkemaData() == newSkema);
 	}
 
 	public void testSetSkemagruppe() {
