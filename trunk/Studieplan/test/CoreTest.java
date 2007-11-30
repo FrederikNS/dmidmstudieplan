@@ -74,7 +74,7 @@ public class CoreTest extends TestCase {
 		try {
 			//Adds two different courses that normally would conflict (same schema groups) in two different semesters
 			core.addCourseToStudyPlan("testSubject", "01005", 1);
-			core.addCourseToStudyPlan("testSubject", "01715", 2);
+			core.addCourseToStudyPlan("testSubject", "01035", 2);
 		} catch (ConflictingCourseInStudyPlanException e) {
 			//If one of them already is in the study plan, something i wrong
 			fail(e.toString());
@@ -86,7 +86,7 @@ public class CoreTest extends TestCase {
 			//Finds a studyplan
 			StudyPlan testPlan = core.getStudyPlan("testSubject");
 			//Checks if both courses are in the study plan
-			assertTrue(testPlan.contains("01005") && testPlan.contains("01715"));
+			assertTrue(testPlan.contains("01005") && testPlan.contains("01035"));
 		} catch (StudyPlanDoesNotExistException e) {
 			//If this exception is thrown, something had gone wrong in adding the courses to the study plan 
 			fail(e.toString());
@@ -189,7 +189,6 @@ public class CoreTest extends TestCase {
 	public void testLoadPositive() {
 		//Sets up test data
 		testSavePositive();
-		//TODO
 		try {
 			//Loads an existing study plan
 			core.loadStudyPlan("testSavePositive");
@@ -252,22 +251,25 @@ public class CoreTest extends TestCase {
 		testFillStudyPlanPositive();
 		try {
 			//Tries to remove a course thats not in the study plan
-			core.removeCourseFromStudyPlan("testSubject", "01006");
-			fail("No Exception");
-		} catch (CourseDoesNotExistException e) {
-			
+			if(core.removeCourseFromStudyPlan("testSubject", "01006")) {  
+				fail("Course ought not to have been in the plan");
+			}
 		} catch (StudyPlanDoesNotExistException e) {
 			fail(e.toString());
+		} catch (CourseDoesNotExistException Success) {
 		}
 		try {
 			//Tries to remove a course from a non-existing study plan
-			core.removeCourseFromStudyPlan("testFail", "01005");
-			fail("No Exception");
+			if(core.removeCourseFromStudyPlan("testFail", "01005")) {
+				fail("No Exception");
+			}
 		} catch (CourseDoesNotExistException e) {
 			fail(e.toString());
 		} catch (StudyPlanDoesNotExistException e) {
 			
 		}
+		
+		fail("Missing test (Removal of course that another depends on)");
 	}
 
 	/**

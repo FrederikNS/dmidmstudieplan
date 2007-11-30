@@ -111,7 +111,7 @@ public class Course implements Serializable{
 			}
 		}
 		
-		if( !(courseLength == null) && !courseLength[0].equals("")) {
+		if( (courseLength != null) && !courseLength[0].equals("")) {
 			for(int i = 0 ; i < courseLength.length ; i++ ) {
 				if(courseLength[i].equalsIgnoreCase("januar")) {
 					data |= INTERNAL_SEASON_AUTUMN_SHORT;

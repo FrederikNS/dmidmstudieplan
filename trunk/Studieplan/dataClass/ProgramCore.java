@@ -267,23 +267,28 @@ public class ProgramCore implements Core {
 	 * Remove a course from a StudyPlan
 	 * @param studentID the unique identifier of the StudyPlan
 	 * @param course to look for.
+	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
 	 */
-	public void removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException  {
-		removeCourseFromStudyPlan(studentID, course.getCourseID());		
+	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException  {
+		return removeCourseFromStudyPlan(studentID, course.getCourseID());		
 	}
 	
 	/**
 	 * Remove a course from a StudyPlan
 	 * @param studentID the unique identifier of the StudyPlan
 	 * @param courseID the ID of the course to look for.
+	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
 	 */
-	public void removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException {
+	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException {
 		StudyPlan plan = getStudyPlan(studentID, false);
-		plan.remove(courseID);
+		if(!plan.remove(courseID)) {
+			throw new CourseDoesNotExistException(courseID);
+		}
+		return true;
 	}
 
 	/**

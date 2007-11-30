@@ -66,7 +66,7 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testGetFullSkemaData() {
-		assertTrue( cc.getFullSkemaData() == Course.INTERNAL_WEDNEYSDAY_MORNING);
+		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNEYSDAY_MORNING<<12) | Course.INTERNAL_SEASON_AUTUMN) );
 	}
 
 	public void testSetFullSkemaData() {
