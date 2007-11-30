@@ -29,6 +29,14 @@ public class DatabaseReaderTest extends TestCase{
 		}
 	}
 	
+	
+	/**
+	 * 
+	 */
+	public void testLoadAllCourses() {
+		reader.loadAllCourses();
+	}
+	
 	/**
 	 * A positive test of finding a course
 	 */

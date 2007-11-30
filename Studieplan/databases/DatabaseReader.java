@@ -3,8 +3,11 @@
  */
 package databases;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -20,20 +23,7 @@ import exceptions.FilePermissionException;
  * Reads and parses all the database files. This is used by CourseBase to load all the courses.
  * @author Niels Thykier
  */
-public class DatabaseReader implements Iterable<Course> {
-
-	/**
-	 * Files objects, the databases loaded into memory.
-	 */
-	private File database[] = new File[3];
-	/**
-	 * Scanner objects, used to parse the database files
-	 */
-	private Scanner scan[] = new Scanner[3];
-	/**
-	 * The line number in each of the files.  
-	 */
-	private int lineNumber[] = {0,0,0};
+public class DatabaseReader {
 
 	/**
 	 * enum that handles the (file-)name (and the type) of the databases.
@@ -42,17 +32,23 @@ public class DatabaseReader implements Iterable<Course> {
 	 */
 	enum DatabaseFiles {
 		/**
-		 * The dependency database
+		 * The name database for long courses. 
 		 */
-		NAVN("navne.txt"),
+		NAVNA("navne.txt"),
+		/**
+		 * The name database for short courses.
+		 */
+		NAVNB("navne3uger.txt"),
 		/**
 		 * The Skema database
 		 */
-		KRAV("forud.txt"),
+		SKEMA("skgrpKrav13.txt"),
 		/**
-		 * The name database 
+		 * The dependency database
 		 */
-		SKEMA("skgrpKrav13.txt");
+		KRAV("forud.txt"),
+		
+		;
 
 		/**
 		 * The filename related to the given enum.
@@ -78,35 +74,49 @@ public class DatabaseReader implements Iterable<Course> {
 
 	}
 
+
+	/**
+	 * Files objects, the databases loaded into memory.
+	 */
+	private BufferedReader database[] = new BufferedReader[DatabaseFiles.values().length];
+	/**
+	 * Scanner objects, used to parse the database files
+	 */
+	private Scanner scan[] = new Scanner[4];
+	/**
+	 * The line number in each of the files.  
+	 */
+	private int lineNumber[] = {0,0,0,0};
+	
 	/**
 	 * Opens the three database files for reading.
 	 * @throws FileNotFoundException If one of the database files are missing.
 	 * @throws FilePermissionException if permissions is missing to read the file
 	 */
 	public DatabaseReader() throws FileNotFoundException, FilePermissionException {
-		database[DatabaseFiles.KRAV.ordinal()]  = openFile(DatabaseFiles.KRAV.toString());
-		database[DatabaseFiles.SKEMA.ordinal()] = openFile(DatabaseFiles.SKEMA.toString());
-		database[DatabaseFiles.NAVN.ordinal()]  = openFile(DatabaseFiles.NAVN.toString());
-
+		DatabaseFiles[] array  = DatabaseFiles.values();
+		for(int i = 0 ; i < array.length ; i++) {
+			database[i]  = openFile(array[i].toString());
+		}
 		resetFileScanner(DatabaseFiles.KRAV);
 		resetFileScanner(DatabaseFiles.SKEMA);
-		resetFileScanner(DatabaseFiles.NAVN);
+		resetFileScanner(DatabaseFiles.NAVNA);
 	}
 
 	/**
 	 * This is called by the constructor to open the database files.
 	 * @param filename The name of the file to open.
-	 * @return The file opened.
+	 * @return A BufferedReader to read the file.
 	 * @throws FileNotFoundException if the file is not found.
 	 * @throws FilePermissionException if permissions is missing to read the file
 	 */
-	private File openFile(String filename) throws FileNotFoundException, FilePermissionException {
+	private BufferedReader openFile(String filename) throws FileNotFoundException, FilePermissionException {
 		File f = new File(filename);
 		if(!f.exists() )
 			throw new FileNotFoundException(f.getAbsolutePath());
 		if(!f.canRead() )
 			throw new FilePermissionException("read");
-		return f;
+		return new BufferedReader(new FileReader(f));
 	}
 
 	/**
@@ -115,12 +125,112 @@ public class DatabaseReader implements Iterable<Course> {
 	 * @param db DatabaseFiles enum of the file that needs to be (re-)opened.
 	 */
 	private void resetFileScanner(DatabaseFiles db) {
+		scan[db.ordinal()] = new Scanner(database[db.ordinal()]);
+		scan[db.ordinal()].useDelimiter("\n");
+		lineNumber[db.ordinal()] = 0;
+	}
+	
+	public ArrayList<Course> loadAllCourses() {
+		ArrayList<Course> name = new ArrayList<Course>();
+		ArrayList<Course> skema = new ArrayList<Course>();
+		ArrayList<Course> toReturn = new ArrayList<Course>();
+		String input, data[];
+		long startTime = System.currentTimeMillis();
 		try {
-			scan[db.ordinal()] = new Scanner(database[db.ordinal()]);
-			scan[db.ordinal()].useDelimiter("\n");
-			lineNumber[db.ordinal()] = 0;
-		} catch (FileNotFoundException e) {
+			while((input = database[DatabaseFiles.NAVNA.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						name.add(new Course(data[0], data[1]));
+					}
+				} catch(NumberFormatException e) {
+				}
+			}			
+		} catch (IOException e) {
 		}
+		try {
+			while((input = database[DatabaseFiles.NAVNB.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						name.add(new Course(data[0], data[1]));
+					}
+				} catch(NumberFormatException e) {
+				}
+			}			
+		} catch (IOException e) {
+		}
+		long endTimeName = System.currentTimeMillis() - startTime;
+		int size = name.size();
+		System.out.println("Load (name) time: " + endTimeName + "ms | " + size + " Courses.");
+		try {
+			while((input = database[DatabaseFiles.SKEMA.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						for(int i = 0 ; i < size ; i++) {
+							Course course = name.get(i);
+							if(course.isSameCourseID(data[0])) {
+								course.setSkemagruppe(data[1].split(" "), null);
+								skema.add(course);
+								break;
+							}
+						}
+
+					}
+				} catch(NumberFormatException e) {
+				}
+			}			
+		} catch (IOException e) {
+		}
+		long endTimeSkema = System.currentTimeMillis() - startTime;
+		System.out.println("Load (Skema) time: " + endTimeSkema + "ms | " + skema.size() + " Courses." );
+
+		
+		int depending = 0;
+		size = skema.size();
+		try {
+			while((input = database[DatabaseFiles.KRAV.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						for(int i = 0 ; i < size ; i++) {
+							Course course = skema.get(i);
+							if(course.isSameCourseID(data[0])) {
+								course.setDependencies(data[1]);
+								depending++;
+							}
+						}
+
+					}
+				} catch(NumberFormatException e) {
+					System.out.println(e);
+				}
+			}			
+		} catch (IOException e) {
+			
+		}
+		long endTimeDepend = System.currentTimeMillis() - startTime;
+		System.out.println("Load (Depends) time: " + endTimeDepend + "ms | " + skema.size() + " Courses" );
+		
+		long time = System.currentTimeMillis();
+		Course temp1, temp2;
+		int a = 0;
+		for(int i = 0 ; i < skema.size() ; i++) {
+			temp1 = skema.get(i);
+			for(int j = 0 ; j < skema.size() ; j++) {
+				temp2 = skema.get(j);
+				if( (i < j) && temp1.equals(temp2) ) {
+					skema.remove(j);
+					System.out.println("Removed " + temp2 + " from cache; duplicated entry");
+					a++;
+				}
+				
+			}
+		}
+		long end = System.currentTimeMillis() - startTime;
+		System.out.println(end + " - removed: " + a + ", final amount of courses: " + skema.size());
+		return toReturn;
 	}
 	
 	/**
@@ -152,7 +262,7 @@ public class DatabaseReader implements Iterable<Course> {
 		 */
 
 		String courseName;
-		final int id = DatabaseFiles.NAVN.ordinal();
+		final int id = DatabaseFiles.NAVNA.ordinal();
 		final int runStart = lineNumber[id]; 
 		do {
 
@@ -163,10 +273,10 @@ public class DatabaseReader implements Iterable<Course> {
 				Course course = new Course(courseID, courseName);
 
 				course = findCourseSkema(course);
-				getNextLine(DatabaseFiles.NAVN);
+				getNextLine(DatabaseFiles.NAVNA);
 				return findCourseDependencies(course);			
 			}
-			getNextLine(DatabaseFiles.NAVN);
+			getNextLine(DatabaseFiles.NAVNA);
 		} while(lineNumber[id] != runStart);
 		
 		throw new CourseDoesNotExistException(courseID);
@@ -292,6 +402,7 @@ public class DatabaseReader implements Iterable<Course> {
 	} 
 
 	/**
+	 * @return Iterator
 	 * @see java.lang.Iterable#iterator()
 	 * @see databases.DatabaseReader.Iter
 	 */
@@ -312,7 +423,7 @@ public class DatabaseReader implements Iterable<Course> {
 		//load the parses.
 		/*openFileScan(DatabaseFiles.KRAV);
 		openFileScan(DatabaseFiles.SKEMA);
-		openFileScan(DatabaseFiles.NAVN);*/
+		openFileScan(DatabaseFiles.NAVNA);*/
 		for(int i = 0 ; i < scan.length ; i++ ) {
 			try {
 				for ( ; ; ) {
@@ -348,7 +459,7 @@ public class DatabaseReader implements Iterable<Course> {
 	 */
 	public class Iter implements Iterator<Course> {
 		/**
-		 * The Iterators own scanner for the "NAVN" database.
+		 * The Iterators own scanner for the "NAVNA" database.
 		 */
 		Scanner s;
 		/**
@@ -365,12 +476,8 @@ public class DatabaseReader implements Iterable<Course> {
 		 * Setups the scanner.
 		 */
 		public Iter() {
-			try {
-				s = new Scanner(database[DatabaseFiles.NAVN.ordinal()]);
-				s.useDelimiter("\n");
-			} catch(FileNotFoundException e){
-
-			}
+			s = new Scanner(database[DatabaseFiles.NAVNA.ordinal()]);
+			s.useDelimiter("\n");
 
 		}
 
