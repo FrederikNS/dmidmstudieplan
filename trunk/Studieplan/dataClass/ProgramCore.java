@@ -108,8 +108,9 @@ public class ProgramCore implements Core {
 			
 			planList = new ArrayList<StudyPlan>();
 			
+			currentPlan = new StudyPlan("temp");
 			try{
-				currentPlan = getStudyPlan("temp",true);
+				planList.add(currentPlan);
 			} catch (Exception e) {
 				
 			}

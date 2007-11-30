@@ -13,6 +13,11 @@ public class CourseIsMissingDependenciesException extends Exception {
 	 */
 	private static final long serialVersionUID = 1264886153105068668L;
 
+	
+	/**
+	 * The ID of the course in question
+	 */
+	private final String courseID;
 	/**
 	 * The list of missing dependencies.
 	 */
@@ -20,10 +25,12 @@ public class CourseIsMissingDependenciesException extends Exception {
 	
 	/**
 	 * @param missing The missing courses. 
+	 * @param courseID The ID of the course.
 	 */
-	public CourseIsMissingDependenciesException(String missing) {
-		super("*** Kurset kunne ikke tilføjes, følgende kurser kræves " + missing + " ***");
+	public CourseIsMissingDependenciesException(String courseID, String missing) {
+		super("*** Kurset, " + courseID + " kunne ikke tilføjes, følgende kurser kræves " + missing + " ***");
 		this.missing = missing;
+		this.courseID = courseID;
 	}
 	
 	/**
@@ -32,6 +39,13 @@ public class CourseIsMissingDependenciesException extends Exception {
 	 */
 	public String getMissingCourses() {
 		return missing;
+	}
+	/**
+	 * Get the ID of the course.
+	 * @return the ID of the course.
+	 */
+	public String getCourseID() {
+		return courseID;
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 import ui.Core;
+import dataClass.Course;
 import dataClass.ProgramCore;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
@@ -78,22 +79,19 @@ public class CoreTest extends TestCase {
 			//Adds two different courses that normally would conflict (same schema groups) in two different semesters
 			core.addCourseToStudyPlan("testSubject", "01005", 1);
 			core.addCourseToStudyPlan("testSubject", "01035", 2);
-		} catch (ConflictingCourseInStudyPlanException e) {
-			//If one of them already is in the study plan, something i wrong
-			fail(e.toString());
 		} catch (Exception e) {
 			//If any other kind of error occures, something is wrong
-			fail(e.toString());
+			fail("Exception " + e.toString());
 		}
 		try {
 			//Finds a studyplan
 			StudyPlan testPlan = core.getStudyPlan("testSubject");
 			//Checks if both courses are in the study plan
-			assertTrue(testPlan.contains("01005") && testPlan.contains("01035"));
+			assertTrue( testPlan.contains("01005") && testPlan.contains("01035"));
 		} catch (StudyPlanDoesNotExistException e) {
 			//If this exception is thrown, something had gone wrong in adding the courses to the study plan 
 			fail(e.toString());
-		}
+		} 
 	}
 	
 	/**

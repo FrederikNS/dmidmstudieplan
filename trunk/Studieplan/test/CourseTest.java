@@ -42,6 +42,7 @@ public class CourseTest extends TestCase {
 	
 	public void testGetDependenciesPositive() {
 		String skema = cc.getDependencies();
+		System.out.println(cc);
 		assertTrue(skema.contains("01035"));
 	}
 

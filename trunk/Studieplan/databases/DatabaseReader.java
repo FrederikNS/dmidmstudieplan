@@ -44,15 +44,15 @@ public class DatabaseReader implements Iterable<Course> {
 		/**
 		 * The dependency database
 		 */
-		KRAV("kursuskrav.txt"),
-		/**
-		 * The name database 
-		 */
-		NAVN("kursusnavne.txt"),
+		NAVN("navne.txt"),
 		/**
 		 * The Skema database
 		 */
-		SKEMA("kursusskema.txt");
+		KRAV("forud.txt"),
+		/**
+		 * The name database 
+		 */
+		SKEMA("skgrpKrav13.txt");
 
 		/**
 		 * The filename related to the given enum.
@@ -87,6 +87,7 @@ public class DatabaseReader implements Iterable<Course> {
 		database[DatabaseFiles.KRAV.ordinal()]  = openFile(DatabaseFiles.KRAV.toString());
 		database[DatabaseFiles.SKEMA.ordinal()] = openFile(DatabaseFiles.SKEMA.toString());
 		database[DatabaseFiles.NAVN.ordinal()]  = openFile(DatabaseFiles.NAVN.toString());
+
 		resetFileScanner(DatabaseFiles.KRAV);
 		resetFileScanner(DatabaseFiles.SKEMA);
 		resetFileScanner(DatabaseFiles.NAVN);
@@ -234,7 +235,7 @@ public class DatabaseReader implements Iterable<Course> {
 		 */
 		do {
 
-			if(null != scan[id].findInLine(courseID+"  (( [EF][12345][AB])*)(( (januar|juni)){0,2})") ){
+			if(null != scan[id].findInLine(courseID+"(( [EF][12345][AB])*)(( (januar|juni)){0,2})") ){
 				MatchResult result = scan[id].match();
 				skema = result.group(1).trim().split(" ");
 				period = result.group(3).trim().split(" ");
@@ -242,6 +243,7 @@ public class DatabaseReader implements Iterable<Course> {
 				getNextLine(DatabaseFiles.SKEMA);
 				return course;
 			}
+
 			getNextLine(DatabaseFiles.SKEMA);
 		} while(lineNumber[id] != runStart);
 
@@ -263,7 +265,7 @@ public class DatabaseReader implements Iterable<Course> {
 		final int runStart = lineNumber[id];
 		do {
 
-			if(null != scan[id].findInLine(courseID + "(( \\d{5})*)") ) {
+			if(null != scan[id].findInLine("^" + courseID + "(( \\d{5})*)") ) {
 				/*This time we search for the dependency courses and this database is formatted like this:
 	             ddddd rrrrr( rrrrr)* 
 				 * Where ddddd is the five digits in the course we wish to look up and rrrrr is(/are) the 

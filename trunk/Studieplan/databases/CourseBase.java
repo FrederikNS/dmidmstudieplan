@@ -85,6 +85,8 @@ public class CourseBase {
 	 * @return The load average meassured in courses per second. 
 	 */
 	public long getLoadAverage() {
+		if(loadTime == 0) 
+			return 0;
 		return (amountOfCourses*1000)/loadTime;
 	}
 	
