@@ -41,10 +41,10 @@ public class DatabaseReaderTest extends TestCase{
 		}
 		boolean navn = course.getCourseName().equals("Matematik 1");
 		String[] dtuSkema={"E5A","E5B","E3B","F5A","F5B","F3B"};
-		String[] length={null};
+		String[] length=null;
 		int i = Course.parseDTUSkema(dtuSkema,length);
 		boolean skema = course.getFullSkemaData()==i;
-		boolean deps = course.getDependencies() == null;
+		boolean deps = course.hasDependencies() == false;
 		//If it finds the correct name, schema groups and dependencies for the selected course
 		//the test will be correct
 		assertTrue(navn && skema && deps);

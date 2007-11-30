@@ -147,19 +147,21 @@ public interface Core {
 	 * Remove a course from a StudyPlan
 	 * @param studentID the unique identifier of the StudyPlan
 	 * @param courseID the ID of the course to look for.
+	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course exists (either in general or in the StudyPlan)
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
 	 */
-	public void removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
+	public boolean removeCourseFromStudyPlan(String studentID, String courseID) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
 	
 	/**
 	 * Remove a course from a StudyPlan
 	 * @param studentID the unique identifier of the StudyPlan
 	 * @param course to look for.
+	 * @return true if the course was in the list.
 	 * @throws CourseDoesNotExistException Thrown if no such course existed in the StudyPlan
 	 * @throws StudyPlanDoesNotExistException Thrown if no StudyPlan with that identifier existed.
 	 */
-	public void removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
+	public boolean removeCourseFromStudyPlan(String studentID, Course course) throws CourseDoesNotExistException, StudyPlanDoesNotExistException;
 
 	/**
 	 * Saves a StudyPlan under a different name
