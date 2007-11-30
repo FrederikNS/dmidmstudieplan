@@ -14,6 +14,9 @@ public class AnotherCourseDependsOnThisCourseException extends Exception {
 	 * The list of missing dependencies.
 	 */
 	private final String depends;
+	/**
+	 * The ID of the course in question
+	 */
 	private final String courseID;
 	
 	/**
