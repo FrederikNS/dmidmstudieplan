@@ -9,8 +9,6 @@ import java.io.Serializable;
  */
 public class Course implements Serializable{
 
-
-
 	/**
 	 * serialVersionUID needed so that this class can be Serializable. 
 	 */
@@ -249,7 +247,7 @@ public class Course implements Serializable{
 	/**
 	 * This field contains the ID of all the dependency courses. 
 	 */
-	private String dependencies[];
+	private String dependencies;
 	/**
 	 * The internal skema representation bit-flag field.
 	 */
@@ -317,9 +315,9 @@ public class Course implements Serializable{
 
 	/**
 	 * Get the course ID of the dependency courses.
-	 * @return A string array with the course IDs. This MAY return null, if no courses are loaded!
+	 * @return A string with the course IDs. This MAY return null, if no courses are loaded!
 	 */
-	public String[] getDependencies() {
+	public String getDependencies() {
 		return dependencies;
 	}
 
@@ -337,10 +335,10 @@ public class Course implements Serializable{
 	/**
 	 * Update the dependencies with a new set. 
 	 * This is used by the DatabaseReader when loading the the courses into memory. 
-	 * @param dependencies A string array containing all the dependencies.
+	 * @param dependencies A string containing all the dependencies.
 	 */
-	public void setDependencies(String[] dependencies) {
-		this.dependencies = dependencies;
+	public void setDependencies(String dependencies) {
+		this.dependencies = dependencies.trim();
 	}
 
 	/**
@@ -373,6 +371,24 @@ public class Course implements Serializable{
 	 */
 	public void setSkemagruppe(String[] skemagruppe, String[] periodData) {
 		internalSkema = parseDTUSkema(skemagruppe, periodData);
+	}
+	
+	/**
+	 * Get the amont of courses this one depends on.
+	 * @return The amount of courses this one depends on.
+	 */
+	public int getAmountOfDependencies() {
+		if(dependencies == null || dependencies.equals("")) 
+			return 0;
+		return dependencies.split(" ").length;
+	}
+	
+	/**
+	 * Check if the course has any dependency courses.
+	 * @return true if this course has any dependencies.
+	 */
+	public boolean hasDependencies() {
+		return getAmountOfDependencies() != 0;
 	}
 
 	/**
@@ -414,11 +430,8 @@ public class Course implements Serializable{
 	 */
 	public String toString() {
 		String s = courseID  + " " + courseName + ", skemagruppe: " + skemaToString();
-		if(dependencies != null){
-			s += ", forudgående kurser: ";
-			for(int i = 0 ; i < dependencies.length ; i++){
-				s += dependencies[i];
-			}
+		if(hasDependencies()){
+			s += ", forudgående kurser: " + getDependencies();
 		}
 		return s;
 	}

@@ -258,7 +258,7 @@ public class DatabaseReader implements Iterable<Course> {
 	 */
 	private Course findCourseDependencies(Course course) {
 		String courseID = course.getCourseID();
-		String dependencies[];
+		String depends;
 		final int id = DatabaseFiles.KRAV.ordinal();
 		final int runStart = lineNumber[id];
 		do {
@@ -270,22 +270,17 @@ public class DatabaseReader implements Iterable<Course> {
 				 * course number of the required course(s). A course appearing in this database 
 				 * (as the first part of an entry) must have at least one dependency course. 
 				 */ 
-				String depends = scan[id].match().group(1);
-				if(depends == null) {
-					return course;
-				} 
-				depends = depends.trim();
-				if(depends.equals("")) { 
-					return course;
-				}
+				depends = scan[id].match().group(1);
+				getNextLine(DatabaseFiles.KRAV);
 				//Since the regular expression simply fetches everything but the original course number
 				// and the first whitespace after, the match will contain the dependency courses in a 
-				// String, where they are delimited by a single whitespace. Hench we split it, using " " 
-				// as delimiter to get it in an array.
-				dependencies = depends.split(" ");
-				getNextLine(DatabaseFiles.KRAV);
-				course.setDependencies(dependencies);
-
+				// String, where they are delimited by a single whitespace.
+				//if null or (when trimmed) "", we skip it
+				if(depends == null) {
+					course.setDependencies("");
+					return course;
+				} 
+				course.setDependencies(depends.trim());				
 				return course;
 			}
 			getNextLine(DatabaseFiles.KRAV);
