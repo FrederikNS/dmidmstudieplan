@@ -17,81 +17,81 @@ public class Course implements Serializable{
 	/**
 	 * The bit-flag for the short part of the spring semester
 	 */
-	public static final int INTERNAL_SEASON_SPRING_SHORT = 0x00000800;
+	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x8000000000000000L;
 	/**
 	 * The bit-flag for the short part of the autumn semester
 	 */
-	public static final int INTERNAL_SEASON_AUTUMN_SHORT = 0x00800000;
+	public static final long INTERNAL_SEASON_AUTUMN_SHORT  = 0x4000000000000000L;
 	/**
 	 * The bit-flag for the long part of the spring semester
 	 */
-	public static final int INTERNAL_SEASON_SPRING       = 0x00000400;
+	public static final long INTERNAL_SEASON_SPRING        = 0x2000000000000000L;
 	/**
 	 * The bit-flag for the long part of the autum semester
 	 */
-	public static final int INTERNAL_SEASON_AUTUMN       = 0x00400000;
+	public static final long INTERNAL_SEASON_AUTUMN        = 0x1000000000000000L;
 	/**
 	 * Filter bit-flags for isolating all the season bit-flags.
 	 */
-	public static final int INTERNAL_SEASON_ALL          = 0x00C00C00;
+	public static final long INTERNAL_SEASON_ALL           = 0x8000000000000000L;
 
 	/**
 	 * Filter for isolating all the day bit-flags
 	 */
-	public static final int INTERNAL_DAYS         = 0x003ff3ff;
+	public static final long INTERNAL_DAYS                 = 0x0000ffffffffffffL;
 
 
 	/**
 	 * The Monday morning class bit-flag. 
 	 * DTU alias: A1
 	 */
-	public static final int INTERNAL_MONDAY_MORNING       = 0x00000001;
+	public static final long INTERNAL_MONDAY_MORNING       = 0x00000001;
 	/**
 	 * The Monday afternoon class bit-flag. 
 	 * DTU alias: A2
 	 */
-	public static final int INTERNAL_MONDAY_AFTERNOON     = 0x00000002;
+	public static final long INTERNAL_MONDAY_AFTERNOON     = 0x00000002;
 	/**
 	 * The Tuesday morning class bit-flag. 
 	 * DTU alias: A3
 	 */
-	public static final int INTERNAL_TUESDAY_MORNING      = 0x00000004;
+	public static final long INTERNAL_TUESDAY_MORNING      = 0x00000004;
 	/**
 	 * The Tuesday afternoon class bit-flag. 
 	 * DTU alias: 4A
 	 */
-	public static final int INTERNAL_TUESDAY_AFTERNOON    = 0x00000008; 
+	public static final long INTERNAL_TUESDAY_AFTERNOON    = 0x00000008; 
 	/**
 	 * The Wedneysday morning class bit-flag. 
 	 * DTU alias: 5A
 	 */
-	public static final int INTERNAL_WEDNEYSDAY_MORNING   = 0x00000010;
+	public static final long INTERNAL_WEDNEYSDAY_MORNING   = 0x00000010;
 
 	/**
 	 * The Thursday afternoon class bit-flag. 
 	 * DTU alias: 1B
 	 */
-	public static final int INTERNAL_THURSDAY_AFTERNOON   = 0x00000020; 
+	public static final long INTERNAL_THURSDAY_AFTERNOON   = 0x00000020; 
 	/**
 	 * The Thursdag morning class bit-flag. 
 	 * DTU alias: B2
 	 */
-	public static final int INTERNAL_THURSDAY_MORNING     = 0x00000040; 
+	public static final long INTERNAL_THURSDAY_MORNING     = 0x00000040; 
 	/**
 	 * The Friday afternoon class bit-flag. 
 	 * DTU alias: 3B
 	 */
-	public static final int INTERNAL_FRIDAY_AFTERNOON     = 0x00000080;
+	public static final long INTERNAL_FRIDAY_AFTERNOON     = 0x00000080;
 	/**
 	 * The Friday morning class bit-flag. 
 	 * DTU alias: 4B
 	 */
-	public static final int INTERNAL_FRIDAY_MORNING       = 0x00000100;
+	public static final long INTERNAL_FRIDAY_MORNING       = 0x00000100;
 	/**
 	 * The Wedneysday afternoon class bit-flag. 
 	 * DTU alias: 5B
 	 */ 
-	public static final int INTERNAL_WEDNEYSDAY_AFTERNOON = 0x00000200;
+	public static final long INTERNAL_WEDNEYSDAY_AFTERNOON = 0x00000200;
 
 
 	/**
@@ -103,8 +103,8 @@ public class Course implements Serializable{
 	 * @param courseLength The length of the course. (3-week and 13-week)
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
-	public static int parseDTUSkema(String[] DTUdata, String courseLength[]) {
-		int data = 0;
+	public static long parseDTUSkema(String[] DTUdata, String courseLength[]) {
+		long data = 0;
 		if(DTUdata != null) {
 			for(int i = 0; i < DTUdata.length ; i++ ){
 				data |= parseSingleDTUSkema(DTUdata[i]);
@@ -143,8 +143,8 @@ public class Course implements Serializable{
 	 * @param internalRepresentation An internal representation (bit-flags) of the skema.
 	 * @return The DTU skema in a single string.
 	 */
-	public static String internalSkemaToExternString(int internalRepresentation) {
-		int flag;
+	public static String internalSkemaToExternString(long internalRepresentation) {
+		long flag;
 		String toReturn = "";
 		for(int i = 0 ; i < 10 ; i++) {
 			flag = internalRepresentation >> i;
@@ -177,7 +177,7 @@ public class Course implements Serializable{
 	 * @param DTUplan A single DTU skema group (e.g. E1A for monday morning)
 	 * @return A set of internal skema bit-flags or 0, if the input was not a DTU skema group. 
 	 */
-	public static int parseSingleDTUSkema(String DTUplan) {
+	public static long parseSingleDTUSkema(String DTUplan) {
 		//Reading only the three last characters
 		DTUplan = DTUplan.trim();
 		int length = DTUplan.length();
@@ -190,7 +190,7 @@ public class Course implements Serializable{
 		} catch(Exception e) {
 			return 0;
 		}
-		int toReturn = 0;
+		long toReturn = 0;
 		switch(skema & 0xff) {
 		case 0x1A:
 			toReturn = INTERNAL_MONDAY_MORNING;
@@ -251,7 +251,7 @@ public class Course implements Serializable{
 	/**
 	 * The internal skema representation bit-flag field.
 	 */
-	private int internalSkema;
+	private long internalSkema;
 
 	/**
 	 * Creates a new Course. This is used by the DatabaseReader, when loading the 
@@ -327,7 +327,7 @@ public class Course implements Serializable{
 	 * @return true, if this course and compareTo have at least one lession at the same time during a week. 
 	 */
 	public boolean conflictingSkema(Course compareTo) {
-		int compare = compareTo.getFullSkemaData();
+		long compare = compareTo.getFullSkemaData();
 		compare &= ~(INTERNAL_DAYS);
 		return 0 != (compare & internalSkema);
 	}
@@ -350,7 +350,7 @@ public class Course implements Serializable{
 	 * 
 	 * @return internalSkema The internal skema data of the course.
 	 */
-	public int getFullSkemaData() {
+	public long getFullSkemaData() {
 		return internalSkema;
 	}
 
@@ -358,7 +358,7 @@ public class Course implements Serializable{
 	 * Update the internal skema bit-flags with the input.
 	 * @param skema The new bit-flags.
 	 */
-	public void setFullSkemaData(int skema) {
+	public void setFullSkemaData(long skema) {
 		this.internalSkema = skema;
 	}
 
