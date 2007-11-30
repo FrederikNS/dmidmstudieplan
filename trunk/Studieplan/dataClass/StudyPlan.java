@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseIsMissingDependenciesException;
 
 /**
  * A StudyPlan containing a list of courses and a studentID.
@@ -107,12 +108,17 @@ public class StudyPlan implements Serializable {
 	 * @return True if the course was added.
 	 * @throws CourseAlreadyExistsException Thrown if the course was already added to the plan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if another course had at least one lession at the same time as the one to be added.
+	 * @throws CourseIsMissingDependenciesException Thrown if the course being added has unmet dependencies.
 	 */
-	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException {
+	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, CourseIsMissingDependenciesException {
 		if(this.contains(toAdd)) {
 			throw new CourseAlreadyExistsException(toAdd.getCourseID());
 		}
 		int semester = toAdd.getSemester();
+		int missingDependencies = toAdd.getAmountOfDependencies();
+		String dependencies = toAdd.getDependencies();
+		String met = null;
+		
 		if(!plan.isEmpty()) {
 			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
 
@@ -120,19 +126,34 @@ public class StudyPlan implements Serializable {
 			int i = 0, currentSemester = 0;
 			for( ; i < planned.length ; i++) {
 				currentSemester = planned[i].getSemester();
-				if(currentSemester == semester) {
+				if(missingDependencies != 0 && currentSemester < semester) {
+					if(dependencies.contains(planned[i].getCourseID())) {
+						missingDependencies--;
+						met += planned[i].getCourseID()+ " ";
+					}
+				}
+				else if(currentSemester == semester) {
 					if(planned[i].conflictingSkema(toAdd)) {
 						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 					}
 				}
-				if(currentSemester > semester) {
+				else if(currentSemester > semester) {
 					//	If we get here, nothing is planned for that semester.
 					break;
 				}
 
 			}
 		}
-
+		
+		if(missingDependencies > 0) {
+			if(met != null) {
+				String[] metArray = met.trim().split(" ");
+				for(int i = 0 ; i < metArray.length ; i++) {
+					dependencies = dependencies.replaceFirst(metArray[1], "").trim();
+				}
+			}
+			throw new CourseIsMissingDependenciesException(dependencies);
+		}
 
 		return plan.add(toAdd);
 	}

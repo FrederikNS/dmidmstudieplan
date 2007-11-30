@@ -45,12 +45,8 @@ public class CourseTest extends TestCase {
 	}
 	
 	public void testGetDependenciesPositive() {
-		String[] skema = cc.getDependencies();
-		for(int i = 0; i < skema.length ; i++) {
-			if(skema[i].contains("01035")) {
-				assertTrue(true);
-			}
-		}
+		String skema = cc.getDependencies();
+		assertTrue(skema.contains("01035"));
 	}
 
 	public void testConflictingSkemaPositive() {
@@ -67,9 +63,9 @@ public class CourseTest extends TestCase {
 	}
 
 	public void testSetDependencies() {
-		String depends[] = {"01005", "02101"};
+		String depends = "01005 02101";
 		cc.setDependencies(depends);
-		String test[] = cc.getDependencies();
+		String test = cc.getDependencies();
 		assertTrue(test.equals(depends));
 	}
 

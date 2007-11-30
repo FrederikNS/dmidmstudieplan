@@ -6,6 +6,7 @@ import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.DatabaseReader;
 import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CourseIsMissingDependenciesException;
 
 /**
  * This test class tests the class StudyPlan by usint jUnit
@@ -72,12 +73,26 @@ public class StudyPlanTest extends TestCase {
 		testAddPositive();
 		
 		DatabaseReader db;
-		SelectedCourse sc1;
+		SelectedCourse sc1, sc2;
 		try {
 			db = new DatabaseReader();
 			sc1 = new SelectedCourse(db.findCourse("01715"), 1);
+
 			sp.add(sc1);
 		} catch (ConflictingCourseInStudyPlanException e) {
+			
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+		
+		try {
+			db = new DatabaseReader();
+			sc2 = new SelectedCourse(db.findCourse("01450"), 2);
+			if(sp.add(sc2)) {
+				fail("Allowed course to be added without the dependencies being met!");
+			}
+		} catch (CourseIsMissingDependenciesException Success) {
 			
 		} catch (Exception e) {
 			fail(e.toString());

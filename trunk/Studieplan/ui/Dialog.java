@@ -13,6 +13,7 @@ import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
 import exceptions.CourseDoesNotExistException;
+import exceptions.CourseIsMissingDependenciesException;
 import exceptions.FilePermissionException;
 import exceptions.StudyPlanDoesNotExistException;
 
@@ -274,6 +275,10 @@ public class Dialog extends UI {
 		}  catch (StudyPlanDoesNotExistException e) {
 			System.err.println(e);
 		} catch (CourseAlreadyExistsException e) {
+			System.err.println(e);
+		} catch (IllegalArgumentException e) {
+			System.err.println(e);
+		} catch (CourseIsMissingDependenciesException e) {
 			System.err.println(e);
 		}
 	}
