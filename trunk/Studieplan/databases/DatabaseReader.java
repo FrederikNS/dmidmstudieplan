@@ -34,15 +34,19 @@ public class DatabaseReader {
 		/**
 		 * The name database for long courses. 
 		 */
-		NAVNA("navne.txt"),
+		NAME_LONG("navne.txt"),
 		/**
 		 * The name database for short courses.
 		 */
-		NAVNB("navne3uger.txt"),
+		NAME_SHORT("navne3uger.txt"),
 		/**
 		 * The cross semester databases for courses extending more than one period/semester.
 		 */
-		SEMESTER("flerperioder.txt"),
+		MULTI_PERIOD("flerperioder.txt"),
+		/**
+		 * The short course database for course appearing in three week periods and are not multi-period courses.
+		 */
+		SHORT_COURSE("skemagrp3uger.txt"),
 		/**
 		 * The Skema database
 		 */
@@ -50,7 +54,7 @@ public class DatabaseReader {
 		/**
 		 * The dependency database
 		 */
-		KRAV("forud.txt");
+		DEPENDENCY("forud.txt");
 
 		/**
 		 * The filename related to the given enum.
@@ -84,11 +88,11 @@ public class DatabaseReader {
 	/**
 	 * Scanner objects, used to parse the database files
 	 */
-	private Scanner scan[] = new Scanner[4];
+	private Scanner scan[] = new Scanner[8];
 	/**
 	 * The line number in each of the files.  
 	 */
-	private int lineNumber[] = {0,0,0,0};
+	private int lineNumber[] = {0,0,0,0,0,0,0,0};
 	
 	/**
 	 * Opens the three database files for reading.
@@ -100,9 +104,9 @@ public class DatabaseReader {
 		for(int i = 0 ; i < array.length ; i++) {
 			database[i]  = openFile(array[i].toString());
 		}
-		resetFileScanner(DatabaseFiles.KRAV);
+		resetFileScanner(DatabaseFiles.DEPENDENCY);
 		resetFileScanner(DatabaseFiles.SKEMA);
-		resetFileScanner(DatabaseFiles.NAVNA);
+		resetFileScanner(DatabaseFiles.NAME_LONG);
 	}
 
 	/**
@@ -135,11 +139,13 @@ public class DatabaseReader {
 	public ArrayList<Course> loadAllCourses() {
 		ArrayList<Course> name = new ArrayList<Course>();
 		ArrayList<Course> skema = new ArrayList<Course>();
+		ArrayList<Course> multiPeriod = new ArrayList<Course>();
+		ArrayList<Course> shortCourse = new ArrayList<Course>();
 		ArrayList<Course> toReturn = new ArrayList<Course>();
 		String input, data[];
 		long startTime = System.currentTimeMillis();
 		try {
-			while((input = database[DatabaseFiles.NAVNA.ordinal()].readLine()) != null ) {
+			while((input = database[DatabaseFiles.NAME_LONG.ordinal()].readLine()) != null ) {
 				data = input.split(" ", 2);
 				try {
 					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
@@ -151,7 +157,7 @@ public class DatabaseReader {
 		} catch (IOException e) {
 		}
 		try {
-			while((input = database[DatabaseFiles.NAVNB.ordinal()].readLine()) != null ) {
+			while((input = database[DatabaseFiles.NAME_SHORT.ordinal()].readLine()) != null ) {
 				data = input.split(" ", 2);
 				try {
 					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
@@ -164,7 +170,46 @@ public class DatabaseReader {
 		}
 		long endTimeName = System.currentTimeMillis() - startTime;
 		int size = name.size();
-		System.out.println("Load (name) time: " + endTimeName + "ms | " + size + " Courses.");
+		try {
+			while((input = database[DatabaseFiles.SHORT_COURSE.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						for(int i = 0 ; i < size ; i++) {
+							Course course = name.get(i);
+							if(course.isSameCourseID(data[0])) {
+								course.updateSeason(data[1], true);
+								shortCourse.add(course);
+								break;
+							}
+						}
+					}
+				}catch(NumberFormatException e) {
+				}
+			}
+		}catch(IOException e) {
+		}
+		long endTimeShort = System.currentTimeMillis() - startTime;
+		try {
+			while((input = database[DatabaseFiles.MULTI_PERIOD.ordinal()].readLine()) != null ) {
+				data = input.split(" ", 2);
+				try {
+					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
+						for(int i = 0 ; i < size ; i++) {
+							Course course = name.get(i);
+							if(course.isSameCourseID(data[0])) {
+								course.updateSeason(data[1], true);
+								multiPeriod.add(course);
+								break;
+							}
+						}
+					}
+				}catch(NumberFormatException e) {
+				}
+			}
+		}catch(IOException e) {
+		}
+		long endTimeMulti = System.currentTimeMillis() - startTime;
 		try {
 			while((input = database[DatabaseFiles.SKEMA.ordinal()].readLine()) != null ) {
 				data = input.split(" ", 2);
@@ -173,7 +218,7 @@ public class DatabaseReader {
 						for(int i = 0 ; i < size ; i++) {
 							Course course = name.get(i);
 							if(course.isSameCourseID(data[0])) {
-								course.setSkemagruppe(data[1].split(" "), null);
+								course.setSkemagruppe(data[1].split(" "), null, true);
 								skema.add(course);
 								break;
 							}
@@ -186,13 +231,12 @@ public class DatabaseReader {
 		} catch (IOException e) {
 		}
 		long endTimeSkema = System.currentTimeMillis() - startTime;
-		System.out.println("Load (Skema) time: " + endTimeSkema + "ms | " + skema.size() + " Courses." );
 
 		
 		int depending = 0;
 		size = skema.size();
 		try {
-			while((input = database[DatabaseFiles.KRAV.ordinal()].readLine()) != null ) {
+			while((input = database[DatabaseFiles.DEPENDENCY.ordinal()].readLine()) != null ) {
 				data = input.split(" ", 2);
 				try {
 					if(data[0].length() == 5 && Integer.parseInt(data[0]) >-1) {
@@ -213,25 +257,41 @@ public class DatabaseReader {
 			
 		}
 		long endTimeDepend = System.currentTimeMillis() - startTime;
-		System.out.println("Load (Depends) time: " + endTimeDepend + "ms | " + skema.size() + " Courses" );
 		
-		long time = System.currentTimeMillis();
+		
 		Course temp1, temp2;
-		int a = 0;
+		int doubleCourses = 0;
 		for(int i = 0 ; i < skema.size() ; i++) {
 			temp1 = skema.get(i);
-			for(int j = 0 ; j < skema.size() ; j++) {
+			for(int j = i ; j < skema.size() ; j++) {
 				temp2 = skema.get(j);
 				if( (i < j) && temp1.equals(temp2) ) {
 					skema.remove(j);
-					System.out.println("Removed " + temp2 + " from cache; duplicated entry");
-					a++;
+					doubleCourses++;
 				}
 				
 			}
 		}
 		long end = System.currentTimeMillis() - startTime;
-		System.out.println(end + " - removed: " + a + ", final amount of courses: " + skema.size());
+		int idleness = 0;
+		while((System.currentTimeMillis() - startTime) < 290 ) {
+			//asm("nop");
+			idleness++;
+		}
+		
+		System.out.println("Load Stastistics:");
+		System.out.println("Total load time: " + end + "ms.");
+		System.out.println("Half-times: ");
+		System.out.println(" - name load: " + endTimeName + "ms");
+		System.out.println(" - short course load: " + endTimeShort + "ms");
+		System.out.println(" - multi-period load: " + endTimeMulti + "ms");
+		System.out.println(" - skema load: " + endTimeSkema + "ms");
+		System.out.println(" - dependency load: " + endTimeDepend + "ms");
+		System.out.println("Idle time: " + (290 - end )+ "ms. \"NOP\"s: " + idleness);
+		System.out.println("Total amount of courses: " + skema.size());
+		System.out.println(" - Short courses: " + shortCourse.size());
+		System.out.println(" - Multi-period courses: " + multiPeriod.size());
+		System.out.println("Removed " + doubleCourses + " of double courses");
 		return toReturn;
 	}
 	
@@ -264,7 +324,7 @@ public class DatabaseReader {
 		 */
 
 		String courseName;
-		final int id = DatabaseFiles.NAVNA.ordinal();
+		final int id = DatabaseFiles.NAME_LONG.ordinal();
 		final int runStart = lineNumber[id]; 
 		do {
 
@@ -275,10 +335,10 @@ public class DatabaseReader {
 				Course course = new Course(courseID, courseName);
 
 				course = findCourseSkema(course);
-				getNextLine(DatabaseFiles.NAVNA);
+				getNextLine(DatabaseFiles.NAME_LONG);
 				return findCourseDependencies(course);			
 			}
-			getNextLine(DatabaseFiles.NAVNA);
+			getNextLine(DatabaseFiles.NAME_LONG);
 		} while(lineNumber[id] != runStart);
 		
 		throw new CourseDoesNotExistException(courseID);
@@ -351,7 +411,7 @@ public class DatabaseReader {
 				MatchResult result = scan[id].match();
 				skema = result.group(1).trim().split(" ");
 				period = result.group(3).trim().split(" ");
-				course.setSkemagruppe(skema, period);
+				course.setSkemagruppe(skema, period, true);
 				getNextLine(DatabaseFiles.SKEMA);
 				return course;
 			}
@@ -373,7 +433,7 @@ public class DatabaseReader {
 	private Course findCourseDependencies(Course course) {
 		String courseID = course.getCourseID();
 		String depends;
-		final int id = DatabaseFiles.KRAV.ordinal();
+		final int id = DatabaseFiles.DEPENDENCY.ordinal();
 		final int runStart = lineNumber[id];
 		do {
 
@@ -385,7 +445,7 @@ public class DatabaseReader {
 				 * (as the first part of an entry) must have at least one dependency course. 
 				 */ 
 				depends = scan[id].match().group(1);
-				getNextLine(DatabaseFiles.KRAV);
+				getNextLine(DatabaseFiles.DEPENDENCY);
 				//Since the regular expression simply fetches everything but the original course number
 				// and the first whitespace after, the match will contain the dependency courses in a 
 				// String, where they are delimited by a single whitespace.
@@ -397,7 +457,7 @@ public class DatabaseReader {
 				course.setDependencies(depends.trim());				
 				return course;
 			}
-			getNextLine(DatabaseFiles.KRAV);
+			getNextLine(DatabaseFiles.DEPENDENCY);
 		} while(lineNumber[id] != runStart);
 		
 		return course;
@@ -478,7 +538,7 @@ public class DatabaseReader {
 		 * Setups the scanner.
 		 */
 		public Iter() {
-			s = new Scanner(database[DatabaseFiles.NAVNA.ordinal()]);
+			s = new Scanner(database[DatabaseFiles.NAME_LONG.ordinal()]);
 			s.useDelimiter("\n");
 
 		}
