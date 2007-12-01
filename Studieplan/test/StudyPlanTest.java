@@ -5,7 +5,6 @@ import dataClass.Course;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.CourseBase;
-import databases.DatabaseReader;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CourseIsMissingDependenciesException;

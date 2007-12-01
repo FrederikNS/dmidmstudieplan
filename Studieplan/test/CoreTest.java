@@ -36,7 +36,7 @@ public class CoreTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		//Forces the core to not load ui
-		String testSetup[] = {"--no-ui"};
+		String testSetup[] = {"--no-ui", "--silent"};
 		core = new ProgramCore(testSetup); 
 	}
 	
