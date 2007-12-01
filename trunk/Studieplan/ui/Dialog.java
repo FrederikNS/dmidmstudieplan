@@ -333,6 +333,7 @@ public class Dialog extends UI {
 			temp3 = Integer.parseInt(indtastet[1]);
 			if (indtastet[1].length() == 5 && temp3 > -1) {
 				//Kommando sendes til anden class
+				//TODO
 			}
 			System.out.println("Det indtastede data for kursusnummeret var forkert.");
 			System.out.println("Indtast det korrekte kursusnummer:");
@@ -435,6 +436,7 @@ public class Dialog extends UI {
 	/**
 	 * Prints the plan as is
 	 */
+	//TODO - changed
 	private void showPlan(){
 		int temp2;
 		String season;

@@ -119,6 +119,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		if(! isValidSemester(semester) )
 			throw new IllegalArgumentException();
 		this.semester = semester;
+
 	}
 
 }

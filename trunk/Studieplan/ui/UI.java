@@ -1,12 +1,12 @@
 package ui;
 
 /**
- * @author Morten Sørensen
  * A base class that all UserInterfaces must extend (Human <-> Computer communication)
  * 
  * The UI will be constructed by a Core class, which will call the UI.start() command, when 
  * the core is ready for User interaction. 
  * @see Core
+ * @author Morten Sørensen
  */
 public abstract class UI {
 	
