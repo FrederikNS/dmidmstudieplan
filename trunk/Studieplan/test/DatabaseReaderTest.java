@@ -1,8 +1,9 @@
 package test;
 
-import dataClass.Course;
-import databases.DatabaseReader;
 import junit.framework.TestCase;
+import dataClass.Course;
+import databases.CourseBase;
+import databases.CourseBase.DatabaseReader;
 
 /**
  * This test class performs a series of tests on the class DatabaseReader
@@ -23,7 +24,8 @@ public class DatabaseReaderTest extends TestCase{
 	protected void setUp() throws Exception {
 		super.setUp();
 		try{
-			reader = new DatabaseReader();
+			CourseBase cb = new CourseBase();
+			reader = cb.new DatabaseReader();
 		} catch (Exception e) {
 			fail(e.toString());
 		}

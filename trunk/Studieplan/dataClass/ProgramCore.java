@@ -2,8 +2,11 @@
  * 
  */
 package dataClass;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -61,7 +64,6 @@ public class ProgramCore implements Core {
 	 */
 	private boolean onlyOneCore = false;
 	
-	
 	/**
 	 * This will init the other classes and have the UI start its interaction.
 	 * There can only be contructed one ProgramCore. Attempts to construct a second will cause
@@ -81,11 +83,40 @@ public class ProgramCore implements Core {
 			throw new Exception();
 		onlyOneCore = true;
 		
-		boolean makeUI = true;
+		boolean makeUI = true, silent = false;
+		PrintStream stdin = System.out;
 		if(cmdLineArgs != null) {
 			for(int i = 0 ; i < cmdLineArgs.length ; i++) {
 				if(cmdLineArgs[i].equalsIgnoreCase("--no-ui")) {
 					makeUI = false;
+				}
+				else if(cmdLineArgs[i].equalsIgnoreCase("--silent")) {
+					try {
+						System.setOut(new PrintStream("/dev/null"));
+						silent = true;
+					} catch(Throwable e) {
+						System.err.println("Cannot enter silent mode: Unable to redirect stdout");
+					}
+				} else if(cmdLineArgs[i].equalsIgnoreCase("--file")) {
+					if(cmdLineArgs.length > i) {
+						i++;
+						InputStream in;
+						try {
+							in = new FileInputStream(cmdLineArgs[i]);
+						} catch(Exception e) {
+							System.err.println("Could not open the file for reading." );
+							System.err.println(e);
+							System.exit(2);
+							return;
+						}
+						try {
+							System.setIn(in);
+						} catch(Throwable e) {
+							System.err.println("Could not re-direct stdin.");
+							System.err.println(e);
+							System.exit(2);
+						}
+					}
 				}
 			}
 		}
@@ -115,13 +146,15 @@ public class ProgramCore implements Core {
 				
 			}
 			
-			//planList.add(currentPlan);
+			System.out.println(courseDB.getStatisticalData());
 			
-			
-			ui = new Dialog(this);
 			int returnCode = 0;
 			if(makeUI) {
+				ui = new Dialog(this);
 				try {
+					if(silent) {
+						System.setOut(stdin);
+					}
 					ui.start();
 				} catch(RuntimeException e) {
 					System.err.println("Runtime Exception happened in the UI: " + ui.getClass().getName() );
@@ -148,6 +181,7 @@ public class ProgramCore implements Core {
 			
 			System.exit(1);
 		}
+		System.out.println("ProgramCore: Entering \"Daemon\" mode");
 	}
 
 	/**
