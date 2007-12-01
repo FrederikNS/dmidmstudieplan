@@ -15,32 +15,75 @@ public class Course implements Serializable{
 	private static final long serialVersionUID = 4491280720903309211L;
 	
 	/**
-	 * The bit-flag for the short part of the spring semester
-	 */
-	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x8000000000000000L;
-	/**
 	 * The bit-flag for the short part of the autumn semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN_SHORT  = 0x4000000000000000L;
+	public static final long INTERNAL_SEASON_AUTUMN_SHORT  = 0x8000000000000000L;
 	/**
-	 * The bit-flag for the long part of the spring semester
+	 * The bit-flag for the short part of the spring semester
 	 */
-	public static final long INTERNAL_SEASON_SPRING        = 0x2000000000000000L;
+	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x4000000000000000L;
 	/**
 	 * The bit-flag for the long part of the autum semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN        = 0x1000000000000000L;
+	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x2000000000000000L;
+	/**
+	 * The bit-flag for the long part of the spring semester
+	 */
+	public static final long INTERNAL_SEASON_SPRING_LONG   = 0x1000000000000000L;
 	/**
 	 * Filter bit-flags for isolating all the season bit-flags.
 	 */
-	public static final long INTERNAL_SEASON_ALL           = 0x8000000000000000L;
+	public static final long INTERNAL_SEASON_ALL           = 0xf000000000000000L;
+	
+	/**
+	 * If checked, this is a multi-period course.
+	 */
+	public static final long INTERNAL_MULTI_PERIOD_FLAG    = 0x0100000000000000L;
 
+	/**
+	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Spring part of the semester 
+	 */
+	public static final int INTERNAL_SHIFT_SPRING_LONG     = 0;
+	/**
+	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Autumn part of the semester 
+	 */
+	public static final int INTERNAL_SHIFT_AUTUMN_LONG     = 12;
+	/**
+	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Spring part of the semester 
+	 */
+	public static final int INTERNAL_SHIFT_SPRING_SHORT    = 24;
+	/**
+	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Autumn part of the semester 
+	 */
+	public static final int INTERNAL_SHIFT_AUTUMN_SHORT    = 36;
+
+	/**
+	 * Filter for isolating the days (post season to day shifts)
+	 * Use INTERNAL_DAYS_ALL to filter all days regardless of seasons.
+	 */
+	public static final long INTERNAL_DAYS                 = 0x0000000000000fffL;
+	
+	/**
+	 * Filter for isolating all the days bit-flags for the short autumn.
+	 */
+	public static final long INTERNAL_DAYS_AUTUMN_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_SHORT;
+	/**
+	 * Filter for isolating all the days bit-flags for the short spring. 
+	 */
+	public static final long INTERNAL_DAYS_SPRING_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_SHORT;
+	/**
+	 * Filter for isolating all the days bit-flags for the long autumn.
+	 */
+	public static final long INTERNAL_DAYS_AUTUMN_LONG     = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_LONG;
+	/**
+	 * Filter for isolating all the days bit-flags for the long spring. 
+	 */
+	public static final long INTERNAL_DAYS_SPRING_LONG     = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_LONG;
 	/**
 	 * Filter for isolating all the day bit-flags
 	 */
-	public static final long INTERNAL_DAYS                 = 0x0000ffffffffffffL;
-
-
+	public static final long INTERNAL_DAYS_ALL             = INTERNAL_DAYS_SPRING_LONG | INTERNAL_DAYS_AUTUMN_LONG | INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_SPRING_SHORT;
+	
 	/**
 	 * The Monday morning class bit-flag. 
 	 * DTU alias: A1
@@ -100,7 +143,26 @@ public class Course implements Serializable{
 	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
 	 * 
 	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
-	 * @param courseLength The length of the course. (3-week and 13-week)
+	 * @param courseLength The length of the course. (3-week and 13-week determined by the presence of "januar" and/or "juni")
+	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
+	 */
+	public static long parseDTUSkema(String DTUdata, String courseLength) {
+		String[] DTUarray = null, courseArray = null;
+		if(DTUdata != null) {
+			DTUarray = DTUdata.split(" ");
+		}
+		if(courseLength != null) {
+			courseArray = courseLength.split(" ");
+		}
+		return parseDTUSkema(DTUarray, courseArray);
+	}
+	/**
+	 * Parses a DTU based skema and turns it into the internal skema (Bit-flags).
+	 * 
+	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
+	 * 
+	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
+	 * @param courseLength The length of the course. (3-week and 13-week determined by the presence of "januar" and/or "juni")
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
 	public static long parseDTUSkema(String[] DTUdata, String courseLength[]) {
@@ -225,10 +287,10 @@ public class Course implements Serializable{
 		}
 
 		if((skema & 0xf00) == 0xf00) {
-			toReturn |= INTERNAL_SEASON_SPRING;
+			toReturn |= INTERNAL_SEASON_SPRING_LONG;
 		} else if((skema & 0xf00) == 0xe00) {
 			toReturn <<= 12;
-			toReturn |= INTERNAL_SEASON_AUTUMN;
+			toReturn |= INTERNAL_SEASON_AUTUMN_LONG;
 		}
 
 		return toReturn;
@@ -328,7 +390,7 @@ public class Course implements Serializable{
 	 */
 	public boolean conflictingSkema(Course compareTo) {
 		long compare = compareTo.getFullSkemaData();
-		compare &= ~(INTERNAL_DAYS);
+		compare &= ~(INTERNAL_DAYS_ALL);
 		return 0 != (compare & internalSkema);
 	}
 	
@@ -356,23 +418,33 @@ public class Course implements Serializable{
 
 	/**
 	 * Update the internal skema bit-flags with the input.
+	 * 
+	 * Note, if the input is 0, it will be silently ignored!
+	 * 
 	 * @param skema The new bit-flags.
 	 */
 	public void setFullSkemaData(long skema) {
-		this.internalSkema = skema;
+		if(skema != 0) {
+			this.internalSkema = skema;
+		}
 	}
 
 	/**
-	 * This method is mainly used by the DatabaseReader to update the Skema data 
+	 * This method is mainly used by the DatabaseReader to set or add to the Skema data 
 	 * of a course using the data from the files.
 	 * 
 	 * It uses the Course.parseDTUSkema method.
 	 * 
 	 * @param skemagruppe The DTU based skema format with one entry per array-slot (e.g {"E1A", "E2A"} )
 	 * @param periodData The length of the period (3 or 13 weeks) as formatted in the files.
+	 * @param add If true, the new data will be merged with the current rather than overwriting the current. 
 	 */
-	public void setSkemagruppe(String[] skemagruppe, String[] periodData) {
-		internalSkema = parseDTUSkema(skemagruppe, periodData);
+	public void setSkemagruppe(String[] skemagruppe, String[] periodData, boolean add) {
+		if(add) {
+			internalSkema |= parseDTUSkema(skemagruppe, periodData);
+		} else {
+			internalSkema = parseDTUSkema(skemagruppe, periodData);
+		}
 	}
 	
 	/**
@@ -421,6 +493,64 @@ public class Course implements Serializable{
 		if(courseID == null)
 			return false;
 		return courseID.equals(this.courseID);
+	}
+	
+	/**
+	 * Get the amount of periods this course occupies.
+	 * 
+	 * @return The amount of periods this courses takes to complete.
+	 */
+	public int getAmountOfPeriods() {
+		if(!isMultiPeriodCourse() )
+			return 1;
+		long temp = internalSkema & INTERNAL_SEASON_ALL;
+		int toReturn = 1;
+		//Count amount of bits, the "Brian Kernighan's way".
+		//Repeatedly clear the least significant
+		for(; temp != 0 ; toReturn++) {
+			temp &= temp - 1;
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * Test whether the course is more than one period long
+	 * @return true if this course is over more than one period.
+	 */
+	public boolean isMultiPeriodCourse() {
+		return 0 != (internalSkema & INTERNAL_MULTI_PERIOD_FLAG);
+	}
+	
+	/**
+	 * Update the period/semester data for the course.
+	 * @param periods The periods.
+	 * @param multiPeriodCourse If true, the input should be treated as the periods the course occupies rather than the periods, it can be selected.
+	 */
+	public void updateSeason(String periods, boolean multiPeriodCourse) {
+		if(periods == null)
+			return;
+		long temp = 0L, days = internalSkema & INTERNAL_DAYS_ALL;
+		String[] periodArray = periods.trim().split(" ");
+		for(int i = 0 ; i < periodArray.length ; i++ ) {
+			if(periodArray[i].equals("E")) {
+				temp |= INTERNAL_SEASON_AUTUMN_LONG;
+			} else if(periodArray[i].equals("januar")) {
+				temp |= INTERNAL_SEASON_AUTUMN_SHORT;
+			} else if(periodArray[i].equals("F")) {
+				temp |= INTERNAL_SEASON_SPRING_LONG;
+			} else if(periodArray[i].equals("juni")) {
+				temp |= INTERNAL_SEASON_SPRING_SHORT;
+			}
+		}
+		if(multiPeriodCourse) {
+			temp |= INTERNAL_MULTI_PERIOD_FLAG;
+		}
+		
+		//TODO - some day shifting magic.
+		
+		//END of TO-DO
+		
+		internalSkema = temp | days; 
 	}
 
 	/**

@@ -101,22 +101,44 @@ public class CourseTest extends TestCase {
 	}
 
 	/**
-	 * Testing if it can get 
+	 * Testing if it can get the skema data of the course (and that is matches the expected values from the database converted into the internal data pattern)
 	 */
 	public void testGetFullSkemaData() {
-		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNEYSDAY_MORNING<<12) | Course.INTERNAL_SEASON_AUTUMN) );
+		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNEYSDAY_MORNING<<Course.INTERNAL_SHIFT_AUTUMN_LONG) | Course.INTERNAL_SEASON_AUTUMN_LONG) );
 	}
 
-	public void testSetFullSkemaData() {
+	/**
+	 * Testing if the setFullSkemaData overwrites the skema data in the course as expected.
+	 */
+	public void testSetFullSkemaDataPositive() {
 		long newSkema = Course.INTERNAL_WEDNEYSDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
 		cc.setFullSkemaData(newSkema);
 		assertTrue( cc.getFullSkemaData() == newSkema);
 	}
+	
+	/**
+	 * Testing if the setFullSkemaData obeys the "ignore 0" as it says it will.
+	 */
+	public void testSetFullSkemaDataNegative() {
+		long currentSkema = cc.getFullSkemaData();
+		cc.setFullSkemaData(0);
+		assertTrue( cc.getFullSkemaData() == currentSkema);
+	}
 
-	public void testSetSkemagruppe() {
+	/**
+	 * Test if the setSkemagruppe method accurately parse the data required.
+	 */
+	public void testSetSkemagruppePositive() {
 		fail("Not yet implemented");
 	}
 
+	/**
+	 * Test if the setSkemagruppe method ignore mal-formatted data as it claims it will
+	 */
+	public void testSetSkemagruppeNegative() {
+		fail("Not yet implemented");
+	}
+	
 	/**
 	 * Tests if the data it gets from the database, is the same as the class variable got specified
 	 */
