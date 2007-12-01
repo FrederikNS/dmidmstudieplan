@@ -2,7 +2,7 @@ package test;
 
 import dataClass.Course;
 import dataClass.SelectedCourse;
-import databases.DatabaseReader;
+import databases.CourseBase;
 import junit.framework.TestCase;
 
 /**
@@ -22,8 +22,8 @@ public class SelectedCourseTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		DatabaseReader db = new DatabaseReader();
-		sc = new SelectedCourse(db.findCourse("01715"), 2);
+		CourseBase cb = new CourseBase();
+		sc = new SelectedCourse(cb.findCourse("01715"), 2);
 	}
 
 	/**

@@ -5,10 +5,8 @@ package databases;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import dataClass.Course;
-import databases.DatabaseReader;
 import exceptions.CourseDoesNotExistException;
 import exceptions.FilePermissionException;
 
@@ -21,16 +19,12 @@ public class CourseBase {
 	/**
 	 * An ArrayList containing all the courses from the databases 
 	 */
-	private ArrayList<Course> allCourses;
+	private Course[] allCourses;
 	/**
 	 * DatabaseReader, used whenever it is reloading all the courses or searching in the 
 	 * databases.
 	 */
 	private DatabaseReader dbRead;
-	/**
-	 * Statistic data: amount of courses loaded during the last reload.
-	 */
-	private int amountOfCourses;
 	/**
 	 * Statistic data: time (in milliseconds) it took to load the courses doing the last reload.
 	 */
@@ -54,12 +48,15 @@ public class CourseBase {
 	 * The previous list of the Courses are voided, so only the courses in the databases
 	 * at the time of reloading will appear in the CourseBase, when it is done.
 	 */
-	public void reloadDatabase() {
-		allCourses = new ArrayList<Course>();
+	private void reloadDatabase() {
+		this.allCourses = dbRead.loadAllCourses().toArray(new Course[1]);
+		return;
+		/*
+		//allCourses = new ArrayList<Course>();
 		int i = 0;
 		System.out.print("Loading courses from files...");
-		Iterator<Course> ilt = dbRead.iterator();
 		long start = System.currentTimeMillis();
+		/*Iterator<Course> ilt = dbRead.iterator();
 		while(ilt.hasNext()) {
 			allCourses.add(ilt.next());
 			i++;
@@ -69,7 +66,7 @@ public class CourseBase {
 		System.out.println("Done");
 		System.out.println("Loaded " + amountOfCourses +" courses in " + loadTime + " milliseconds");
 		System.out.println("Average: " + getLoadAverage() + " courses per second");
-		
+		*/
 	}
 	
 	/**
@@ -77,7 +74,7 @@ public class CourseBase {
 	 * @return The amount of courses that was loaded during the last reload.
 	 */
 	public int getAmountOfCourses() {
-		return amountOfCourses;
+		return allCourses.length;
 	}
 	
 	/**
@@ -87,7 +84,7 @@ public class CourseBase {
 	public long getLoadAverage() {
 		if(loadTime == 0) 
 			return 0;
-		return (amountOfCourses*1000)/loadTime;
+		return (allCourses.length*1000)/loadTime;
 	}
 	
 	/**
@@ -105,12 +102,10 @@ public class CourseBase {
 	 * @throws CourseDoesNotExistException Thrown if the course does not exist.
 	 */
 	public Course findCourse(String courseID) throws CourseDoesNotExistException {
-		Course course;
-		Iterator<Course> ilt = allCourses.iterator();
-		while(ilt.hasNext()) {
-			 course = ilt.next();
-			 if(course.getCourseID().equalsIgnoreCase(courseID)) {
-				 return course;
+		int size = allCourses.length;
+		for(int i = 0 ; i < size ; i++) {
+			 if(allCourses[i].isSameCourseID(courseID)) {
+				 return allCourses[i];
 			 }
 		}
 		throw new CourseDoesNotExistException(courseID);
@@ -121,11 +116,16 @@ public class CourseBase {
 	 * @param pattern The pattern to search for. 
 	 * @return The Courses that match the pattern in some way.
 	 * @throws CourseDoesNotExistException
-	 * @deprecated It is slow and does not search through the courses in the CourseBase, 
-	 * but sends it on to the DatabaseReader's search.
 	 */
 	public Course[] search(String pattern) throws CourseDoesNotExistException {
-		return dbRead.search(pattern);
+		ArrayList<Course> match = new ArrayList<Course>();
+		int size = getAmountOfCourses();
+		for(int i = 0; i < size ; i++) {
+			if(allCourses[i].toString().contains(pattern)) {
+				match.add(allCourses[i]);
+			}
+		}
+		return match.toArray(new Course[1]);
 	}
 	
 	/**
@@ -133,7 +133,7 @@ public class CourseBase {
 	 * @return All the courses in the CourseBase as a Array.
 	 */
 	public Course[] getAllCourses() {
-		return allCourses.toArray(new Course[1]);
+		return allCourses;
 	}
 	
 	/**
@@ -144,9 +144,9 @@ public class CourseBase {
 	public String toString() {
 		
 		String toReturn = "Kursus list: \n";
-		Iterator<Course> ilt = allCourses.iterator();
-		while(ilt.hasNext()) {
-			toReturn += ilt.next().toString() + "\n"; 
+		int size = allCourses.length;
+		for(int i = 0; i < size ; i++) {
+			toReturn += allCourses[i].toString() + "\n"; 
 		}
 		
 		return toReturn;

@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
+import databases.CourseBase;
 import databases.DatabaseReader;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
@@ -49,11 +50,11 @@ public class StudyPlanTest extends TestCase {
 	 */
 	public void testAddPositive() {
 		//Sets up a course we want to add
-		DatabaseReader db;
+		CourseBase cb;
 		SelectedCourse sc;
 		try {
-			db = new DatabaseReader();
-			sc = new SelectedCourse(db.findCourse("01005"), 1);
+			cb = new CourseBase();
+			sc = new SelectedCourse(cb.findCourse("01005"), 1);
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
@@ -73,11 +74,11 @@ public class StudyPlanTest extends TestCase {
 		//Sets up test data
 		testAddPositive();
 
-		DatabaseReader db;
+		CourseBase cb;
 		SelectedCourse sc1, sc2;
 		try {
-			db = new DatabaseReader();
-			sc1 = new SelectedCourse(db.findCourse("01715"), 1);
+			cb = new CourseBase();
+			sc1 = new SelectedCourse(cb.findCourse("01715"), 1);
 
 			sp.add(sc1);
 		} catch (ConflictingCourseInStudyPlanException e) {
@@ -88,8 +89,8 @@ public class StudyPlanTest extends TestCase {
 		}
 
 		try {
-			db = new DatabaseReader();
-			sc2 = new SelectedCourse(db.findCourse("01450"), 2);
+			cb = new CourseBase();
+			sc2 = new SelectedCourse(cb.findCourse("01450"), 2);
 			if(sp.add(sc2)) {
 				fail("Allowed course to be added without the dependencies being met!");
 			}
@@ -149,17 +150,17 @@ public class StudyPlanTest extends TestCase {
 	public void testRemoveStringPositive() {
 		//Sets up test data
 		testAddPositive();
-		DatabaseReader db;
+		CourseBase cb;
 		try {
-			db = new DatabaseReader();
+			cb = new CourseBase();
 		} catch (Exception e) {
 			fail("DatabaseReader failed");
 			return;
 		}
 
 		try {
-			sp.add(new SelectedCourse(db.findCourse("01035"), 2));
-			sp.add(new SelectedCourse(db.findCourse("01250"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
@@ -198,17 +199,17 @@ public class StudyPlanTest extends TestCase {
 			return;
 		}
 
-		DatabaseReader db;
+		CourseBase cb;
 		try {
-			db = new DatabaseReader();
+			cb = new CourseBase();
 		} catch (Exception e) {
 			fail("DatabaseReader failed");
 			return;
 		}
 
 		try {
-			sp.add(new SelectedCourse(db.findCourse("01035"), 2));
-			sp.add(new SelectedCourse(db.findCourse("01250"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");

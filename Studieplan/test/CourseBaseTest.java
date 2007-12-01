@@ -1,5 +1,6 @@
 package test;
 
+import dataClass.Course;
 import databases.CourseBase;
 import exceptions.CourseDoesNotExistException;
 import junit.framework.TestCase;
@@ -47,12 +48,14 @@ public class CourseBaseTest extends TestCase {
 	 * Tests if it can find any course containing the specified string
 	 */
 	public void testSearch() {
+		Course[] match;
 		try {
-			assertTrue(base.search("mat").length>0);
+			match = base.search("mat");
 		} catch (CourseDoesNotExistException e) {
 			fail("Nothing Found");
+			return;
 		}
-		
+		assertTrue(match.length > 0);
 	}
 	
 	/**
