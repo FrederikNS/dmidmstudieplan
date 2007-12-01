@@ -56,10 +56,14 @@ public class StudyPlan implements Serializable {
 
 	/**
 	 * Rename the owner of this StudyPlan.
+	 * If param is null, nothing will happen.
 	 * @param studentID The ID of the new owner.
+	 * @throws NullPointerException if no studentID is specified
 	 */
-	public void setStudent(String studentID) {
-		this.studentID = studentID;
+	public void setStudent(String studentID) throws NullPointerException {
+		if(studentID != null) {
+			this.studentID = studentID;
+		}
 	}
 
 	/**
