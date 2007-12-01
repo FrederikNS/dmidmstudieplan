@@ -9,7 +9,6 @@ import dataClass.ProgramCore;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.CourseBase;
-import databases.DatabaseReader;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.CannotSaveStudyPlanException;
 import exceptions.ConflictingCourseInStudyPlanException;
@@ -276,17 +275,17 @@ public class CoreTest extends TestCase {
 			return;
 		}
 		
-		DatabaseReader db;
+		CourseBase cb;
 		try {
-			db = new DatabaseReader();
+			cb = new CourseBase();
 		} catch (Exception e) {
 			fail("DatabaseReader failed");
 			return;
 		}
 
 		try {
-			core.addCourseToStudyPlan(new SelectedCourse(db.findCourse("01035"), 2));
-			core.addCourseToStudyPlan(new SelectedCourse(db.findCourse("01250"), 3));
+			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01035"), 2));
+			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01250"), 3));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");

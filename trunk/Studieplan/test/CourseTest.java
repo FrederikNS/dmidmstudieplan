@@ -3,7 +3,7 @@ package test;
 import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
-import databases.DatabaseReader;
+import databases.CourseBase;
 
 /**
  * This test class tests the class Course
@@ -23,8 +23,8 @@ public class CourseTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		DatabaseReader db = new DatabaseReader();
-		cc = new SelectedCourse(db.findCourse("01715"), 2);
+		CourseBase cb = new CourseBase();
+		cc = new SelectedCourse(cb.findCourse("01715"), 2);
 	}
 
 	/**
@@ -40,8 +40,8 @@ public class CourseTest extends TestCase {
 	public void testSkemaToString() {
 		try {
 			//Uses course 01005 because it got more schema groups
-			DatabaseReader db = new DatabaseReader();
-			cc = new SelectedCourse(db.findCourse("01005"), 1);
+			CourseBase cb = new CourseBase();
+			cc = new SelectedCourse(cb.findCourse("01005"), 1);
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
@@ -79,8 +79,8 @@ public class CourseTest extends TestCase {
 	public void testConflictingSkemaPositive() {
 		Course cc2;
 		try {
-			DatabaseReader db = new DatabaseReader();
-			cc2 = db.findCourse("01005");
+			CourseBase cb = new CourseBase();
+			cc2 = cb.findCourse("01005");
 		} catch (Exception e) {
 			fail("Course not found");
 			return;
