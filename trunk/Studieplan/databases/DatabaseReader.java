@@ -291,7 +291,7 @@ public class DatabaseReader {
 		System.out.println("Total amount of courses: " + skema.size());
 		System.out.println(" - Short courses: " + shortCourse.size());
 		System.out.println(" - Multi-period courses: " + multiPeriod.size());
-		System.out.println("Removed " + doubleCourses + " of double courses");
+		System.out.println("Removed " + doubleCourses + " courses apearing twice.");
 		return toReturn;
 	}
 	
