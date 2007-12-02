@@ -168,7 +168,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * @throws IllegalArgumentException
 	 */
 	public int getIsInSemester(boolean shortPeriod, int start, int finish) throws IllegalArgumentException {
-		return getIsInPeriod(start<<1 + (shortPeriod?1:0), finish<<1 + (shortPeriod?1:0));
+		return getIsInPeriod(start<<1 + (shortPeriod?0:-1), finish<<1 + (shortPeriod?0:-1));
 	}
 	
 	/**
