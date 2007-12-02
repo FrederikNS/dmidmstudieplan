@@ -124,7 +124,6 @@ public class StudyPlan implements Serializable {
 		if(this.contains(toAdd)) {
 			throw new CourseAlreadyExistsException(toAdd.getCourseID());
 		}
-		int semester = toAdd.getSemester();
 		int missingDependencies = toAdd.getAmountOfDependencies();
 		String dependencies = toAdd.getDependencies();
 		String met = null;
@@ -134,22 +133,22 @@ public class StudyPlan implements Serializable {
 			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);
 
 			Arrays.sort( planned );
-			int i = 0, currentSemester = 0;
+			int i = 0, placement = 0;
 			for( ; i < planned.length ; i++) {
-				currentSemester = planned[i].getSemester();
-				if(missingDependencies != 0 && currentSemester < semester) {
+				placement = planned[i].getIsInSameSemester(toAdd);
+				if(missingDependencies != 0 && placement < 0) {
 					if(dependencies.contains(planned[i].getCourseID())) {
 						missingDependencies--;
 						met += planned[i].getCourseID()+ " ";
 						temp.add(planned[i]);
 					}
 				}
-				else if(currentSemester == semester) {
+				else if(placement == 0) {
 					if(planned[i].conflictingSkema(toAdd)) {
 						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 					}
 				}
-				else if(currentSemester > semester) {
+				else {
 					//	If we get here, nothing is planned for that semester.
 					break;
 				}
@@ -247,7 +246,7 @@ public class StudyPlan implements Serializable {
 		toReturn = "";
 
 		for(int i = 0 ; i < planned.length ; i ++) {
-			plannedSemester = planned[i].getSemester();
+			//plannedSemester = planned[i].getSemester();
 
 
 			

@@ -21,7 +21,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	/**
 	 * The semester this course is taken on.
 	 */
-	private int semester = 0;
+	private final int period;
 
 	/**
 	 * Create a SelectedCourse from a courseID, courseName and a semester.
@@ -38,7 +38,9 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	public SelectedCourse(String courseID, String courseName, int semester) throws IllegalArgumentException{
 		super(courseID, courseName);
-		setSemester(semester);
+		if(!SelectedCourse.isValidSemester(semester))
+			throw new IllegalArgumentException();
+		period = (semester<<1)-1;
 		}
 	
 	/**
@@ -46,6 +48,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * @see databases.UserDatabase#loadStudyPlan(String, String)
 	 */
 	protected SelectedCourse() {
+		period = 0;
 	}
 	
 	/**
@@ -56,9 +59,11 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	public SelectedCourse(Course course, int semester) throws IllegalArgumentException {
 		super(course.getCourseID(), course.getCourseName() );
+		if(!SelectedCourse.isValidSemester(semester))
+			throw new IllegalArgumentException();
+		period = (semester<<1)-1;
 		setDependencies(course.getDependencies());
 		setFullSkemaData(course.getFullSkemaData());
-		setSemester(semester);
 	}
 	
 	
@@ -76,12 +81,12 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	public int compareTo(SelectedCourse compareTo) {
 		int order = 0;
 		
-		if(semester < compareTo.getSemester() ) {
+		if(this.getStartingSemester() < compareTo.getStartingSemester() ) {
 			order = -1;
-		} else if (semester > compareTo.getSemester() ) {
+		} else if (this.getStartingSemester() > compareTo.getStartingSemester() ) {
 			order = 1;
 		} else {
-			int ID = Integer.parseInt( super.getCourseID() );
+			int ID = Integer.parseInt( getCourseID() );
 			int compareToID = Integer.parseInt(compareTo.getCourseID());
 			if(ID < compareToID ) {
 				order = -1;
@@ -94,19 +99,76 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	}
 	
 	/**
-	 * Get the semester of this course.
+	 * Get the semester in which this course starts.
 	 * @return The semester 
 	 */
-	public int getSemester() {
-		return semester;
+	public int getStartingSemester() {
+		return (this.period>>1)+1;
 	}
 	
-	public boolean getIsInSemester(int semester, boolean shortPeriod) {
-		int courseLength = this.getAmountOfPeriods();
-		if( (semester >= this.semester) && (semester <= (semester + courseLength + 1))) {
-			
+	/**
+	 * Returns the starting period for this course.
+	 * @return The period this course starts in.
+	 */
+	public int getStartingPeriod() {
+		return this.period;
+	}
+	
+	/**
+	 * Returns the period in which this course finishes.
+	 * (For 1 period courses, this will be the same period as the starting period, 
+	 * for 2 period courses it will be starting period + 1 and so on...)
+	 * 
+	 * @return The period this course end in.
+	 */
+	public int getFinishingPeriod() {
+		return this.period + this.getAmountOfPeriods() - 1;
+	}
+	
+	/**
+	 * Check if this course and the compareTo course are share at least one period.
+	 * @param compareTo The course to test against.
+	 * @return -1,0 or 1 if this course is ends before, shares at least one period with or comes after the compareTo course.
+	 */
+	public int getIsInSameSemester(SelectedCourse compareTo) {
+		return getIsInPeriod(compareTo.getStartingPeriod(), compareTo.getFinishingPeriod());
+	}
+	
+	/**
+	 * Check if the course is within a given period. Used to test for conflicts between courses.
+	 * @param start The first period of interest.
+	 * @param finish The last period of interest. 
+	 * @return -1,0 or 1 if this course is ends before, shares at least one period with or comes after the period-range. 
+	 * @throws IllegalArgumentException If the "start" is greater than "finish", "start" is less than 1 or "finish" greater than 41
+	 */
+	public int getIsInPeriod(int start, int finish) throws IllegalArgumentException {
+		if(finish < start || start < 1 || finish > 41) {
+			throw new IllegalArgumentException();
 		}
-		return false;
+		int courseStart = this.getStartingPeriod();
+		int courseEnd = this.getFinishingPeriod();
+		if(courseStart > finish) {
+			return 1;
+		}
+		if(courseEnd < start) {
+			return -1;
+		}
+		return 0; 
+	}
+	
+	/**
+	 * Check if the course is within a given period. Used to test for conflicts between courses.
+	 * 
+	 * The boolean parameter "shortPeriod" is first to avoid accidental use of {@link #getIsInPeriod(int, int)}  
+	 * 
+	 * @param shortPeriod Whether or not the test should start at the short-period part (second-half) of the semester.
+	 * @param start The semester to test for.  
+	 * @param finish The amount of periods after the initial periods that should be considered "reserved"
+	 * @return -1,0 or 1 if this course is ends before, shares at least one semester with or comes after the semester-range.
+	 * @throws IllegalArgumentException
+	 */
+	public int getIsInSemester(boolean shortPeriod, int start, int finish) throws IllegalArgumentException {
+		return getIsInPeriod(start<<1 + (shortPeriod?1:0), finish<<1 + (shortPeriod?1:0));
 	}
 	
 	/**
@@ -118,16 +180,4 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		return semester < 21 && semester > 0;
 	}
 	
-	/**
-	 * Update the semester of this course.
-	 * @param semester the semester to set
-	 * @throws IllegalArgumentException if the semester is less than 1 or greater than 20
-	 */
-	public void setSemester(int semester) throws IllegalArgumentException {
-		if(! isValidSemester(semester) )
-			throw new IllegalArgumentException();
-		this.semester = semester;
-
-	}
-
 }
