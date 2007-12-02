@@ -109,10 +109,10 @@ public class Course implements Serializable{
 	 */
 	public static final long INTERNAL_TUESDAY_AFTERNOON    = 0x00000008; 
 	/**
-	 * The Wedneysday morning class bit-flag. 
+	 * The Wednesday morning class bit-flag. 
 	 * DTU alias: 5A
 	 */
-	public static final long INTERNAL_WEDNEYSDAY_MORNING   = 0x00000010;
+	public static final long INTERNAL_WEDNESDAY_MORNING   = 0x00000010;
 
 	/**
 	 * The Thursday afternoon class bit-flag. 
@@ -135,10 +135,10 @@ public class Course implements Serializable{
 	 */
 	public static final long INTERNAL_FRIDAY_MORNING       = 0x00000100;
 	/**
-	 * The Wedneysday afternoon class bit-flag. 
+	 * The Wednesday afternoon class bit-flag. 
 	 * DTU alias: 5B
 	 */ 
-	public static final long INTERNAL_WEDNEYSDAY_AFTERNOON = 0x00000200;
+	public static final long INTERNAL_WEDNESDAY_AFTERNOON = 0x00000200;
 
 
 	/**
@@ -214,16 +214,16 @@ public class Course implements Serializable{
 		String toReturn = "";
 		for(int i = 0 ; i < 10 ; i++) {
 			flag = internalRepresentation >> i;
-		if(0 != (flag & 1)) {
-			toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-		}
+			if(0 != (flag & 1)) {
+				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+			}
 		}
 		internalRepresentation >>= 12;
 			for(int i = 0 ; i < 10 ; i++) {
 				flag = internalRepresentation >> i;
-			if(0 != (flag & 1)) {
-				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-			}
+				if(0 != (flag & 1)) {
+					toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+				}
 			}
 
 			return toReturn.trim();
@@ -271,7 +271,7 @@ public class Course implements Serializable{
 			toReturn = INTERNAL_TUESDAY_AFTERNOON;
 			break;
 		case 0x5A:
-			toReturn = INTERNAL_WEDNEYSDAY_MORNING;
+			toReturn = INTERNAL_WEDNESDAY_MORNING;
 			break;				
 		case 0x1B:
 			toReturn = INTERNAL_THURSDAY_AFTERNOON;
@@ -286,8 +286,10 @@ public class Course implements Serializable{
 			toReturn = INTERNAL_FRIDAY_MORNING;
 			break;
 		case 0x5B:
-			toReturn = INTERNAL_WEDNEYSDAY_AFTERNOON;
+			toReturn = INTERNAL_WEDNESDAY_AFTERNOON;
 			break;				
+		default: 
+			return 0;
 		}
 
 		if((skema & 0xf00) == 0xf00) {
@@ -564,30 +566,30 @@ public class Course implements Serializable{
 					//But have no days in it and yet it has in the short?
 					//Shift days into place.
 					shift = (days & INTERNAL_DAYS_AUTUMN_SHORT)>>INTERNAL_SHIFT_AUTUMN_SHORT;
-					days |= shift << INTERNAL_SHIFT_AUTUMN_LONG; 
+		days |= shift << INTERNAL_SHIFT_AUTUMN_LONG; 
 				}
 			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_LONG)) {
 				//There was class in the long part of the autumn semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_AUTUMN_LONG;
 			}
-			
+
 			if(0 != (temp & INTERNAL_SEASON_AUTUMN_SHORT) ) {
 				//Course runs in the short autumn period.  
 				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
 					//But have no days in it and yet it has in the long?
 					//Shift days into place.
 					shift = (days & INTERNAL_DAYS_AUTUMN_LONG)>>INTERNAL_SHIFT_AUTUMN_LONG;
-					days |= shift << INTERNAL_SHIFT_AUTUMN_SHORT; 
+		days |= shift << INTERNAL_SHIFT_AUTUMN_SHORT; 
 				}
 			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_SHORT)) {
 				//There was class in the short part of the autumn semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_AUTUMN_SHORT;
 			}
-			
+
 		} 
-		
+
 		if(0 != (days & (INTERNAL_DAYS_SPRING_SHORT | INTERNAL_DAYS_SPRING_LONG)) ) {
 
 			if(0 != (temp & INTERNAL_SEASON_SPRING_LONG) ) {
@@ -596,30 +598,30 @@ public class Course implements Serializable{
 					//But have no days in it and yet it has in the short?
 					//Shift days into place.
 					shift = (days & INTERNAL_DAYS_SPRING_SHORT)>>INTERNAL_SHIFT_SPRING_SHORT;
-					days |= shift << INTERNAL_SHIFT_SPRING_LONG; 
+		days |= shift << INTERNAL_SHIFT_SPRING_LONG; 
 				}
 			} else if(0 != (days & INTERNAL_DAYS_SPRING_LONG)) {
 				//There was class in the long part of the spring semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_SPRING_LONG;
 			}
-			
+
 			if(0 != (temp & INTERNAL_SEASON_SPRING_SHORT) ) {
 				//Course runs in the short spring period.  
 				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
 					//But have no days in it and yet it has in the long?
 					//Shift days into place.
 					shift = (days & INTERNAL_DAYS_SPRING_LONG)>>INTERNAL_SHIFT_SPRING_LONG;
-					days |= shift << INTERNAL_SHIFT_SPRING_SHORT; 
+		days |= shift << INTERNAL_SHIFT_SPRING_SHORT; 
 				}
 			} else if(0 != (days & INTERNAL_DAYS_SPRING_SHORT)) {
 				//There was class in the short part of the spring semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_SPRING_SHORT;
 			}
-			
+
 		}
-		
+
 		internalSkema = temp | (days & ~clear); 
 	}
 

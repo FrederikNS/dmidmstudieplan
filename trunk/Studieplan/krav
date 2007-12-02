@@ -1,4 +1,4 @@
-hvorDONE   1.  Kunne fortælle brugeren navnene på de ordrer programmet kender.
+DONE   1.  Kunne fortælle brugeren navnene på de ordrer programmet kender.
 DONE   2. Have en hjælpefacilitet der i terminalvinduet kan oplyse detaljer om ordrerne.
 TEST   3. Danne programmets kursusbase ud fra de tre filer som nævnt ovenfor.
 TEST   4. Kunne give en tekstrepræsentation af kursusbasen - toString().

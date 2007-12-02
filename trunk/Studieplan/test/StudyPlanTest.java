@@ -160,13 +160,15 @@ public class StudyPlanTest extends TestCase {
 		try {
 			sp.add(new SelectedCourse(cb.findCourse("01035"), 3));
 			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
 		}
 
 		try {
-			assertTrue(sp.remove("01250") && sp.remove("01035"));
+			assertTrue(sp.remove("01450") && sp.remove("01246") && sp.remove("01250") && sp.remove("01035"));
 		} catch (Exception e) {
 			fail("No Exception ought to happen: " + e.toString() );
 			return;
@@ -177,7 +179,6 @@ public class StudyPlanTest extends TestCase {
 	 * A negative test of removing a specific string from a study plan
 	 */
 	public void testRemoveStringNegative() {
-
 		try {
 			if(sp.remove("01005")) {
 				fail("course ought not to exist");
@@ -209,14 +210,17 @@ public class StudyPlanTest extends TestCase {
 		try {
 			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
 			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
 		}
 		try {
-			sp.remove("01035");
+			sp.remove("01246");
+			fail("No exception");
 		} catch (AnotherCourseDependsOnThisCourseException e) {
-
+			
 		} catch(Exception e) {
 			fail("Wrong Exception: " + e.toString());
 			return;
@@ -258,6 +262,33 @@ public class StudyPlanTest extends TestCase {
 
 		} catch (Exception e) {
 			fail("Wrong exception: " + e.toString());
+			return;
+		}
+		
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+		
+		try {
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			sp.remove(cb.findCourse("01246"));
+			fail("No exception");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
 			return;
 		}
 	}

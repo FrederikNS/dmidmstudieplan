@@ -214,46 +214,6 @@ public class SelectedCourseTest extends TestCase {
 	}
 
 	/**
-	 * Testing which semester a course is in
-	 */
-	public void testGetIsInSemester() {
-		int test = 0;
-		SelectedCourse sc2 = new SelectedCourse("02238", " ", 1);		
-		if(sc2.getIsInSemester(true, 1, 2) == 1) {
-			test++;
-			System.out.println("test½");
-		}
-		if(sc2.getIsInSemester(false, 1, 2) == 1) {
-			test++;
-			System.out.println("test1");
-		}
-		if(sc2.getIsInSemester(3) == 1) {
-			test++;
-		}
-		sc2 = new SelectedCourse(sc2, 1);
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		sc2 = new SelectedCourse(sc2, 3);
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		if(sc2.getIsInSemester(1, 2) == 1) {
-			test++;
-		}
-		assertTrue(test == 9);
-	}
-
-	/**
 	 * Checks if a semester is valid
 	 */
 	public void testIsValidSemesterPositive() {
