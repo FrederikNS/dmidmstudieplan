@@ -35,11 +35,11 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2.setSemester(2);
+		sc2 = new SelectedCourse(sc2, 2);
 		if(sc.compareTo(sc2) == 0){
 			test++;
 		}
-		sc2.setSemester(3);
+		sc2 = new SelectedCourse(sc2, 3);
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
@@ -47,11 +47,11 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2.setSemester(2);
+		sc2 = new SelectedCourse(sc2, 2);
 		if(sc.compareTo(sc2) == 1){
 			test++;
 		}
-		sc2.setSemester(3);
+		sc2 = new SelectedCourse(sc2, 3);
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
@@ -59,11 +59,11 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2.setSemester(2);
+		sc2 = new SelectedCourse(sc2, 2);
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2.setSemester(3);
+		sc2 = new SelectedCourse(sc2, 3);
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
@@ -97,36 +97,7 @@ public class SelectedCourseTest extends TestCase {
 	 * Testing if it can get the right semester
 	 */
 	public void testGetSemester() {
-		assertTrue(sc.getSemester() == 2);
-	}
-
-	/**
-	 * A positive test of setting the semester to something else
-	 */
-	public void testSetSemesterPositive() {
-		sc.setSemester(5);
-		//Checks if it really has changed
-		assertTrue(sc.getSemester() == 5);
-	}
-
-	/**
-	 * A negative test of changing semester
-	 */
-	public void testSetSemesterNegative() {
-		try {
-			//Tries to set it to something below the allowed
-			sc.setSemester(-1);
-			fail("illegal argument");
-		} catch (IllegalArgumentException e) {
-			
-		}
-		try {
-			//Tries to set it so something above the allowed
-			sc.setSemester(21);
-			fail("illegal argument");
-		} catch (IllegalArgumentException e) {
-			
-		}
+		assertTrue(sc.getStartingSemester() == 2);
 	}
 
 	/**
