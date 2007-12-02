@@ -182,7 +182,7 @@ public class ProgramCore implements Core {
 			System.exit(1);
 		}
 		System.out.println("ProgramCore: Entering \"Daemon\" (for testing) mode");
-		System.out.println("If only the core is the running, the program will shutdown.");
+		System.out.println("If only the core is the running, the program will terminate with an exit code 0.");
 	}
 
 	/**

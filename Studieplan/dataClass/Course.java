@@ -17,7 +17,7 @@ public class Course implements Serializable{
 	 * serialVersionUID needed so that this class can be Serializable. 
 	 */
 	private static final long serialVersionUID = 4491280720903309211L;
-	
+
 	/**
 	 * The bit-flag for the short part of the autumn semester
 	 */
@@ -38,7 +38,7 @@ public class Course implements Serializable{
 	 * Filter bit-flags for isolating all the season bit-flags.
 	 */
 	public static final long INTERNAL_SEASON_ALL           = 0xf000000000000000L;
-	
+
 	/**
 	 * If checked, this is a multi-period course.
 	 */
@@ -66,7 +66,7 @@ public class Course implements Serializable{
 	 * Use INTERNAL_DAYS_ALL to filter all days regardless of seasons.
 	 */
 	public static final long INTERNAL_DAYS                 = 0x0000000000000fffL;
-	
+
 	/**
 	 * Filter for isolating all the days bit-flags for the short autumn.
 	 */
@@ -87,7 +87,7 @@ public class Course implements Serializable{
 	 * Filter for isolating all the day bit-flags
 	 */
 	public static final long INTERNAL_DAYS_ALL             = INTERNAL_DAYS_SPRING_LONG | INTERNAL_DAYS_AUTUMN_LONG | INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_SPRING_SHORT;
-	
+
 	/**
 	 * The Monday morning class bit-flag. 
 	 * DTU alias: A1
@@ -176,7 +176,7 @@ public class Course implements Serializable{
 				data |= parseSingleDTUSkema(DTUdata[i]);
 			}
 		}
-		
+
 		if( (courseLength != null) && !courseLength[0].equals("")) {
 			for(int i = 0 ; i < courseLength.length ; i++ ) {
 				if(courseLength[i].equalsIgnoreCase("januar")) {
@@ -216,17 +216,17 @@ public class Course implements Serializable{
 			flag = internalRepresentation >> i;
 		if(0 != (flag & 1)) {
 			toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-			}
+		}
 		}
 		internalRepresentation >>= 12;
-		for(int i = 0 ; i < 10 ; i++) {
-			flag = internalRepresentation >> i;
-		if(0 != (flag & 1)) {
-			toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+			for(int i = 0 ; i < 10 ; i++) {
+				flag = internalRepresentation >> i;
+			if(0 != (flag & 1)) {
+				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
 			}
-		}
+			}
 
-		return toReturn.trim();
+			return toReturn.trim();
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class Course implements Serializable{
 		courseName = "";
 		courseID = "";
 	}
-	
+
 	/**
 	 * Get the course ID of the Course.
 	 * @return the courseID
@@ -397,7 +397,7 @@ public class Course implements Serializable{
 		compare &= ~(INTERNAL_DAYS_ALL);
 		return 0 != (compare & internalSkema);
 	}
-	
+
 	/**
 	 * Update the dependencies with a new set. 
 	 * This is used by the DatabaseReader when loading the the courses into memory. 
@@ -450,7 +450,7 @@ public class Course implements Serializable{
 			internalSkema = parseDTUSkema(skemagruppe, periodData);
 		}
 	}
-	
+
 	/**
 	 * Get the amont of courses this one depends on.
 	 * @return The amount of courses this one depends on.
@@ -460,7 +460,7 @@ public class Course implements Serializable{
 			return 0;
 		return dependencies.split(" ").length;
 	}
-	
+
 	/**
 	 * Check if the course has any dependency courses.
 	 * @return true if this course has any dependencies.
@@ -498,7 +498,7 @@ public class Course implements Serializable{
 			return false;
 		return courseID.equals(this.courseID);
 	}
-	
+
 	/**
 	 * Get the amount of periods this course occupies.
 	 * 
@@ -516,7 +516,7 @@ public class Course implements Serializable{
 		}
 		return toReturn;
 	}
-	
+
 	/**
 	 * Test whether the course is more than one period long
 	 * @return true if this course is over more than one period.
@@ -524,9 +524,14 @@ public class Course implements Serializable{
 	public boolean isMultiPeriodCourse() {
 		return 0 != (internalSkema & INTERNAL_MULTI_PERIOD_FLAG);
 	}
-	
+
 	/**
 	 * Update the period/semester data for the course.
+	 * 
+	 * NB: This method will assume that previous data about days are still valid and update accordingly.
+	 * If a new period is added, it will receive the same days as its semester counter part. (autumn inheirts from autumn and spring from spring)
+	 * If a period is removed, all days related to it will be removed (after the update is complete, so its counter-part if added can still inheirt from it)
+	 * 
 	 * @param periods The periods.
 	 * @param multiPeriodCourse If true, the input should be treated as the periods the course occupies rather than the periods, it can be selected.
 	 */
@@ -534,6 +539,8 @@ public class Course implements Serializable{
 		if(periods == null)
 			return;
 		long temp = 0L, days = internalSkema & INTERNAL_DAYS_ALL;
+		long clear = 0L;
+		long shift;
 		String[] periodArray = periods.trim().split(" ");
 		for(int i = 0 ; i < periodArray.length ; i++ ) {
 			if(periodArray[i].equals("E")) {
@@ -549,12 +556,71 @@ public class Course implements Serializable{
 		if(multiPeriodCourse) {
 			temp |= INTERNAL_MULTI_PERIOD_FLAG;
 		}
+		if(0 != (days & (INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_AUTUMN_LONG)) ) {
+
+			if(0 != (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
+				//Course runs in the long autumn period.  
+				if(0 == (days & INTERNAL_DAYS_AUTUMN_LONG) ) {
+					//But have no days in it and yet it has in the short?
+					//Shift days into place.
+					shift = (days & INTERNAL_DAYS_AUTUMN_SHORT)>>INTERNAL_SHIFT_AUTUMN_SHORT;
+					days |= shift << INTERNAL_SHIFT_AUTUMN_LONG; 
+				}
+			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_LONG)) {
+				//There was class in the long part of the autumn semester
+				//but this course ought not to have it.
+				clear |= INTERNAL_DAYS_AUTUMN_LONG;
+			}
+			
+			if(0 != (temp & INTERNAL_SEASON_AUTUMN_SHORT) ) {
+				//Course runs in the short autumn period.  
+				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
+					//But have no days in it and yet it has in the long?
+					//Shift days into place.
+					shift = (days & INTERNAL_DAYS_AUTUMN_LONG)>>INTERNAL_SHIFT_AUTUMN_LONG;
+					days |= shift << INTERNAL_SHIFT_AUTUMN_SHORT; 
+				}
+			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_SHORT)) {
+				//There was class in the short part of the autumn semester
+				//but this course ought not to have it.
+				clear |= INTERNAL_DAYS_AUTUMN_SHORT;
+			}
+			
+		} 
 		
-		//TODO - some day shifting magic.
+		if(0 != (days & (INTERNAL_DAYS_SPRING_SHORT | INTERNAL_DAYS_SPRING_LONG)) ) {
+
+			if(0 != (temp & INTERNAL_SEASON_SPRING_LONG) ) {
+				//Course runs in the long spring period.  
+				if(0 == (days & INTERNAL_DAYS_SPRING_LONG) ) {
+					//But have no days in it and yet it has in the short?
+					//Shift days into place.
+					shift = (days & INTERNAL_DAYS_SPRING_SHORT)>>INTERNAL_SHIFT_SPRING_SHORT;
+					days |= shift << INTERNAL_SHIFT_SPRING_LONG; 
+				}
+			} else if(0 != (days & INTERNAL_DAYS_SPRING_LONG)) {
+				//There was class in the long part of the spring semester
+				//but this course ought not to have it.
+				clear |= INTERNAL_DAYS_SPRING_LONG;
+			}
+			
+			if(0 != (temp & INTERNAL_SEASON_SPRING_SHORT) ) {
+				//Course runs in the short spring period.  
+				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
+					//But have no days in it and yet it has in the long?
+					//Shift days into place.
+					shift = (days & INTERNAL_DAYS_SPRING_LONG)>>INTERNAL_SHIFT_SPRING_LONG;
+					days |= shift << INTERNAL_SHIFT_SPRING_SHORT; 
+				}
+			} else if(0 != (days & INTERNAL_DAYS_SPRING_SHORT)) {
+				//There was class in the short part of the spring semester
+				//but this course ought not to have it.
+				clear |= INTERNAL_DAYS_SPRING_SHORT;
+			}
+			
+		}
 		
-		//END of TO-DO
-		
-		internalSkema = temp | days; 
+		internalSkema = temp | (days & ~clear); 
 	}
 
 	/**

@@ -76,7 +76,7 @@ public class CoreTest extends TestCase {
 		try {
 			//Adds two different courses that normally would conflict (same schema groups) in two different semesters
 			core.addCourseToStudyPlan("testSubject", "01005", 1);
-			core.addCourseToStudyPlan("testSubject", "01035", 2);
+			core.addCourseToStudyPlan("testSubject", "01035", 3);
 		} catch (Exception e) {
 			//If any other kind of error occures, something is wrong
 			fail("Exception " + e.toString());

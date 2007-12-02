@@ -89,7 +89,7 @@ public class StudyPlanTest extends TestCase {
 
 		try {
 			cb = new CourseBase();
-			sc2 = new SelectedCourse(cb.findCourse("01450"), 2);
+			sc2 = new SelectedCourse(cb.findCourse("01450"), 10);
 			if(sp.add(sc2)) {
 				fail("Allowed course to be added without the dependencies being met!");
 			}
@@ -158,8 +158,8 @@ public class StudyPlanTest extends TestCase {
 		}
 
 		try {
-			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
-			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
