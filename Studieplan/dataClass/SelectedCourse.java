@@ -156,20 +156,6 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		return 0; 
 	}
 	
-	/**
-	 * Check if the course is within a given period. Used to test for conflicts between courses.
-	 * 
-	 * The boolean parameter "shortPeriod" is first to avoid accidental use of {@link #getIsInPeriod(int, int)}  
-	 * 
-	 * @param shortPeriod Whether or not the test should start at the short-period part (second-half) of the semester.
-	 * @param start The semester to test for.  
-	 * @param finish The amount of periods after the initial periods that should be considered "reserved"
-	 * @return -1,0 or 1 if this course is ends before, shares at least one semester with or comes after the semester-range.
-	 * @throws IllegalArgumentException
-	 */
-	public int getIsInSemester(boolean shortPeriod, int start, int finish) throws IllegalArgumentException {
-		return getIsInPeriod(start<<1 + (shortPeriod?0:-1), finish<<1 + (shortPeriod?0:-1));
-	}
 	
 	/**
 	 * Tests if the inputted semester is valid

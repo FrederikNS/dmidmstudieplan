@@ -202,7 +202,14 @@ public class CourseBase {
 	 * @return All the courses in the CourseBase as a Array.
 	 */
 	public Course[] getAllCourses() {
-		return allCourses;
+		if(allCourses == null)
+			return null;
+		int size = allCourses.length;
+		Course[] copy = new Course[size];
+		for(int i = 0 ; i <  size ; i++) {
+			copy[i] = allCourses[i];
+		}
+		return copy;
 	}
 	
 	/**

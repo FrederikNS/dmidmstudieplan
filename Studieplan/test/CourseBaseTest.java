@@ -71,7 +71,17 @@ public class CourseBaseTest extends TestCase {
 	public void testToString() {
 		assertNotNull(base.toString());
 	}
-
+	
+	/**
+	 * Test that the getAllCourses does not allow methods outside CourseBase to alter in the 
+	 * list inside CourseBase. 
+	 */
+	public void testRandomStuff() {
+		Course[] temp = base.getAllCourses();		
+		temp[0] = null;
+		assertNotNull(base.getAllCourses()[0]);
+	}
+	
 	/**
 	 * Tears everything down, including resetting the class variable
 	 * @see junit.framework.TestCase#tearDown()
