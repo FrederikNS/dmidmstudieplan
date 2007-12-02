@@ -6,10 +6,10 @@ package dataClass;
 import java.io.Serializable;
 
 /**
- * @author Niels Thykier
  * This class is a course selected by a student. On top of all the information
  * in the Course class, this also contains the data on which semester this course is 
  * taken.
+ * @author Niels Thykier
  */
 public class SelectedCourse extends Course implements Comparable<SelectedCourse>, Serializable {
 
@@ -27,7 +27,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * Create a SelectedCourse from a courseID, courseName and a semester.
 	 * NB: This will NOT look up all the data from the databases.
 	 * 
-	 * Use the findCourse from Core or DatabaseReader and the {@link #SelectedCourse(Course, int)} Constructor
+	 * Use the findCourse from Core or CourseBase and the {@link #SelectedCourse(Course, int)} Constructor
 	 * for that.
 	 * 
 	 * @param courseID The ID number of the course.
@@ -98,7 +98,15 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * @return The semester 
 	 */
 	public int getSemester() {
-		return semester ;
+		return semester;
+	}
+	
+	public boolean getIsInSemester(int semester, boolean shortPeriod) {
+		int courseLength = this.getAmountOfPeriods();
+		if( (semester >= this.semester) && (semester <= (semester + courseLength + 1))) {
+			
+		}
+		return false;
 	}
 	
 	/**

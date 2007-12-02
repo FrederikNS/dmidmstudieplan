@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 
 /**
+ * This class describes a course that a student could take during his/her stay at the university.
+ * 
+ * Asside from the ID of the course and its name, it also contains information about what periods
+ * it can be taken, whether it is single or a multi-period course and what courses, that it depends on.
  * 
  * @author Niels Thykier
  */
@@ -321,7 +325,7 @@ public class Course implements Serializable{
 	 * 
 	 * NB: This will NOT look up all the data from the databases.
 	 * 
-	 * Use the findCourse from Core or DatabaseReader.
+	 * Use the findCourse from Core or CourseBase.
 	 * 
 	 * @param courseID the ID of the course.
 	 * @param courseName the Name of the course.
