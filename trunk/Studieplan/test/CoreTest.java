@@ -3,9 +3,10 @@ package test;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cores.Core;
+import cores.ProgramCore;
+
 import junit.framework.TestCase;
-import ui.Core;
-import dataClass.ProgramCore;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
 import databases.CourseBase;
@@ -285,7 +286,7 @@ public class CoreTest extends TestCase {
 
 		try {
 			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01035"), 2));
-			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01250"), 3));
+			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01250"), 4));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");

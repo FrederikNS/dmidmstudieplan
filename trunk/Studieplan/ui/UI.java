@@ -1,5 +1,7 @@
 package ui;
 
+import cores.Core;
+
 /**
  * A base class that all UserInterfaces must extend (Human <-> Computer communication)
  * 

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseCannotStartInThisSemesterException;
 import exceptions.CourseIsMissingDependenciesException;
 
 /**
@@ -119,11 +120,17 @@ public class StudyPlan implements Serializable {
 	 * @throws CourseAlreadyExistsException Thrown if the course was already added to the plan.
 	 * @throws ConflictingCourseInStudyPlanException Thrown if another course had at least one lession at the same time as the one to be added.
 	 * @throws CourseIsMissingDependenciesException Thrown if the course being added has unmet dependencies.
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in the semester it wants to. 
 	 */
-	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, CourseIsMissingDependenciesException {
+	public boolean add(SelectedCourse toAdd) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		if(this.contains(toAdd)) {
 			throw new CourseAlreadyExistsException(toAdd.getCourseID());
 		}
+		if(!toAdd.canStartInSemester(toAdd.getStartingSemester()) ) {
+			throw new CourseCannotStartInThisSemesterException(toAdd.getCourseID(), toAdd.getStartingSemester());
+			
+		}
+		
 		int missingDependencies = toAdd.getAmountOfDependencies();
 		String dependencies = toAdd.getDependencies();
 		String met = null;
@@ -255,60 +262,43 @@ public class StudyPlan implements Serializable {
 		String toReturn = "";
 
 
-		String[] courses1 = {"-----","-----","-----","-----","-----",
-				"-----","-----","-----","-----","-----"};
-		String[] courses2 = {"-----","-----","-----","-----","-----",
-				"-----","-----","-----","-----","-----"};
+		String[][] courses = {{"-----","-----","-----","-----","-----",
+				  				"-----","-----","-----","-----","-----"},
+				  			   {"-----","-----","-----","-----","-----",
+				  				"-----","-----","-----","-----","-----"}};
 		
 		for(int i = 0 ; i < planned.length ; i++) {
 			
 			if(planned[i].getIsInPeriod(semesterStart, semesterEnd) == 0) {
 				skema = planned[i].getFullSkemaData() & semesterPattern;
-			
-				skemaTest = skema >> shiftLong;
-				if(skemaTest != 0) {
-					for(int j = 0 ; j < 5 ; j++) {
-						if(((skemaTest>>j) & 1) == 1) {
-							courses1[j] = planned[i].getCourseID();
+				
+				for(int period = 0 ; period < 2 ; period++) {
+					if(period == 0) {
+						skemaTest = skema >> shiftLong;
+					} else {
+						skemaTest = skema >> shiftShort;
+					}
+					if(skemaTest != 0) {
+						for(int j = 0 ; j < 5 ; j++) {
+							if(((skemaTest>>j) & 1) == 1) {
+								courses[period][j] = planned[i].getCourseID();
+							}
+						}				
+						if((skemaTest & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
+							courses[period][5] = planned[i].getCourseID();
 						}
-					}				
-					if((skemaTest & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
-						courses1[5] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
-						courses1[6] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
-						courses1[7] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
-						courses1[8] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
-						courses1[9] = planned[i].getCourseID();
-					}
-				}
-				skemaTest = skema >> shiftShort;
-				if(skemaTest != 0) {
-					for(int j = 0 ; j < 5 ; j++) {
-						if(((skemaTest>>j) & 1) == 1) {
-							courses2[j] = planned[i].getCourseID();
+						if((skemaTest & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
+							courses[period][6] = planned[i].getCourseID();
 						}
-					}				
-					if((skemaTest & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
-						courses2[5] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
-						courses2[6] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
-						courses2[7] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
-						courses2[8] = planned[i].getCourseID();
-					}
-					if((skemaTest & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
-						courses2[9] = planned[i].getCourseID();
+						if((skemaTest & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
+							courses[period][7] = planned[i].getCourseID();
+						}
+						if((skemaTest & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
+							courses[period][8] = planned[i].getCourseID();
+						}
+						if((skemaTest & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
+							courses[period][9] = planned[i].getCourseID();
+						}
 					}
 				}
 			}
@@ -316,13 +306,13 @@ public class StudyPlan implements Serializable {
 
 		String semesterString = (semester < 10?" ":"") + semester;
 		toReturn  = "Semester: "+ semesterString +" "+((semester&1)==1?"e":"f")+" 13-ugers  mandag  tirsdag  onsdag  torsdag  fredag\n";
-		toReturn += " 8:00-12:00              "+ courses1[0] + "    "+ courses1[2] + "   "+ courses1[4] + "   "+ courses1[6] + "    "+ courses1[8] + "\n";
+		toReturn += " 8:00-12:00              "+ courses[0][0] + "    "+ courses[0][2] + "   "+ courses[0][4] + "   "+ courses[0][6] + "    "+ courses[0][8] + "\n";
 		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ courses1[1] + "    "+ courses1[3] + "   "+ courses1[5] + "   "+ courses1[7] + "    "+ courses1[9] + "\n";
+		toReturn += "13:00-17:00              "+ courses[0][1] + "    "+ courses[0][3] + "   "+ courses[0][5] + "   "+ courses[0][7] + "    "+ courses[0][9] + "\n";
 		toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
-		toReturn += " 8:00-12:00              "+ courses2[0] + "    "+ courses2[2] + "   "+ courses2[4] + "   "+ courses2[6] + "    "+ courses2[8] + "\n";
+		toReturn += " 8:00-12:00              "+ courses[1][0] + "    "+ courses[1][2] + "   "+ courses[1][4] + "   "+ courses[1][6] + "    "+ courses[1][8] + "\n";
 		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ courses2[1] + "    "+ courses2[3] + "   "+ courses2[5] + "   "+ courses2[7] + "    "+ courses2[9];		
+		toReturn += "13:00-17:00              "+ courses[1][1] + "    "+ courses[1][3] + "   "+ courses[1][5] + "   "+ courses[1][7] + "    "+ courses[1][9];		
 		return toReturn;
 	}
 

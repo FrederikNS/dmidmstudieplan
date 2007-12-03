@@ -5,6 +5,8 @@ package dataClass;
 
 import java.io.Serializable;
 
+import exceptions.CourseCannotStartInThisSemesterException;
+
 /**
  * This class is a course selected by a student. On top of all the information
  * in the Course class, this also contains the data on which semester this course is 
@@ -23,25 +25,6 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	private final int period;
 
-	/**
-	 * Create a SelectedCourse from a courseID, courseName and a semester.
-	 * NB: This will NOT look up all the data from the databases.
-	 * 
-	 * Use the findCourse from Core or CourseBase and the {@link #SelectedCourse(Course, int)} Constructor
-	 * for that.
-	 * 
-	 * @param courseID The ID number of the course.
-	 * @param courseName The name of the Course.
-	 * @param semester the semester it is taken on.
-	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1). or in case the base class Constructor would throw an exception
-	 * @see dataClass.Course#Course(String, String)
-	 */
-	public SelectedCourse(String courseID, String courseName, int semester) throws IllegalArgumentException{
-		super(courseID, courseName);
-		if(!SelectedCourse.isValidSemester(semester))
-			throw new IllegalArgumentException();
-		period = (semester<<1)-1;
-		}
 	
 	/**
 	 * Contructor used when loading from this class from classes via the ObjectInputStream class.
@@ -55,12 +38,18 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 * Create a SelectedCourse from a Course and a semester.
 	 * @param course An object of the Course type.
 	 * @param semester the semester it is taken on.
-	 * @throws IllegalArgumentException thrown if semester is invalid (e.g. less than 1).
+	 * @throws IllegalArgumentException Thrown if semester is invalid (e.g. less than 1).
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course cannot start in that semester.
 	 */
-	public SelectedCourse(Course course, int semester) throws IllegalArgumentException {
+	public SelectedCourse(Course course, int semester) throws IllegalArgumentException, CourseCannotStartInThisSemesterException  {
 		super(course.getCourseID(), course.getCourseName() );
 		if(!SelectedCourse.isValidSemester(semester))
 			throw new IllegalArgumentException();
+		
+		if(!course.canStartInSemester(semester)) {
+			throw new CourseCannotStartInThisSemesterException(course.getCourseID(), semester);
+		}
+		
 		period = (semester<<1)-1;
 		setDependencies(course.getDependencies());
 		setFullSkemaData(course.getFullSkemaData());
@@ -165,5 +154,6 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	public static boolean isValidSemester(int semester) {
 		return semester < 21 && semester > 0;
 	}
+	
 	
 }

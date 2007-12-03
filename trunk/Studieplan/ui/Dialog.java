@@ -8,10 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import cores.Core;
+
 import dataClass.Course;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseCannotStartInThisSemesterException;
 import exceptions.CourseDoesNotExistException;
 import exceptions.CourseIsMissingDependenciesException;
 import exceptions.FilePermissionException;
@@ -279,6 +282,8 @@ public class Dialog extends UI {
 		} catch (IllegalArgumentException e) {
 			System.err.println(e);
 		} catch (CourseIsMissingDependenciesException e) {
+			System.err.println(e);
+		} catch (CourseCannotStartInThisSemesterException e) {
 			System.err.println(e);
 		}
 	}

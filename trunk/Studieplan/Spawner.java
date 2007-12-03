@@ -1,4 +1,4 @@
-import dataClass.ProgramCore;
+import cores.ProgramCore;
 
 /**
  * This is our spawner. It's the only class that contains the method "main", and therefore

@@ -1,9 +1,9 @@
 package test;
 
+import junit.framework.TestCase;
 import dataClass.Course;
 import dataClass.SelectedCourse;
 import databases.CourseBase;
-import junit.framework.TestCase;
 
 /**
  * Tests the class SelectedCourses by usint jUnit
@@ -27,47 +27,85 @@ public class SelectedCourseTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		cb = new CourseBase();
-		sc = new SelectedCourse(cb.findCourse("01715"), 2);
+		sc = new SelectedCourse(cb.findCourse("01715"), 3);
 	}
 
 	/**
 	 * A positive test of the comparing function
 	 */
 	public void testCompareToPositive() {
-		SelectedCourse sc2 = new SelectedCourse("01715", " ", 1);
+		SelectedCourse sc2;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01715"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;			
+		}
 		int test = 0;
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == 0){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("01005", " ", 1);
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == 1){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("02101", " ", 1);
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.compareTo(sc2) == -1){
 			test++;
 		}
@@ -129,47 +167,85 @@ public class SelectedCourseTest extends TestCase {
 	 * Testing if it can get the right finishing period
 	 */
 	public void testGetFinishingPeriod() {
-		assertTrue(sc.getFinishingPeriod() == 3);
+		assertTrue(sc.getFinishingPeriod() == 5);
 	}
 
 	/**
 	 * Testing if a course is in the same semester as another course
 	 */
 	public void testGetIsInSameSemester() {
-		SelectedCourse sc2 = new SelectedCourse("02101", " ", 1);
+		SelectedCourse sc2;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
 		int test = 0;
 		if(sc.getIsInSameSemester(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == 0){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("01005", " ", 1);
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == 0){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == -1){
 			test++;
 		}
-		sc2 = new SelectedCourse("02101", " ", 1);
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == 1) {
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 2);
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == 0){
 			test++;
 		}
-		sc2 = new SelectedCourse(sc2, 3);
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInSameSemester(sc2) == -1){
 			test++;
 		}
@@ -181,16 +257,23 @@ public class SelectedCourseTest extends TestCase {
 	 */
 	public void testGetIsInPeriod() {
 		int test = 0;
-		if(sc.getIsInPeriod(1, 2) == 1) {
+		if(sc.getIsInPeriod(1, 4) == 1) {
 			test++;
 		}
-		if(sc.getIsInPeriod(3, 4) == 0) {
+		if(sc.getIsInPeriod(5, 5) == 0) {
 			test++;
 		}
-		if(sc.getIsInPeriod(5, 6) == -1) {
+		if(sc.getIsInPeriod(4, 6) == 0) {
 			test++;
 		}
-		sc = new SelectedCourse(sc, 1);
+		if(sc.getIsInPeriod(6, 20) == -1) {
+			test++;
+		}
+		try {
+			sc = new SelectedCourse(sc, 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInPeriod(1, 2) == 0) {
 			test++;
 		}
@@ -200,7 +283,11 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.getIsInPeriod(3, 4) == -1) {
 			test++;
 		}
-		sc = new SelectedCourse(sc, 3);
+		try {
+			sc = new SelectedCourse(sc, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
 		if(sc.getIsInPeriod(1, 2) == 1) {
 			test++;
 		}
@@ -210,7 +297,7 @@ public class SelectedCourseTest extends TestCase {
 		if(sc.getIsInPeriod(5, 6) == 0) {
 			test++;
 		}
-		assertTrue(test == 9);
+		assertTrue(test == 10);
 	}
 
 	/**
