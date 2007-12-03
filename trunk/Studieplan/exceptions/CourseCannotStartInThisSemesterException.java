@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * 
+ * Exception thrown when a Course cannot be selected in a given semester.
  * @author Niels Thykier
  */
 public class CourseCannotStartInThisSemesterException extends Exception {
@@ -21,8 +21,9 @@ public class CourseCannotStartInThisSemesterException extends Exception {
 	private final int semester;
 	
 	/**
-	 * @param courseID
-	 * @param semester
+	 * Create new instance of this exception.
+	 * @param courseID The course in question.
+	 * @param semester The semester related to this exception.
 	 */
 	public CourseCannotStartInThisSemesterException(String courseID, int semester) {
 		super("*** Kursus " + courseID + " kan ikke starte i semesteret " + semester + "***");

@@ -403,7 +403,6 @@ public class ProgramCore implements Core {
 	 * @param pattern searches for a pattern.
 	 * @return returns an array of courses which (somehow) matches this pattern.
 	 * @throws CourseDoesNotExistException thrown if no courses match the pattern.
-	 * @deprecated It is slow, not required and does not use the CourseBase.
 	 */
 	public Course[] search(String pattern) throws CourseDoesNotExistException { 
 		return courseDB.search(pattern);
