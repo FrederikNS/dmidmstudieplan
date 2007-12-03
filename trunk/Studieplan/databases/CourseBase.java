@@ -232,7 +232,7 @@ public class CourseBase {
 		                     " - Short courses: " + amountOfShortCourses + "\n" +
 		                     " - Multi-period courses: " + amountOfMultiPeriodCourses + "\n" +
 		                     " - Courses with Dependencies: " + amountOfCoursesWithDependencies + "\n" +
-		                     "Removed " + amountOfDoubleCourses + " courses apearing twice.\n";
+		                     "Removed " + amountOfDoubleCourses + " duplicate courses.\n";
 		return toReturn;
 	}
 
