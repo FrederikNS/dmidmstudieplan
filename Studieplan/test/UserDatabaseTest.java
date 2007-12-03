@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import junit.framework.TestCase;
 import dataClass.SelectedCourse;
 import dataClass.StudyPlan;
+import databases.CourseBase;
 import databases.UserDatabase;
 import exceptions.CannotSaveStudyPlanException;
 import exceptions.FilePermissionException;
@@ -64,8 +65,10 @@ public class UserDatabaseTest extends TestCase {
 	 */
 	public void testSavePositive() {
 		StudyPlan testPlan = new StudyPlan("testSubject2");
+		CourseBase cb;
 		try {
-			testPlan.add(new SelectedCourse("01005", "Matematik 1", 1));
+			cb = new CourseBase();
+			testPlan.add(new SelectedCourse(cb.findCourse("01005"), 1));
 		} catch (Exception e) {
 			fail(e.toString());		
 		}

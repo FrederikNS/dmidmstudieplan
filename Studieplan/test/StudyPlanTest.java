@@ -7,6 +7,7 @@ import dataClass.StudyPlan;
 import databases.CourseBase;
 import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CourseCannotStartInThisSemesterException;
 import exceptions.CourseIsMissingDependenciesException;
 
 /**
@@ -91,6 +92,17 @@ public class StudyPlanTest extends TestCase {
 			cb = new CourseBase();
 			sc2 = new SelectedCourse(cb.findCourse("01450"), 10);
 			if(sp.add(sc2)) {
+				fail("Allowed course to start in semester it cannot!");
+			}
+		} catch (CourseCannotStartInThisSemesterException Success) {
+			
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		try {
+			cb = new CourseBase();
+			sc2 = new SelectedCourse(cb.findCourse("01450"), 9);
+			if(sp.add(sc2)) {
 				fail("Allowed course to be added without the dependencies being met!");
 			}
 		} catch (CourseIsMissingDependenciesException Success) {
@@ -104,8 +116,10 @@ public class StudyPlanTest extends TestCase {
 	 * A positive test to see if a study plan contains a specific string
 	 */
 	public void testContainsStringPositive() {
+		CourseBase cb;
 		try {
-			sp.add(new SelectedCourse("01005", " ", 1));
+			cb = new CourseBase();
+			sp.add(new SelectedCourse(cb.findCourse("01005"), 1));
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -124,12 +138,14 @@ public class StudyPlanTest extends TestCase {
 	 */
 	public void testContainsCoursePositive() {
 		SelectedCourse sc;
+		CourseBase cb;
 		try {
-			sc = new SelectedCourse("01005", " ", 1);
+			cb = new CourseBase();
+			sc = new SelectedCourse(cb.findCourse("01005"), 1);
 			sp.add(sc);
 		} catch (Exception e) {
 			fail(e.toString());
-			sc = null;
+			return;
 		}
 		boolean test1 = sp.contains(sc);
 		boolean test2 = sp.contains(new Course("01005", " "));
@@ -160,8 +176,8 @@ public class StudyPlanTest extends TestCase {
 		try {
 			sp.add(new SelectedCourse(cb.findCourse("01035"), 3));
 			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
-			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
-			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
@@ -209,9 +225,9 @@ public class StudyPlanTest extends TestCase {
 
 		try {
 			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
-			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
-			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
-			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
@@ -275,9 +291,9 @@ public class StudyPlanTest extends TestCase {
 		
 		try {
 			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
-			sp.add(new SelectedCourse(cb.findCourse("01250"), 3));
-			sp.add(new SelectedCourse(cb.findCourse("01246"), 4));
-			sp.add(new SelectedCourse(cb.findCourse("01450"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
 		} catch (Exception e) {
 			System.err.println(e);
 			fail("Adding course?");
@@ -301,6 +317,7 @@ public class StudyPlanTest extends TestCase {
 		testAddPositive();
 		try {
 			sp.printSemester(1);
+			sp.printSemester(2);
 		} catch (IllegalArgumentException e) {
 			fail(e.toString());
 		}

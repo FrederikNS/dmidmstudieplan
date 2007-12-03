@@ -1,7 +1,7 @@
 /**
  * 
  */
-package dataClass;
+package cores;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,9 +10,11 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import dataClass.Course;
+import dataClass.SelectedCourse;
+import dataClass.StudyPlan;
 import databases.CourseBase;
 import databases.UserDatabase;
-import ui.Core;
 import ui.Dialog;
 import ui.UI;
 import exceptions.AnotherCourseDependsOnThisCourseException;
@@ -20,6 +22,7 @@ import exceptions.CannotSaveStudyPlanException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseCannotStartInThisSemesterException;
 import exceptions.CourseDoesNotExistException;
 import exceptions.CourseIsMissingDependenciesException;
 import exceptions.FilePermissionException;
@@ -255,7 +258,7 @@ public class ProgramCore implements Core {
 	
 	/**
 	 * Adds a Course to a StudyPlan on a given semester
-	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @see cores.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * @param studentID the student ID of the student, who's plan it should be added to.
 	 * @param courseID The ID of the course to be added.
 	 * @param semester The semester the course should be added too.
@@ -265,14 +268,15 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added.  
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException if the course being added has unmet dependencies. Thrown if the course being added has unmet dependencies.
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in that semester. 
 	 */
-	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(String studentID, String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		addCourseToStudyPlan(studentID, findCourse(courseID), semester);
 	}
 	
 	/**
 	 * Adds a Course to a StudyPlan on a given semester
-	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @see cores.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 * @param studentID the student ID of the student, who's plan it should be added to.
 	 * @param course The course to be added.
 	 * @param semester The semester the course should be added too.
@@ -281,8 +285,9 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException if the course being added has unmet dependencies. Thrown if the course being added has unmet dependencies.
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in that semester. 
 	 */
-	public void addCourseToStudyPlan(String studentID, Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(String studentID, Course course, int semester) throws CourseAlreadyExistsException, IllegalArgumentException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		addCourseToStudyPlan(studentID, new SelectedCourse(course, semester));		
 	}
 
@@ -294,8 +299,9 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException Thrown if the course being added has unmet dependencies. Thrown if the course being added has unmet dependencies.
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in the semester it wants to.
 	 */
-	public void addCourseToStudyPlan(String studentID, SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(String studentID, SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		StudyPlan sp = getStudyPlan(studentID);
 		sp.add(course);
 	}
@@ -476,9 +482,10 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException Thrown if the course being added has unmet dependencies.
-	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in that semester. 
+	 * @see cores.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 */	
-	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(String courseID, int semester) throws ConflictingCourseInStudyPlanException, CourseDoesNotExistException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseAlreadyExistsException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		addCourseToStudyPlan(currentPlan.getStudent(), courseID, semester);
 	}
 	
@@ -491,9 +498,10 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException Thrown if the course being added has unmet dependencies.
-	 * @see ui.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in that semester. 
+	 * @see cores.Core#addCourseToStudyPlan(java.lang.String, dataClass.SelectedCourse)
 	 */
-	public void addCourseToStudyPlan(Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(Course course, int semester) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, IllegalArgumentException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		addCourseToStudyPlan(currentPlan.getStudent(), course, semester);
 	}
 
@@ -504,8 +512,9 @@ public class ProgramCore implements Core {
 	 * @throws ConflictingCourseInStudyPlanException Thrown if the course to be added have at least one matching skema data with a course on the same semester as the course to be added. 
 	 * @throws StudyPlanDoesNotExistException Thrown if the StudyPlan related to studentID does not exist.
 	 * @throws CourseIsMissingDependenciesException 
+	 * @throws CourseCannotStartInThisSemesterException Thrown if the course being added cannot start in the semester it wants to.
 	 */
-	public void addCourseToStudyPlan(SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException {
+	public void addCourseToStudyPlan(SelectedCourse course) throws CourseAlreadyExistsException, ConflictingCourseInStudyPlanException, StudyPlanDoesNotExistException, CourseIsMissingDependenciesException, CourseCannotStartInThisSemesterException {
 		addCourseToStudyPlan(currentPlan.getStudent(), course);
 	}
 

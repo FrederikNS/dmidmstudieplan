@@ -24,7 +24,7 @@ public class CourseTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		CourseBase cb = new CourseBase();
-		cc = new SelectedCourse(cb.findCourse("01715"), 2);
+		cc = cb.findCourse("01715");
 	}
 
 	/**
@@ -69,7 +69,6 @@ public class CourseTest extends TestCase {
 	 */
 	public void testGetDependenciesPositive() {
 		String skema = cc.getDependencies();
-		System.out.println(cc);
 		assertTrue(skema.contains("01035"));
 	}
 
@@ -144,7 +143,13 @@ public class CourseTest extends TestCase {
 	 */
 	public void testEqualsObject() {
 		boolean test1 = cc.equals(new Course(cc.getCourseID(),cc.getCourseName()));
-		boolean test2 = cc.equals(new SelectedCourse(cc.getCourseID(), cc.getCourseID(),1 ));
+		boolean test2;
+		try {
+			test2 = cc.equals(new SelectedCourse(cc,1 ));
+		}  catch (Exception e) {
+			fail("Could not create course");
+			return;
+		}
 		assertTrue(test1 && test2);
 	}
 

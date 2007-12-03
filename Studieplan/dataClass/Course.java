@@ -40,10 +40,29 @@ public class Course implements Serializable{
 	public static final long INTERNAL_SEASON_ALL           = 0xf000000000000000L;
 
 	/**
-	 * If checked, this is a multi-period course.
+	 * Filter for determining the starting season. 
+	 * If applying this filter on a internal skema is non-zero, the skema is for a multi-period course.
 	 */
-	public static final long INTERNAL_MULTI_PERIOD_FLAG    = 0x0100000000000000L;
+	public static final long INTERNAL_STARTING_PERIOD    = 0x0f00000000000000L;
 
+	/**
+	 * The bit-flag for courses that must start in the short part of the autumn semester
+	 */
+	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_SHORT  = 0x0800000000000000L;
+	/**
+	 * The bit-flag for courses that must start in the short part of the spring semester
+	 */
+	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0400000000000000L;
+	/**
+	 * The bit-flag for courses that must start in the long part of the autum semester
+	 */
+	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0200000000000000L;
+	/**
+	 * The bit-flag for courses that must start in the long part of the spring semester
+	 */
+	public static final long INTERNAL_STARTING_PERIOD_SPRING_LONG   = 0x0100000000000000L;
+	
+	
 	/**
 	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Spring part of the semester 
 	 */
@@ -306,12 +325,12 @@ public class Course implements Serializable{
 	 * The ID of the course.
 	 * This is final as no course ought ever to change the ID.
 	 */
-	final private String courseID;
+	private final String courseID;
 	/**
 	 * The name of the Course. 
 	 * Since a course name is not likely to change, it is final.
 	 */
-	final private String courseName;
+	private final String courseName;
 	/**
 	 * This field contains the ID of all the dependency courses. 
 	 */
@@ -524,7 +543,7 @@ public class Course implements Serializable{
 	 * @return true if this course is over more than one period.
 	 */
 	public boolean isMultiPeriodCourse() {
-		return 0 != (internalSkema & INTERNAL_MULTI_PERIOD_FLAG);
+		return 0 != (internalSkema & INTERNAL_STARTING_PERIOD);
 	}
 
 	/**
@@ -547,17 +566,27 @@ public class Course implements Serializable{
 		for(int i = 0 ; i < periodArray.length ; i++ ) {
 			if(periodArray[i].equals("E")) {
 				temp |= INTERNAL_SEASON_AUTUMN_LONG;
+				if(i == 0 && multiPeriodCourse) {
+					temp |= INTERNAL_STARTING_PERIOD_AUTUMN_LONG;
+				}
 			} else if(periodArray[i].equals("januar")) {
 				temp |= INTERNAL_SEASON_AUTUMN_SHORT;
+				if(i == 0 && multiPeriodCourse) {
+					temp |= INTERNAL_STARTING_PERIOD_AUTUMN_SHORT;
+				}
 			} else if(periodArray[i].equals("F")) {
 				temp |= INTERNAL_SEASON_SPRING_LONG;
+				if(i == 0 && multiPeriodCourse) {
+					temp |= INTERNAL_STARTING_PERIOD_SPRING_LONG;
+				}
 			} else if(periodArray[i].equals("juni")) {
 				temp |= INTERNAL_SEASON_SPRING_SHORT;
+				if(i == 0 && multiPeriodCourse) {
+					temp |= INTERNAL_STARTING_PERIOD_SPRING_SHORT;
+				}
 			}
 		}
-		if(multiPeriodCourse) {
-			temp |= INTERNAL_MULTI_PERIOD_FLAG;
-		}
+
 		if(0 != (days & (INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_AUTUMN_LONG)) ) {
 
 			if(0 != (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
@@ -623,6 +652,30 @@ public class Course implements Serializable{
 		}
 
 		internalSkema = temp | (days & ~clear); 
+	}
+	
+	
+	/**
+	 * Check if this course can start in the given semester.
+	 * @param semester The semester the course should start in.
+	 * @return true if this course can start in the given semester.
+	 */
+	public boolean canStartInSemester(int semester) {
+		boolean toReturn = false;
+		if(this.isMultiPeriodCourse()) {
+			if((semester & 1) == 1) {
+				toReturn = 0 != (internalSkema & (INTERNAL_STARTING_PERIOD_AUTUMN_SHORT | INTERNAL_STARTING_PERIOD_AUTUMN_LONG));
+			} else {
+				toReturn = 0 != (internalSkema & (INTERNAL_STARTING_PERIOD_SPRING_SHORT | INTERNAL_STARTING_PERIOD_SPRING_LONG));				
+			}
+		} else {
+			if((semester & 1) == 1) {
+				toReturn = 0 != (internalSkema & (INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_AUTUMN_LONG));
+			} else {
+				toReturn = 0 != (internalSkema & (INTERNAL_DAYS_SPRING_SHORT | INTERNAL_DAYS_SPRING_LONG));
+			}
+		}
+		return toReturn;
 	}
 
 	/**
