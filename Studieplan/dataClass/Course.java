@@ -231,21 +231,25 @@ public class Course implements Serializable{
 	public static String internalSkemaToExternString(long internalRepresentation) {
 		long flag;
 		String toReturn = "";
-		for(int i = 0 ; i < 10 ; i++) {
-			flag = internalRepresentation >> i;
+		long autumnDays, springDays;
+		
+		autumnDays = ((internalRepresentation & INTERNAL_DAYS_AUTUMN_LONG) >> INTERNAL_SHIFT_AUTUMN_LONG) | ((internalRepresentation & INTERNAL_DAYS_AUTUMN_SHORT) >> INTERNAL_SHIFT_AUTUMN_SHORT);
+		springDays = ((internalRepresentation & INTERNAL_DAYS_SPRING_LONG) >> INTERNAL_SHIFT_SPRING_LONG) | ((internalRepresentation & INTERNAL_DAYS_SPRING_SHORT) >> INTERNAL_SHIFT_SPRING_SHORT);
+		
+		for(int i = 0 ; i < 12 ; i++) {
+			flag = springDays >> i;
 			if(0 != (flag & 1)) {
 				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
 			}
 		}
-		internalRepresentation >>= 12;
-			for(int i = 0 ; i < 10 ; i++) {
-				flag = internalRepresentation >> i;
-				if(0 != (flag & 1)) {
-					toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-				}
+		for(int i = 0 ; i < 12 ; i++) {
+			flag = autumnDays >> i;
+			if(0 != (flag & 1)) {
+				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
 			}
+		}
 
-			return toReturn.trim();
+		return toReturn.trim();
 	}
 
 	/**
