@@ -15,7 +15,7 @@ import exceptions.FilePermissionException;
  * @author Morten Sørensen
  */
 public class UserDatabaseTest extends TestCase {
-	
+
 	/**
 	 * Sets up the class variable usr
 	 */
@@ -34,30 +34,18 @@ public class UserDatabaseTest extends TestCase {
 	 * A positive test to see if a saved study plan exists
 	 */
 	public void testExistsPositive() {
-		try {
-			usr.exists("UserDBTest");
-		} catch (FileNotFoundException e) {
-			fail(e.toString());
-		}
+		assertTrue(usr.exists("UserDBTest"));
 	}
-	
+
 	/**
 	 * A negative test to see if a saved study plan exists
 	 */
 	public void testExistsNegative() {
-		try {
-			//User added the file extension by himself
-			usr.exists("UserDBTest.plan");
+		if(usr.exists("UserDBTest.plan"))
 			fail("File ought not exist");
-		} catch (FileNotFoundException e) {
-			
-		}
-		try {
-			usr.exists("testFail");
+
+		if(usr.exists("testFail"))
 			fail("File ought not exists");
-		} catch (FileNotFoundException e) {
-			
-		}
 	}
 
 	/**
@@ -78,7 +66,7 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 		}
 	}
-	
+
 	/**
 	 * A negative test of the save function
 	 */
@@ -89,7 +77,7 @@ public class UserDatabaseTest extends TestCase {
 			usr.saveStudyPlan(testPlan);
 			fail("No name");
 		} catch (CannotSaveStudyPlanException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -99,7 +87,7 @@ public class UserDatabaseTest extends TestCase {
 			usr.saveStudyPlan(testPlan2);
 			fail("Permission Denied");
 		} catch (FilePermissionException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -117,10 +105,10 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 			return;
 		}
-		
+
 		assertTrue(plan.contains("01005"));
 	}
-	
+
 	/**
 	 * A negative test of the load function
 	 */
@@ -131,7 +119,7 @@ public class UserDatabaseTest extends TestCase {
 			usr.loadStudyPlan("testFail");
 			fail("File ought not to exists");
 		} catch (FileNotFoundException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -140,12 +128,12 @@ public class UserDatabaseTest extends TestCase {
 			usr.loadStudyPlan("PermissionDenied");
 			fail("Permission denied");
 		} catch (FilePermissionException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
 	}
-	
+
 	/**
 	 * A positive test of deleting a study plan
 	 */
@@ -158,7 +146,7 @@ public class UserDatabaseTest extends TestCase {
 			fail("File should exists");
 		}
 	}
-	
+
 	/**
 	 * A negative test of deleting a study plan
 	 */
@@ -168,7 +156,7 @@ public class UserDatabaseTest extends TestCase {
 			usr.deleteFile("");
 			fail("no name");
 		} catch (FileNotFoundException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -177,7 +165,7 @@ public class UserDatabaseTest extends TestCase {
 			usr.deleteFile("testFail");
 			fail("File ought not to exist");
 		} catch (FileNotFoundException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
@@ -186,12 +174,12 @@ public class UserDatabaseTest extends TestCase {
 			usr.deleteFile("PermissionDenied");
 			fail("Permission Denied");
 		} catch (FilePermissionException e) {
-			
+
 		} catch (Exception e) {
 			fail(e.toString());
 		}
 	}
-	
+
 	/**
 	 * Tears down everything the test has created, including resetting the class variable
 	 * @see junit.framework.TestCase#tearDown()

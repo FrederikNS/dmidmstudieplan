@@ -385,7 +385,7 @@ public class CourseBase {
 							for(int i = 0 ; i < size ; i++) {
 								Course course = name.get(i);
 								if(course.isSameCourseID(data[0])) {
-									course.setSkemagruppe(data[1].split(" "), null, true);
+									course.setSkemagruppe(data[1].split(" "), true);
 									skema.add(course);
 									break;
 								}

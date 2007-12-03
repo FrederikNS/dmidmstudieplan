@@ -23,33 +23,25 @@ import exceptions.FilePermissionException;
  */
 public class UserDatabase {
 
-
-	/**
-	 * Constuctor
-	 */
-	public UserDatabase() {
-	}
-
 	/**
 	 * Test if a .plan file exists. This is the same as 
 	 * exists(file, "plan");
 	 * @param file the name of the file (without extension)
-	 * @throws FileNotFoundException if the file is not found.
+	 * @return true if the file exists
 	 */
-	public void exists(String file) throws FileNotFoundException {
-		exists(file, "plan");
+	public boolean exists(String file) {
+		return exists(file, "plan");
 	}
 
 	/**
 	 * Test if a file exists.
 	 * @param file the name of the file without extension (without trailing . )
 	 * @param extension the extension of the file (without leading .)
-	 * @throws FileNotFoundException if file not found.
+	 * @return true if the file exists.
 	 */
-	public void exists(String file, String extension) throws FileNotFoundException {
+	public boolean exists(String file, String extension) {
 		File f = new File(file + "." + extension);
-		if(!f.exists()) 
-			throw new FileNotFoundException(file + "." + extension);
+		return f.exists(); 
 	}
 
 	/**

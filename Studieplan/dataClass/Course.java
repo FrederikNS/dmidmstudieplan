@@ -166,18 +166,14 @@ public class Course implements Serializable{
 	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
 	 * 
 	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
-	 * @param courseLength The length of the course. (3-week and 13-week determined by the presence of "januar" and/or "juni")
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
-	public static long parseDTUSkema(String DTUdata, String courseLength) {
-		String[] DTUarray = null, courseArray = null;
+	public static long parseDTUSkema(String DTUdata) {
+		String[] DTUarray = null;
 		if(DTUdata != null) {
 			DTUarray = DTUdata.split(" ");
 		}
-		if(courseLength != null) {
-			courseArray = courseLength.split(" ");
-		}
-		return parseDTUSkema(DTUarray, courseArray);
+		return parseDTUSkema(DTUarray);
 	}
 	/**
 	 * Parses a DTU based skema and turns it into the internal skema (Bit-flags).
@@ -185,10 +181,9 @@ public class Course implements Serializable{
 	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
 	 * 
 	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
-	 * @param courseLength The length of the course. (3-week and 13-week determined by the presence of "januar" and/or "juni")
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
-	public static long parseDTUSkema(String[] DTUdata, String courseLength[]) {
+	public static long parseDTUSkema(String[] DTUdata) {
 		long data = 0;
 		if(DTUdata != null) {
 			for(int i = 0; i < DTUdata.length ; i++ ){
@@ -196,15 +191,6 @@ public class Course implements Serializable{
 			}
 		}
 
-		if( (courseLength != null) && !courseLength[0].equals("")) {
-			for(int i = 0 ; i < courseLength.length ; i++ ) {
-				if(courseLength[i].equalsIgnoreCase("januar")) {
-					data |= INTERNAL_SEASON_AUTUMN_SHORT;
-				}else if(courseLength[i].equalsIgnoreCase("juni")) {
-					data |= INTERNAL_SEASON_SPRING_SHORT;
-				}
-			}
-		}
 
 		return data;
 	}
@@ -465,14 +451,13 @@ public class Course implements Serializable{
 	 * It uses the Course.parseDTUSkema method.
 	 * 
 	 * @param skemagruppe The DTU based skema format with one entry per array-slot (e.g {"E1A", "E2A"} )
-	 * @param periodData The length of the period (3 or 13 weeks) as formatted in the files.
 	 * @param add If true, the new data will be merged with the current rather than overwriting the current. 
 	 */
-	public void setSkemagruppe(String[] skemagruppe, String[] periodData, boolean add) {
+	public void setSkemagruppe(String[] skemagruppe, boolean add) {
 		if(add) {
-			internalSkema |= parseDTUSkema(skemagruppe, periodData);
+			internalSkema |= parseDTUSkema(skemagruppe);
 		} else {
-			internalSkema = parseDTUSkema(skemagruppe, periodData);
+			internalSkema = parseDTUSkema(skemagruppe);
 		}
 	}
 
