@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import cores.Core;
 
 import dataClass.Course;
+import exceptions.AnotherCourseDependsOnThisCourseException;
 import exceptions.ConflictingCourseInStudyPlanException;
 import exceptions.CorruptStudyPlanFileException;
 import exceptions.CourseAlreadyExistsException;
@@ -247,7 +248,7 @@ public class Dialog extends UI {
 	public int commandCheck() {
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return COMMAND_AFSLUT;
-		} else if (indtastet[0].equalsIgnoreCase("hjaelp")) {
+		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
 			return COMMAND_HJAELP;
 		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
 			return COMMAND_VIS_PLAN;
@@ -286,7 +287,8 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede kursus ID var ikke korrekt, prøv igen:");
+				System.out
+						.println("Det indtastede kursus ID var ikke korrekt, prøv igen:");
 				break;
 			}
 			input(1);
@@ -298,7 +300,8 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede semester nummer var ikke korrekt, prøv igen:");
+				System.out
+						.println("Det indtastede semester nummer var ikke korrekt, prøv igen:");
 				break;
 			}
 			input(2);
@@ -366,31 +369,75 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * Remove a course from the users study plan. If the format of the inputted
+	 * Removes a course from the users study plan. If the format of the inputted
 	 * courseID is wrong, it will ask for a new courseID
+	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
-	private void remove() {
-		studyPlanChanged = true;
-		int temp3;
-		try {
-			temp3 = Integer.parseInt(indtastet[1]);
-			if (indtastet[1].length() == 5 && temp3 > -1) {
-				// Kommando sendes til anden class
-				// TODO
+	private void remove() throws IOException {
+		int test = 0;
+		while ((test = courseCheck()) != INPUT_ACCEPTED) {
+			switch (test) {
+			case INPUT_NULL:
+				System.out.println("Indtast venligst et CourseID:");
+				break;
+			case INPUT_NOT_INT:
+			case INPUT_OUT_OF_BOUNDS:
+				System.out.println("Det indtastede kursus ID var ikke korrekt, prøv igen:");
+				break;
 			}
-			System.out.println("Det indtastede kursusnummer var forkert, prøv igen:");
-			System.out.print("> ");
-			// changeCourse(input);
-			remove();
-		} catch (Exception e) {
-
+			input(1);
 		}
+		while ((test = semesterCheck()) != INPUT_ACCEPTED) {
+			switch (test) {
+			case INPUT_NULL:
+				System.out.println("Indtast venligst et semesternummer:");
+				break;
+			case INPUT_NOT_INT:
+			case INPUT_OUT_OF_BOUNDS:
+				System.out.println("Det indtastede semester nummer var ikke korrekt, prøv igen:");
+				break;
+			}
+			input(2);
+		}
+		try{
+			getCore().isCourseInStudyPlan("1", indtastet[2]);
+			System.out.println("Kursus er fjernet fra studieplanen");
+		} catch (CourseDoesNotExistException e) {
+			System.err.println(e);
+		} catch (StudyPlanDoesNotExistException e) {
+			System.err.println(e);
+		} catch (IllegalArgumentException e) {
+			System.err.println(e);
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+			System.err.println(e);
+		}
+		/*
+		try {
+			getCore().addCourseToStudyPlan(indtastet[1],
+					Integer.parseInt(indtastet[2]));
+			System.out.println("Kursus er tilføjet til studieplanen");
+			studyPlanChanged = true;
+		} catch (ConflictingCourseInStudyPlanException e) {
+			System.err.println(e);
+		} catch (CourseDoesNotExistException e) {
+			System.err.println(e);
+		} catch (StudyPlanDoesNotExistException e) {
+			System.err.println(e);
+		} catch (CourseAlreadyExistsException e) {
+			System.err.println(e);
+		} catch (IllegalArgumentException e) {
+			System.err.println(e);
+		} catch (CourseIsMissingDependenciesException e) {
+			System.err.println(e);
+		} catch (CourseCannotStartInThisSemesterException e) {
+			System.err.println(e);
+		}*/
 	}
 
 	/**
-	 * Prints the hjaelp-function. If the funktion is followed by an argument, it
-	 * will print an more detailed discription of how to use the function (if it
-	 * exists).
+	 * Prints the hjaelp-function. If the funktion is followed by an argument,
+	 * it will print an more detailed discription of how to use the function (if
+	 * it exists).
 	 */
 	private void helpMe() {
 		if (indtastet[1] == null) {
@@ -403,122 +450,75 @@ public class Dialog extends UI {
 			System.out.println("virkursus - viser alle info for et enkelt kursus");
 			System.out.println("soeg - soeger i kursusdatabasen om der er noget det ligner det indtastede");
 			System.out.println("gem - gemmer studieplanen saa man kan arbejde videre paa det senere");
-			System.out
-					.println("hent - indlaeser en studieplan saa det er muligt man kan arbejde videre paa den");
+			System.out.println("hent - indlaeser en studieplan saa det er muligt man kan arbejde videre paa den");
 			System.out.println("afslut - afslutter programmet");
 			System.out.println("");
-			System.out
-					.println("For at faa en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjaelp og dernaest kommandoen.");
+			System.out.println("For at faa en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjaelp og dernaest kommandoen.");
 		} else if (indtastet[1].equalsIgnoreCase("afslut")) {
-			System.out
-					.println("Kommandoen afslut soerger for at lukke programmet ned.");
+			System.out.println("Kommandoen afslut soerger for at lukke programmet ned.");
 			System.out.println("Kommandoen tager ikke imod argumenter.");
-			System.out
-					.println("Inden programmet bliver lukket ned, saa bliver man spurgt om man vil gemme sin studie plan.");
+			System.out.println("Inden programmet bliver lukket ned, saa bliver man spurgt om man vil gemme sin studie plan.");
 		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
-			System.out
-					.println("Kommandoen visplan viser studieplanen for et valgt semester.");
-			System.out
-					.println("Et eksempel paa en studieplan kan se saaledes ud: \n");
+			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
+			System.out.println("Et eksempel paa en studieplan kan se saaledes ud: \n");
 			testPlan();
 			System.out.println("");
-			System.out
-					.println("Kommandoen til at fremkalde en studieplan er: \"visplan <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Bliver et semesternummer ikke indtastet, eller det er af forkert format, vil man blive spurgt efter et nyt");
+			System.out.println("Kommandoen til at fremkalde en studieplan er: \"visplan <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Bliver et semesternummer ikke indtastet, eller det er af forkert format, vil man blive spurgt efter et nyt");
 		} else if (indtastet[1].equalsIgnoreCase("udskrivbase")) {
-			System.out
-					.println("Kommandoen udskrivbase udskriver en liste over alle de kuser der er i kursusdatabasen.");
-			System.out
-					.println("Den nuvaerende liste over kurser i databasen ser saaledes ud: \n");
+			System.out.println("Kommandoen udskrivbase udskriver en liste over alle de kuser der er i kursusdatabasen.");
+			System.out.println("Den nuvaerende liste over kurser i databasen ser saaledes ud: \n");
 			printDatabaseList();
 			System.out.println("");
-			System.out
-					.println("Kommandoen modtager ingen argumenter. Oensker man et mere specifikt resultat, brug viskursus.");
+			System.out.println("Kommandoen modtager ingen argumenter. Oensker man et mere specifikt resultat, brug viskursus.");
 		} else if (indtastet[1].equalsIgnoreCase("tilfoej")) {
-			System.out
-					.println("Kommandoen tilfoej tilfoejer et nyt kursus til en studieplan.");
-			System.out
-					.println("Kommandoen skal bruge argumenter, men den kan bruges paa foelgendemaade:");
-			System.out
-					.println("\"tilfoej <kursusnummer> <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer og/eller semesternummer)");
-			System.out
-					.println("vil man blive spurgt efter at indtaste kursusnummer/semester igen hvorefter kommandoen saa vil blive udfoert");
-			System.out
-					.println("(saafrem ifald formatet af det nyligt indtastede er i orden).");
+			System.out.println("Kommandoen tilfoej tilfoejer et nyt kursus til en studieplan.");
+			System.out.println("Kommandoen skal bruge argumenter, men den kan bruges paa foelgendemaade:");
+			System.out.println("\"tilfoej <kursusnummer> <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer og/eller semesternummer)");
+			System.out.println("vil man blive spurgt efter at indtaste kursusnummer/semester igen hvorefter kommandoen saa vil blive udfoert");
+			System.out.println("(saafrem ifald formatet af det nyligt indtastede er i orden).");
 		} else if (indtastet[1].equalsIgnoreCase("fjern")) {
-			System.out
-					.println("Kommandoen fjern vil fjerne et kursus fra en studieplan.");
-			System.out
-					.println("Kommandoen skal bruge et argument, men kan bruges paa foelgende maade:");
-			System.out
-					.println("\"fjern <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer)");
-			System.out
-					.println("vil man blive spurgt efter at indtaste kursusnummer, hvorefter kommandoen vil blive udfoert (saafrem ifald");
-			System.out
-					.println("formatet af det nyligt indtastede er i orden).");
+			System.out.println("Kommandoen fjern vil fjerne et kursus fra en studieplan.");
+			System.out.println("Kommandoen skal bruge et argument, men kan bruges paa foelgende maade:");
+			System.out.println("\"fjern <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer)");
+			System.out.println("vil man blive spurgt efter at indtaste kursusnummer, hvorefter kommandoen vil blive udfoert (saafrem ifald");
+			System.out.println("formatet af det nyligt indtastede er i orden).");
 		} else if (indtastet[1].equalsIgnoreCase("hent")) {
 			System.out.println("Kommandoen hent indlaeser en gemt studieplan.");
-			System.out
-					.println("Brugen af kommandoen kan ske paa foelgende maade:");
-			System.out
-					.println("\"hent <studienummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
-			System.out
-					.println("Det vil vaere anbefalet man har brugt sit studienummer da det i forvejen er unikt. Har man brugt noget andet,");
-			System.out
-					.println("og man har vaeret konsekvent med at bruge det, saa kan man bruge det.");
+			System.out.println("Brugen af kommandoen kan ske paa foelgende maade:");
+			System.out.println("\"hent <studienummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
+			System.out.println("Det vil vaere anbefalet man har brugt sit studienummer da det i forvejen er unikt. Har man brugt noget andet,");
+			System.out.println("og man har vaeret konsekvent med at bruge det, saa kan man bruge det.");
 		} else if (indtastet[1].equalsIgnoreCase("gem")) {
-			System.out
-					.println("Kommandoen gem gemmer en studieplan, saa man kan arbejde videre paa det paa et andet tidspunkt.");
-			System.out
-					.println("Brugen af kommandoen kan ske paa foelgende maade:");
-			System.out
-					.println("\"gem <studenternummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
-			System.out
-					.println("Det anbefalede filnavn vil vaere ens studienummer, hvilket goer det lettere bagefter at finde og eventuelt");
-			System.out
-					.println("vidersende til andre. Men saa laenge man er konsekvent med det man skriver, saa er det fint.");
+			System.out.println("Kommandoen gem gemmer en studieplan, saa man kan arbejde videre paa det paa et andet tidspunkt.");
+			System.out.println("Brugen af kommandoen kan ske paa foelgende maade:");
+			System.out.println("\"gem <studenternummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
+			System.out.println("Det anbefalede filnavn vil vaere ens studienummer, hvilket goer det lettere bagefter at finde og eventuelt");
+			System.out.println("vidersende til andre. Men saa laenge man er konsekvent med det man skriver, saa er det fint.");
 		} else if (indtastet[1].equalsIgnoreCase("viskursus")) {
-			System.out
-					.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
+			System.out.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
 			System.out.println("Kommandoen kan bruges paa foelgende maade:");
-			System.out
-					.println("\"virkursus <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
+			System.out.println("\"virkursus <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
 		} else if (indtastet[1].equalsIgnoreCase("soeg")) {
-			System.out
-					.println("Kommandoen soeg soeger efter det indtastede argument.");
+			System.out.println("Kommandoen soeg soeger efter det indtastede argument.");
 			System.out.println("Kommandoen bruges paa foelgende maade:");
-			System.out
-					.println("\"soeg <tekst>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Den indtastede tekst vil der blive soegt efter i kursusdatabasen for at se om der findes et kursus");
+			System.out.println("\"soeg <tekst>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Den indtastede tekst vil der blive soegt efter i kursusdatabasen for at se om der findes et kursus");
 			System.out.println("som indeholder den givne tekst.");
 		} else if (indtastet[1].equalsIgnoreCase("hjaelp")) {
-			System.out
-					.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
-			System.out
-					.println("Kommandoen kan tage imod argumenter, og kan bruges paa foelgende maade:");
-			System.out
-					.println("\"hjaelp <kommando>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out
-					.println("Kommandoen kraever ikke et argument for at fungere. Indtaster man ingen faar man standard listen over funktioner.");
-			System.out
-					.println("Indtaster man en ukendt kommando faar man besked derom.");
+			System.out.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
+			System.out.println("Kommandoen kan tage imod argumenter, og kan bruges paa foelgende maade:");
+			System.out.println("\"hjaelp <kommando>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Kommandoen kraever ikke et argument for at fungere. Indtaster man ingen faar man standard listen over funktioner.");
+			System.out.println("Indtaster man en ukendt kommando faar man besked derom.");
 		} else if (indtastet[1] != null || !indtastet[1].equals("")) {
-			System.out.println("Kommandoen \"" + indtastet[1]
-					+ "\" genkendes ikke.");
-			System.out
-					.println("For at faa en liste af genkendte kommandoer, tast \"hjaelp\" (uden gaaseoejne)");
+			System.out.println("Kommandoen \"" + indtastet[1] + "\" genkendes ikke.");
+			System.out.println("For at faa en liste af genkendte kommandoer, tast \"hjaelp\" (uden gaaseoejne)");
 		}
 	}
 
