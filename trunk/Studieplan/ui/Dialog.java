@@ -411,27 +411,6 @@ public class Dialog extends UI {
 		} catch (AnotherCourseDependsOnThisCourseException e) {
 			System.err.println(e);
 		}
-		/*
-		try {
-			getCore().addCourseToStudyPlan(indtastet[1],
-					Integer.parseInt(indtastet[2]));
-			System.out.println("Kursus er tilføjet til studieplanen");
-			studyPlanChanged = true;
-		} catch (ConflictingCourseInStudyPlanException e) {
-			System.err.println(e);
-		} catch (CourseDoesNotExistException e) {
-			System.err.println(e);
-		} catch (StudyPlanDoesNotExistException e) {
-			System.err.println(e);
-		} catch (CourseAlreadyExistsException e) {
-			System.err.println(e);
-		} catch (IllegalArgumentException e) {
-			System.err.println(e);
-		} catch (CourseIsMissingDependenciesException e) {
-			System.err.println(e);
-		} catch (CourseCannotStartInThisSemesterException e) {
-			System.err.println(e);
-		}*/
 	}
 
 	/**
