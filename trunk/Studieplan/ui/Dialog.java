@@ -176,7 +176,7 @@ public class Dialog extends UI {
 		System.out.println("Velkommen til 'Læg en Studieplan'");
 		System.out.println("");
 		System.out.println("Programmet kender følgende kommandoer:");
-		System.out.println("hjælp  tilføj  fjern  udskrivbase  visplan  gem  hent  viskursus  afslut");
+		System.out.println("hjælp  tilføj  fjern  udskrivbase  visplan  gem  hent  søg  viskursus  afslut");
 		System.out.println("");
 	}
 
@@ -364,6 +364,7 @@ public class Dialog extends UI {
 			System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
 			System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
 			System.out.println("virkursus - viser alle info for et enkelt kursus");
+			System.out.println("søg - søger i kursusdatabasen om der er noget det ligner det indtastede");
 			System.out.println("gem - gemmer studieplanen så man kan arbejde videre på det senere");
 			System.out.println("hent - indlæser en studieplan så det er muligt man kan arbejde videre på den");
 			System.out.println("afslut - afslutter programmet");
@@ -419,6 +420,12 @@ public class Dialog extends UI {
 			System.out.println("Kommandoen kan bruges på følgende måde:");
 			System.out.println("\"virkursus <kursusnummer>\" (uden gåseøjne og større/mindre-end tegn)");
 			System.out.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
+		} else if (indtastet[1].equalsIgnoreCase("søg")) {
+			System.out.println("Kommandoen søg søger efter det indtastede argument.");
+			System.out.println("Kommandoen bruges på følgende måde:");
+			System.out.println("\"søg <tekst>\" (uden gåseøjne og større/mindre-end tegn)");
+			System.out.println("Den indtastede tekst vil der blive søgt efter i kursusdatabasen for at se om der findes et kursus");
+			System.out.println("som indeholder den givne tekst.");
 		} else if (indtastet[1].equalsIgnoreCase("hjælp")) {
 			System.out.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
 			System.out.println("Kommandoen kan tage imod argumenter, og kan bruges på følgende måde:");
@@ -578,3 +585,8 @@ public class Dialog extends UI {
 		System.out.println("Tak for idag.");
 	}
 }
+
+//TODO
+//FIXME
+//XXX <-- programmøren nåede ikke længere på grund af XXX ....?
+//lav en søg kommando. input skal bare kastes direkte videre i systemet ukritisk.
