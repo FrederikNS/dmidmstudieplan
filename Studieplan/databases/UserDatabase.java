@@ -20,6 +20,8 @@ import exceptions.FilePermissionException;
 /**
  * Handles the saving and loading of StudyPlans.
  * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class UserDatabase {
 

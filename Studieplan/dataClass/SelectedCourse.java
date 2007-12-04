@@ -12,6 +12,8 @@ import exceptions.CourseCannotStartInThisSemesterException;
  * in the Course class, this also contains the data on which semester this course is 
  * taken.
  * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class SelectedCourse extends Course implements Comparable<SelectedCourse>, Serializable {
 
