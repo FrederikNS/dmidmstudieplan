@@ -391,7 +391,6 @@ public class Dialog extends UI {
 	/**
 	 * Removes a course from the users study plan. If the format of the inputted
 	 * courseID is wrong, it will ask for a new courseID
-	 * @author Frederik Nordahl Sabroe
 	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	private void remove() throws IOException {
@@ -547,7 +546,6 @@ public class Dialog extends UI {
 	
 	/**
 	 * Searches for a given string in any course
-	 * @author Frederik Nordahl Sabroe
 	 */
 	private void search() {
 		String searchString = "";
