@@ -593,7 +593,9 @@ public class Dialog extends UI {
 	private void showCourse() throws IOException {
 		while (courseCheck() != INPUT_ACCEPTED) {
 			try {
-				indtastet[1].trim();
+				if(indtastet[1]!=null){
+					indtastet[1].trim();
+				}
 			} catch (Exception e) {
 			}
 			if (indtastet[1] == null || indtastet.equals("")) {
@@ -621,7 +623,7 @@ public class Dialog extends UI {
 			 input(1);
 		}
 		try {
-			getCore().saveStudyPlan(indtastet[1]);
+			getCore().saveStudyPlanAs(indtastet[1]);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -679,7 +681,11 @@ public class Dialog extends UI {
 					killSwitch = true;
 					break;
 				case COMMAND_GEM:
-					savePlan();
+					try {
+							savePlan();
+						} catch (IOException e) {
+							return;
+						}
 					break;
 				}
 			}
