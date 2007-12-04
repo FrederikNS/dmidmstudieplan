@@ -658,6 +658,12 @@ public class Dialog extends UI {
 	 * @throws IOException is thrown if the input is null
 	 */
 	private String readInput() throws IOException {
+		String input=keyboard.readLine();
+		if(input==null){
+			input="";
+		} else {
+			input = input.trim();
+		}
 		return keyboard.readLine().trim();
 	}
 
@@ -695,7 +701,7 @@ public class Dialog extends UI {
 
 // TODO
 // FIXME
-// XXX <-- programmoeren naaede ikke laengere paa grund af XXX ....?
+// XXX <-- programmøren valgte at gemme denne del til senere på grund af porno....?
 // lav en soeg kommando. input skal bare kastes direkte videre i systemet
 // ukritisk.
 // alle errors skal skrives paa system.err
