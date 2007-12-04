@@ -1,5 +1,6 @@
 package test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -31,6 +32,10 @@ public class CoreTest extends TestCase {
 	 * Creates the global variable core
 	 */
 	Core core;
+	/**
+	 * Set to true if the Permission cannot be run.
+	 */
+	boolean disablePermissionTest = false;
 	
 	/**
 	 * Sets up the data the test class uses throughout testing
@@ -41,6 +46,22 @@ public class CoreTest extends TestCase {
 		//Forces the core to not load ui
 		String testSetup[] = {"--no-ui", "--silent"};
 		core = new ProgramCore(testSetup); 
+		File f = new File("PermissionDenied.plan");
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		if(f.canRead()) {
+			if(!f.setReadable(false)) {
+				disablePermissionTest = true;
+				return;
+			}
+		}
+		if(f.canWrite()) {
+			if(!f.setWritable(false)){
+				disablePermissionTest = true;
+				return;
+			}
+		}
 	}
 	
 	/**
@@ -217,7 +238,15 @@ public class CoreTest extends TestCase {
 			//An exception, as expected
 			
 		} catch (IOException e) {
-			fail("Exception: IOException");
+			fail("Exception - IOException: " +e.toString());
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
 		}
 		try {
 			//Tries to load a study plan the user got no permission to read
