@@ -220,21 +220,29 @@ public class CourseBase {
 	 * @return The Statistical Data from the last Database (re)load.
 	 */
 	public String getStatisticalData() {
-		
-		String toReturn = "Load Stastistics:\n" +
-		                     "Total load time: " + loadTime + "ms.\n" +
-		                     "Half-times:\n" +
-		                     " - name (long) load: " + loadTimeFile[DatabaseFiles.NAME_LONG.ordinal()] + "ms\n" +
-		                     " - name (short) load: " + loadTimeFile[DatabaseFiles.NAME_SHORT.ordinal()] + "ms\n" +
-		                     " - short course load: " + loadTimeFile[DatabaseFiles.SHORT_COURSE.ordinal()] + "ms\n"+
-		                     " - multi-period load: " + loadTimeFile[DatabaseFiles.MULTI_PERIOD.ordinal()] + "ms\n" +
-		                     " - skema load: " + loadTimeFile[DatabaseFiles.SKEMA.ordinal()] + "ms\n" +
-		                     " - dependency load: " + loadTimeFile[DatabaseFiles.DEPENDENCY.ordinal()] + "ms\n" +
-		                     "Total amount of courses: " + allCourses.length + "\n" +
-		                     " - Short courses: " + amountOfShortCourses + "\n" +
-		                     " - Multi-period courses: " + amountOfMultiPeriodCourses + "\n" +
-		                     " - Courses with Dependencies: " + amountOfCoursesWithDependencies + "\n" +
-		                     "Removed " + amountOfDoubleCourses + " duplicate courses.\n";
+		String toReturn = "+---------------------------------+\n";
+		String line[] = {"|Load Statistics:",
+				"|Total load time: " + loadTime+ "ms",
+				"|half-times:",
+				"| - name (long) load: " + loadTimeFile[DatabaseFiles.NAME_LONG.ordinal()] + "ms",
+                "| - name (short) load: " + loadTimeFile[DatabaseFiles.NAME_SHORT.ordinal()] + "ms",
+                "| - short course load: " + loadTimeFile[DatabaseFiles.SHORT_COURSE.ordinal()] + "ms",
+                "| - multi-period load: " + loadTimeFile[DatabaseFiles.MULTI_PERIOD.ordinal()] + "ms",
+                "| - skema load: " + loadTimeFile[DatabaseFiles.SKEMA.ordinal()] + "ms",
+                "| - dependency load: " + loadTimeFile[DatabaseFiles.DEPENDENCY.ordinal()] + "ms",
+                "|Total amount of courses: " + allCourses.length,
+                "| - Short courses: " + amountOfShortCourses,
+                "| - Multi-period courses: " + amountOfMultiPeriodCourses,
+                "| - Courses with Dependencies: " + amountOfCoursesWithDependencies,
+                "|Removed " + amountOfDoubleCourses + " duplicate courses."};
+		for(int i = 0;i < 13;i++){
+			while(line[i].length() < 34){
+				line[i]+=" ";
+			}
+			line[i]+="|";
+			toReturn += line[i] + "\n";
+		}
+		toReturn += "+---------------------------------+";
 		return toReturn;
 	}
 
