@@ -127,9 +127,14 @@ public class Dialog extends UI {
 	public final static int COMMAND_GEM = 8;
 
 	/**
-	 * A constant to compare to if the command is "VisKursus"
+	 * A constant to compare to if the command is "Viskursus"
 	 */
 	public final static int COMMAND_VIS_KURSUS = 9;
+
+	/**
+	 * A constant to compare to if the command is "soeg"
+	 */
+	public final static int COMMAND_SOEG = 10;
 
 	/**
 	 * This is the constructor
@@ -240,27 +245,38 @@ public class Dialog extends UI {
 	 *         user wishes to use
 	 */
 	public int commandCheck() {
-		if (indtastet[0].equalsIgnoreCase("afslut")) {
-			return COMMAND_AFSLUT;
-		} else if (indtastet[0].equalsIgnoreCase("hjaelp")) {
-			return COMMAND_HJAELP;
-		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
-			return COMMAND_VIS_PLAN;
-		} else if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
-			return COMMAND_UDSKRIV_BASE;
-		} else if (indtastet[0].equalsIgnoreCase("tilfoej")) {
-			return COMMAND_TILFOEJ;
-		} else if (indtastet[0].equalsIgnoreCase("fjern")) {
-			return COMMAND_FJERN;
-		} else if (indtastet[0].equalsIgnoreCase("hent")) {
-			return COMMAND_HENT;
-		} else if (indtastet[0].equalsIgnoreCase("gem")) {
-			return COMMAND_GEM;
-		} else if (indtastet[0].equalsIgnoreCase("viskursus")) {
-			return COMMAND_VIS_KURSUS;
-		} else {
+		if (indtastet[0] == null) {
 			return COMMAND_NOT_RECOGNIZED;
 		}
+		if (indtastet[0].equalsIgnoreCase("afslut")) {
+			return COMMAND_AFSLUT;
+		} 
+		if (indtastet[0].equalsIgnoreCase("hjaelp")) {
+			return COMMAND_HJAELP;
+		}
+		if (indtastet[0].equalsIgnoreCase("visplan")) {
+			return COMMAND_VIS_PLAN;
+		}
+		if (indtastet[0].equalsIgnoreCase("udskrivbase")) {
+			return COMMAND_UDSKRIV_BASE;
+		} 
+		if (indtastet[0].equalsIgnoreCase("tilfoej")) {
+			return COMMAND_TILFOEJ;
+		}
+		if (indtastet[0].equalsIgnoreCase("fjern")) {
+			return COMMAND_FJERN;
+		}
+		if (indtastet[0].equalsIgnoreCase("hent")) {
+			return COMMAND_HENT;
+		} 
+		if (indtastet[0].equalsIgnoreCase("gem")) {
+			return COMMAND_GEM;
+		}
+		if (indtastet[0].equalsIgnoreCase("viskursus")) {
+			return COMMAND_VIS_KURSUS;
+		}
+		return COMMAND_NOT_RECOGNIZED;
+
 	}
 
 	/**
@@ -413,25 +429,15 @@ public class Dialog extends UI {
 	 * it exists).
 	 */
 	private void helpMe() {
-		if (indtastet[1] == null) {
-			System.out.println("Programmet kender foelgende kommandoer:");
-			System.out.println("hjaelp - viser denne hjaelpe tekst samt forklaring til de forskellige kommandoer");
-			System.out.println("tilfoej - tilfoejer et kursus til kursusplanen. Den mest optimale maade at kalde kommandoen paa ville vaere 'tilfoej kursusnummer semesternummer'");
-			System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale maade at kalde kommandoen paa ville vaere 'fjern kursusnummer'");
-			System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
-			System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
-			System.out.println("virkursus - viser alle info for et enkelt kursus");
-			System.out.println("soeg - soeger i kursusdatabasen om der er noget det ligner det indtastede");
-			System.out.println("gem - gemmer studieplanen saa man kan arbejde videre paa det senere");
-			System.out.println("hent - indlaeser en studieplan saa det er muligt man kan arbejde videre paa den");
-			System.out.println("afslut - afslutter programmet");
-			System.out.println("");
-			System.out.println("For at faa en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjaelp og dernaest kommandoen.");
-		} else if (indtastet[1].equalsIgnoreCase("afslut")) {
+		indtastet[1] = indtastet[0];
+		
+		switch(commandCheck()) {
+		case COMMAND_AFSLUT:
 			System.out.println("Kommandoen afslut soerger for at lukke programmet ned.");
 			System.out.println("Kommandoen tager ikke imod argumenter.");
 			System.out.println("Inden programmet bliver lukket ned, saa bliver man spurgt om man vil gemme sin studie plan.");
-		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
+			break;
+		case COMMAND_VIS_PLAN:
 			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
 			System.out.println("Et eksempel paa en studieplan kan se saaledes ud: \n");
 			System.out.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
@@ -441,60 +447,86 @@ public class Dialog extends UI {
 			System.out.println("");
 			System.out.println("Kommandoen til at fremkalde en studieplan er: \"visplan <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Bliver et semesternummer ikke indtastet, eller det er af forkert format, vil man blive spurgt efter et nyt");
-		} else if (indtastet[1].equalsIgnoreCase("udskrivbase")) {
+			break;
+		case COMMAND_UDSKRIV_BASE:
 			System.out.println("Kommandoen udskrivbase udskriver en liste over alle de kuser der er i kursusdatabasen.");
 			System.out.println("Den nuvaerende liste over kurser i databasen ser saaledes ud: \n");
 			printDatabaseList();
 			System.out.println("");
 			System.out.println("Kommandoen modtager ingen argumenter. Oensker man et mere specifikt resultat, brug viskursus.");
-		} else if (indtastet[1].equalsIgnoreCase("tilfoej")) {
-			System.out.println("Kommandoen tilfoej tilfoejer et nyt kursus til en studieplan.");
-			System.out.println("Kommandoen skal bruge argumenter, men den kan bruges paa foelgendemaade:");
-			System.out.println("\"tilfoej <kursusnummer> <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer og/eller semesternummer)");
-			System.out.println("vil man blive spurgt efter at indtaste kursusnummer/semester igen hvorefter kommandoen saa vil blive udfoert");
-			System.out.println("(saafrem ifald formatet af det nyligt indtastede er i orden).");
-		} else if (indtastet[1].equalsIgnoreCase("fjern")) {
+		break;
+		case COMMAND_FJERN:
 			System.out.println("Kommandoen fjern vil fjerne et kursus fra en studieplan.");
 			System.out.println("Kommandoen skal bruge et argument, men kan bruges paa foelgende maade:");
 			System.out.println("\"fjern <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer)");
 			System.out.println("vil man blive spurgt efter at indtaste kursusnummer, hvorefter kommandoen vil blive udfoert (saafrem ifald");
 			System.out.println("formatet af det nyligt indtastede er i orden).");
-		} else if (indtastet[1].equalsIgnoreCase("hent")) {
+			break;
+		case COMMAND_HENT:
 			System.out.println("Kommandoen hent indlaeser en gemt studieplan.");
 			System.out.println("Brugen af kommandoen kan ske paa foelgende maade:");
 			System.out.println("\"hent <studienummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
 			System.out.println("Det vil vaere anbefalet man har brugt sit studienummer da det i forvejen er unikt. Har man brugt noget andet,");
 			System.out.println("og man har vaeret konsekvent med at bruge det, saa kan man bruge det.");
-		} else if (indtastet[1].equalsIgnoreCase("gem")) {
+			break;
+		case COMMAND_TILFOEJ:
+			System.out.println("Kommandoen tilfoej tilfoejer et nyt kursus til en studieplan.");
+			System.out.println("Kommandoen skal bruge argumenter, men den kan bruges paa foelgendemaade:");
+			System.out.println("\"tilfoej <kursusnummer> <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man ingen eller er argumenter af forkert format (fx bruger bogstaver i kursusnummer og/eller semesternummer)");
+			System.out.println("vil man blive spurgt efter at indtaste kursusnummer/semester igen hvorefter kommandoen saa vil blive udfoert");
+			System.out.println("(saafrem ifald formatet af det nyligt indtastede er i orden).");
+			break;
+		case COMMAND_VIS_KURSUS:
+			System.out.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
+			System.out.println("Kommandoen kan bruges paa foelgende maade:");
+			System.out.println("\"virkursus <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
+			System.out.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
+			break;
+		case COMMAND_GEM:
 			System.out.println("Kommandoen gem gemmer en studieplan, saa man kan arbejde videre paa det paa et andet tidspunkt.");
 			System.out.println("Brugen af kommandoen kan ske paa foelgende maade:");
 			System.out.println("\"gem <studenternummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Indtaster man ikke selv et filnavn, vil man blive spurgt efter det.");
 			System.out.println("Det anbefalede filnavn vil vaere ens studienummer, hvilket goer det lettere bagefter at finde og eventuelt");
 			System.out.println("vidersende til andre. Men saa laenge man er konsekvent med det man skriver, saa er det fint.");
-		} else if (indtastet[1].equalsIgnoreCase("viskursus")) {
-			System.out.println("Kommandoen viskursus viser en alle detaljer omkring et enkelt kursus.");
-			System.out.println("Kommandoen kan bruges paa foelgende maade:");
-			System.out.println("\"virkursus <kursusnummer>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
-			System.out.println("Indtaster man intet kursusnummer (eller den er af forkert format) vil der blive spurgt efter det.");
-		} else if (indtastet[1].equalsIgnoreCase("soeg")) {
+			break;
+		case COMMAND_SOEG:
 			System.out.println("Kommandoen soeg soeger efter det indtastede argument.");
 			System.out.println("Kommandoen bruges paa foelgende maade:");
 			System.out.println("\"soeg <tekst>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Den indtastede tekst vil der blive soegt efter i kursusdatabasen for at se om der findes et kursus");
 			System.out.println("som indeholder den givne tekst.");
-		} else if (indtastet[1].equalsIgnoreCase("hjaelp")) {
+			break;
+		case COMMAND_HJAELP:
 			System.out.println("Denne kommando kommer med en mere uddybende forklaring omkring de forskellige funktioner.");
 			System.out.println("Kommandoen kan tage imod argumenter, og kan bruges paa foelgende maade:");
 			System.out.println("\"hjaelp <kommando>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Kommandoen kraever ikke et argument for at fungere. Indtaster man ingen faar man standard listen over funktioner.");
 			System.out.println("Indtaster man en ukendt kommando faar man besked derom.");
-		} else if (indtastet[1] != null || !indtastet[1].equals("")) {
-			System.out.println("Kommandoen \"" + indtastet[1] + "\" genkendes ikke.");
-			System.out.println("For at faa en liste af genkendte kommandoer, tast \"hjaelp\" (uden gaaseoejne)");
+			break;
+		case COMMAND_NOT_RECOGNIZED:
+			if(indtastet[1] == null || indtastet[1].equals("")) {
+				System.out.println("Programmet kender foelgende kommandoer:");
+				System.out.println("hjaelp - viser denne hjaelpe tekst samt forklaring til de forskellige kommandoer");
+				System.out.println("tilfoej - tilfoejer et kursus til kursusplanen. Den mest optimale maade at kalde kommandoen paa ville vaere 'tilfoej kursusnummer semesternummer'");
+				System.out.println("fjern - fjerner et kursus fra kursusplanen. Den mest optimale maade at kalde kommandoen paa ville vaere 'fjern kursusnummer'");
+				System.out.println("udskrivbase - udskriver en liste over kurser i databasen");
+				System.out.println("visplan - viser en komplet plan over det valgte semindtastetester");
+				System.out.println("virkursus - viser alle info for et enkelt kursus");
+				System.out.println("soeg - soeger i kursusdatabasen om der er noget det ligner det indtastede");
+				System.out.println("gem - gemmer studieplanen saa man kan arbejde videre paa det senere");
+				System.out.println("hent - indlaeser en studieplan saa det er muligt man kan arbejde videre paa den");
+				System.out.println("afslut - afslutter programmet");
+				System.out.println("");
+				System.out.println("For at faa en udvidet forklaring omkring brugen af de enkelte funktioner, indtast hjaelp og dernaest kommandoen.");
+			} else {
+				System.out.println("Kommandoen \"" + indtastet[1] + "\" genkendes ikke.");
+				System.out.println("For at faa en liste af genkendte kommandoer, tast \"hjaelp\" (uden gaaseoejne)");
+			}
+			break;
 		}
 	}
 
