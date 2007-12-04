@@ -144,7 +144,6 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		}
 		int courseStart = this.getStartingPeriod();
 		int courseEnd = this.getFinishingPeriod();
-		System.err.println(getCourseID() + " " + courseStart + " " + courseEnd + " vs " + start + " " + finish);
 		if(courseStart > finish) {
 			return 1;
 		}

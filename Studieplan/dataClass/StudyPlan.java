@@ -246,7 +246,6 @@ public class StudyPlan implements Serializable {
 		boolean toPrint = false;
 		int semesterEnd = (semester<<1);
 		int semesterStart = semesterEnd - 1;
-		System.err.println(semesterStart + " " + semesterEnd);
 		int semesterPattern = 0;
 		int shift = 0;
 		

@@ -353,7 +353,7 @@ public class CourseBase {
 							for(int i = 0 ; i < size ; i++) {
 								Course course = name.get(i);
 								if(course.isSameCourseID(data[0])) {
-									course.updateSeason(data[1], true);
+									course.updateSeason(data[1], false);
 									shortCourse.add(course);
 									break;
 								}
@@ -442,7 +442,7 @@ public class CourseBase {
 				for(int j = i ; j < skema.size() ; j++) {
 					temp2 = skema.get(j);
 					if( (i < j) && temp1.equals(temp2) ) {
-						skema.remove(j);
+						System.err.println(skema.get(j));
 						doubleCourses++;
 					}
 
