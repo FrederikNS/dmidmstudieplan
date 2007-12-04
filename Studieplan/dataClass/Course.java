@@ -672,15 +672,35 @@ public class Course implements Serializable{
 	/**
 	 * Turns the Course into a string in the following format:
 	 * 
-	 * ID Name, skemagruppe: [the DTU skema] (, forudgående kurser: [the ID of dependency courses]) 
+	 * ID Name, skemagruppe: "the DTU skema", "perioder" (, forudgående kurser: [the ID of dependency courses]) 
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
 		String s = courseID  + " " + courseName + ", skemagruppe: " + skemaToString();
+		long skema = internalSkema >> 60;
+		for(int i = 0 ; i < 4 ; i++) {
+			if(0 != ((skema>>i) & 1) ) {
+				switch(i) {
+				case 0:
+					s += ", F";
+					break;
+				case 1:
+					s += ", E";
+					break;
+				case 2:
+					s += ", juni";
+					break;
+				case 3:
+					s += ", januar";
+					break;
+				}
+			}
+		}
 		if(hasDependencies()){
 			s += ", forudgående kurser: " + getDependencies();
 		}
+		s += ".";
 		return s;
 	}
 }
