@@ -186,6 +186,9 @@ public class Dialog extends UI {
 				case COMMAND_GEM:
 					savePlan();
 					break;
+				case COMMAND_SOEG:
+					search();
+					break;
 				case COMMAND_VIS_KURSUS:
 					showCourse();
 					break;
@@ -239,10 +242,9 @@ public class Dialog extends UI {
 
 	/**
 	 * Checks if the command is recognized by the program
-	 * 
 	 * @return is one of the constants defined at the start of the program,
 	 *         which is used by start() to trigger the part of the program the
-	 *         user wishes to use
+	 *         user wishes to use.
 	 */
 	public int commandCheck() {
 		if (indtastet[0] == null) {
@@ -271,6 +273,9 @@ public class Dialog extends UI {
 		} 
 		if (indtastet[0].equalsIgnoreCase("gem")) {
 			return COMMAND_GEM;
+		}
+		if (indtastet[0].equalsIgnoreCase("soeg")) {
+			return COMMAND_SOEG;
 		}
 		if (indtastet[0].equalsIgnoreCase("viskursus")) {
 			return COMMAND_VIS_KURSUS;
@@ -357,7 +362,7 @@ public class Dialog extends UI {
 
 	/**
 	 * Checks if the form of semester number is a possible semester number
-	 * 
+	 * @param offset 
 	 * @return true if the form is correct, else false
 	 */
 	private int semesterCheck(int offset) {
@@ -537,10 +542,19 @@ public class Dialog extends UI {
 		System.out.println(getCore().getCourseBase().toString());
 	}
 	
+	/**
+	 * Searches for a given string in any course
+	 */
 	private void search() {
-		for(int i=0;;)
+		String searchString = "";
+		for(int i=1;i<9;i++) {
+			if(indtastet[i]!=null) {
+				searchString += " " + indtastet[i];	
+			}
+		}
+		searchString.trim();
 		try {
-			getCore().search(indtastet[1]);
+			getCore().search(searchString);
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
 		}
