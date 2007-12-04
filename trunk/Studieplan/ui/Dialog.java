@@ -156,7 +156,8 @@ public class Dialog extends UI {
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			while (killSwitch == false) {
-				System.out.println("Indtast venligst din kommando:");
+				System.out.println("");
+				System.out.println("Indtast venligst en kommando:");
 				indtastet = new String[10];
 				input(0);
 				switch (commandCheck()) {
@@ -211,11 +212,16 @@ public class Dialog extends UI {
 	 * Prints the welcome text when the program starts.
 	 */
 	private void intro() {
-		System.out.println("Velkommen til 'Laeg en Studieplan'");
+		//windows 82 wide  "|23456789012345678901234567890123456789012345678901234567890123456789012345678901|"
+		//ubuntu 80 wide   "|234567890123456789012345678901234567890123456789012345678901234567890123456789|"
 		System.out.println("");
-		System.out.println("Programmet kender foelgende kommandoer:");
-		System.out.println("hjaelp  tilfoej  fjern  udskrivbase  visplan  gem  hent  soeg  viskursus  afslut");
-		System.out.println("");
+		System.out.println("+-------------------------------------------+");
+		System.out.println("|Velkommen til 'Laeg en Studieplan'         |");
+		System.out.println("|                                           |");
+		System.out.println("|Programmet kender foelgende kommandoer:    |");
+		System.out.println("|hjaelp  tilfoej  fjern  udskrivbase        |");
+		System.out.println("|visplan  gem  hent  soeg  viskursus  afslut|");
+		System.out.println("+-------------------------------------------+");
 	}
 
 	/**
@@ -299,8 +305,9 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out
-						.println("Det indtastede kursus ID var ikke korrekt, proev igen:");
+				System.out.println("+------------------------------------------------------+");
+				System.out.println("|Det indtastede kursus ID var ikke korrekt, proev igen:|");
+				System.out.println("+------------------------------------------------------+");
 				break;
 			}
 			input(1);
@@ -312,8 +319,9 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out
-						.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
+				System.out.println("+------------------------------------------------------------+");
+				System.out.println("|Det indtastede semester nummer var ikke korrekt, proev igen:|");
+				System.out.println("+------------------------------------------------------------+");
 				break;
 			}
 			input(2);
@@ -321,7 +329,9 @@ public class Dialog extends UI {
 		try {
 			getCore().addCourseToStudyPlan(indtastet[1],
 					Integer.parseInt(indtastet[2]));
-			System.out.println("Kursus er tilfoejet til studieplanen");
+			System.out.println("+------------------------------------+");
+			System.out.println("|Kursus er tilfoejet til studieplanen|");
+			System.out.println("+------------------------------------+");
 			studyPlanChanged = true;
 		} catch (ConflictingCourseInStudyPlanException e) {
 			System.err.println(e);
@@ -393,16 +403,22 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede kursus ID var ikke korrekt, proev igen:");
+				System.out.println("+------------------------------------------------------+");
+				System.out.println("|Det indtastede kursus ID var ikke korrekt, proev igen:|");
+				System.out.println("+------------------------------------------------------+");
 				break;
 			}
 			input(1);
 		}
 		try{
 			if(getCore().removeCourseFromStudyPlan(indtastet[1])) {
-				System.out.println("Kursus er fjernet fra studieplanen");
+				System.out.println("+----------------------------------+");
+				System.out.println("|Kursus er fjernet fra studieplanen|");
+				System.out.println("+----------------------------------+");
 			}else{
-				System.out.println("Kurset kunne ikke fjernes");
+				System.out.println("+-------------------------+");
+				System.out.println("|Kurset kunne ikke fjernes|");
+				System.out.println("+-------------------------+");
 			}
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
@@ -561,7 +577,9 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
+				System.out.println("+------------------------------------------------------------+");
+				System.out.println("|Det indtastede semester nummer var ikke korrekt, proev igen:|");
+				System.out.println("+------------------------------------------------------------+");
 				break;
 			}
 			input(1);
@@ -588,7 +606,9 @@ public class Dialog extends UI {
 			if (indtastet[1] == null || indtastet.equals("")) {
 				System.out.println("Indtast venligst et kursus nummer:");
 			} else {
-				System.out.println("Det indtastede kursus nummer var ikke korrekt, prøv igen:");
+				System.out.println("+---------------------------------------------------------+");
+				System.out.println("|Det indtastede kursus nummer var ikke korrekt, prøv igen:|");
+				System.out.println("+---------------------------------------------------------+");
 			}
 			input(1);
 		}
@@ -680,6 +700,8 @@ public class Dialog extends UI {
 				}
 			}
 		}
-		System.out.println("Tak for idag.");
+		System.out.println("+-------------+");
+		System.out.println("|Tak for idag.|");
+		System.out.println("+-------------+");
 	}
 }
