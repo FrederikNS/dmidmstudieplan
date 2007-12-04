@@ -145,165 +145,7 @@ public class Course implements Serializable{
 	 */ 
 	public static final int INTERNAL_WEDNESDAY_AFTERNOON  = 0x00000200;
 
-
-	/**
-	 * Parses a DTU based skema and turns it into the internal skema (Bit-flags).
-	 * 
-	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
-	 * 
-	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
-	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
-	 */
-	public static int parseDTUSkema(String DTUdata) {
-		String[] DTUarray = null;
-		if(DTUdata != null) {
-			DTUarray = DTUdata.split(" ");
-		}
-		return parseDTUSkema(DTUarray);
-	}
-	/**
-	 * Parses a DTU based skema and turns it into the internal skema (Bit-flags).
-	 * 
-	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
-	 * 
-	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
-	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
-	 */
-	public static int parseDTUSkema(String[] DTUdata) {
-		int data = 0;
-		if(DTUdata != null) {
-			for(int i = 0; i < DTUdata.length ; i++ ){
-				data |= parseSingleDTUSkema(DTUdata[i]);
-			}
-		}
 		
-		return data;
-	}
-
-
-	/**
-	 * Transforms an internal skema (bit-flags) to the DTU skema standard. 
-	 * This will not print short courses skemas.
-	 * 
-	 * This will always output the skema in the same order (Spring before Autumn courses) and
-	 * thus cannot garantuee to them in the same order as they were converted from.
-	 * 
-	 * This method heavily exploits the Bit-flags of the INTERNAL_*DAG_* constants.
-	 * The flags have been added in such an order that if one loops through them they will
-	 * appear in the order: A1 to A5 and then B1 to B5
-	 * 
-	 * This has been exploited so that two simple math operations generate the digit and the trailing letter,
-	 * using the following: 
-	 * 		
-	 * 		((i%5)+1) + (1 == (i/5)?"B":"A")
-	 * 
-	 * NOTE: This will return "", if there are no days for long courses.
-	 * 
-	 * @param internalRepresentation An internal representation (bit-flags) of the skema.
-	 * @return The DTU skema in a single string.
-	 */
-	public static String internalSkemaToExternString(int internalRepresentation) {
-		if(0 == (internalRepresentation & INTERNAL_DAYS)) {
-			return "";
-		}
-		int flag;
-		String toReturn = "";
-		int autumnDays, springDays;
-		
-		autumnDays = (internalRepresentation & INTERNAL_DAYS_AUTUMN) >> INTERNAL_SHIFT_AUTUMN;
-		springDays = (internalRepresentation & INTERNAL_DAYS_SPRING) >> INTERNAL_SHIFT_SPRING;
-		
-		for(int i = 0 ; i < 10 ; i++) {
-			flag = springDays >> i;
-			if(0 != (flag & 1)) {
-				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-			}
-		}
-		for(int i = 0 ; i < 10 ; i++) {
-			flag = autumnDays >> i;
-			if(0 != (flag & 1)) {
-				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
-			}
-		}
-
-		return toReturn.trim();
-	}
-
-	/**
-	 * Converts a single DTU skema group into an internal skema bit-flag.
-	 * 
-	 * If the input is longer that 3 characters long (after being trimmed), it will read the
-	 * three last characters of the string and disregard the rest!
-	 * 
-	 * The DTU skema is parsed by exploiting the fact that all parts of such a skema 
-	 * are valid hexadecimals and thus the Integer.parseInt is used on it, attempting to 
-	 * parse it as a hexadecimal.
-	 *  
-	 * 
-	 * @param DTUplan A single DTU skema group (e.g. E1A for monday morning)
-	 * @return A set of internal skema bit-flags or 0, if the input was not a DTU skema group. 
-	 */
-	public static int parseSingleDTUSkema(String DTUplan) {
-		//Reading only the three last characters
-		DTUplan = DTUplan.trim();
-		int length = DTUplan.length();
-		if(length > 3) {
-			DTUplan = DTUplan.substring(length-3, length);
-		}
-		int skema;
-		try {
-			skema = Integer.parseInt(DTUplan, 16);
-		} catch(Exception e) {
-			return 0;
-		}
-		int toReturn = 0;
-		switch(skema & 0xff) {
-		case 0x1A:
-			toReturn = INTERNAL_MONDAY_MORNING;
-			break;
-		case 0x2A:
-			toReturn = INTERNAL_MONDAY_AFTERNOON;
-			break;
-		case 0x3A:
-			toReturn = INTERNAL_TUESDAY_MORNING;
-			break;
-		case 0x4A:
-			toReturn = INTERNAL_TUESDAY_AFTERNOON;
-			break;
-		case 0x5A:
-			toReturn = INTERNAL_WEDNESDAY_MORNING;
-			break;				
-		case 0x1B:
-			toReturn = INTERNAL_THURSDAY_AFTERNOON;
-			break;
-		case 0x2B:
-			toReturn = INTERNAL_THURSDAY_MORNING;
-			break;
-		case 0x3B:
-			toReturn = INTERNAL_FRIDAY_AFTERNOON;
-			break;
-		case 0x4B:
-			toReturn = INTERNAL_FRIDAY_MORNING;
-			break;
-		case 0x5B:
-			toReturn = INTERNAL_WEDNESDAY_AFTERNOON;
-			break;				
-		default: 
-			return 0;
-		}
-
-		if((skema & 0xf00) == 0xf00) {
-			toReturn <<= INTERNAL_SHIFT_SPRING;
-			toReturn |= INTERNAL_SEASON_SPRING_LONG;
-		} else if((skema & 0xf00) == 0xe00) {
-			toReturn <<= INTERNAL_SHIFT_AUTUMN;
-			toReturn |= INTERNAL_SEASON_AUTUMN_LONG;
-		} else {
-			System.err.println("Malformated skemagruppe... Did not contain period");
-		}
-
-		return toReturn;
-	}
 
 	/**
 	 * The ID of the course.
@@ -360,6 +202,103 @@ public class Course implements Serializable{
 		courseID = "";
 	}
 
+	
+
+	/**
+	 * Parses a DTU based skema and turns it into the internal skema (Bit-flags).
+	 * 
+	 * If either the DTUdata or the courseLength input is missing, that check will be skipped!
+	 * 
+	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
+	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
+	 * @throws IllegalArgumentException If the DTU plan was malformatted.
+	 */
+	private int parseDTUSkema(String DTUdata) throws IllegalArgumentException {
+		int data = 0;
+		if(DTUdata != null) {
+			String[] DTUarray = DTUdata.split(" ");
+			for(int i = 0; i < DTUarray.length ; i++ ){
+				data |= parseSingleDTUSkema(DTUarray[i]);
+			}
+		}
+		return data;
+	}
+	
+
+	/**
+	 * Converts a single DTU skema group into an internal skema bit-flag.
+	 * 
+	 * The DTU skema is parsed by exploiting the fact that all parts of such a skema 
+	 * are valid hexadecimals and thus the Integer.parseInt is used on it, attempting to 
+	 * parse it as a hexadecimal.
+	 *  
+	 * 
+	 * @param DTUplan A single DTU skema group (e.g. E1A for monday morning)
+	 * @return A set of internal skema bit-flags or 0, if the input was not a DTU skema group. 
+	 * @throws IllegalArgumentException If the DTU plan was malformatted.
+	 */
+	private int parseSingleDTUSkema(String DTUplan) throws IllegalArgumentException {
+		//Reading only the three last characters
+		DTUplan = DTUplan.trim();
+		int length = DTUplan.length();
+		if(length > 3) {
+			throw new IllegalArgumentException();
+		}
+		int skema;
+		try {
+			skema = Integer.parseInt(DTUplan, 16);
+		} catch(Exception e) {
+			throw new IllegalArgumentException();
+		}
+		int toReturn = 0;
+		switch(skema & 0xff) {
+		case 0x1A:
+			toReturn = INTERNAL_MONDAY_MORNING;
+			break;
+		case 0x2A:
+			toReturn = INTERNAL_MONDAY_AFTERNOON;
+			break;
+		case 0x3A:
+			toReturn = INTERNAL_TUESDAY_MORNING;
+			break;
+		case 0x4A:
+			toReturn = INTERNAL_TUESDAY_AFTERNOON;
+			break;
+		case 0x5A:
+			toReturn = INTERNAL_WEDNESDAY_MORNING;
+			break;				
+		case 0x1B:
+			toReturn = INTERNAL_THURSDAY_AFTERNOON;
+			break;
+		case 0x2B:
+			toReturn = INTERNAL_THURSDAY_MORNING;
+			break;
+		case 0x3B:
+			toReturn = INTERNAL_FRIDAY_AFTERNOON;
+			break;
+		case 0x4B:
+			toReturn = INTERNAL_FRIDAY_MORNING;
+			break;
+		case 0x5B:
+			toReturn = INTERNAL_WEDNESDAY_AFTERNOON;
+			break;				
+		default: 
+			throw new IllegalArgumentException();
+		}
+
+		if((skema & 0xf00) == 0xf00) {
+			toReturn <<= INTERNAL_SHIFT_SPRING;
+			toReturn |= INTERNAL_SEASON_SPRING_LONG;
+		} else if((skema & 0xf00) == 0xe00) {
+			toReturn <<= INTERNAL_SHIFT_AUTUMN;
+			toReturn |= INTERNAL_SEASON_AUTUMN_LONG;
+		} else {
+			throw new IllegalArgumentException();
+		}
+
+		return toReturn;
+	}
+
 	/**
 	 * Get the course ID of the Course.
 	 * @return the courseID
@@ -369,20 +308,49 @@ public class Course implements Serializable{
 	}
 
 	/**
-	 * Turn the internal skema representation into the DTU format.
+	 * Transforms an internal skema (bit-flags) to the DTU skema standard. 
+	 * This will not print short courses skemas.
 	 * 
-	 * This method uses the Course.internalSkemaToExternString(int) method.
+	 * This will always output the skema in the same order (Spring before Autumn courses) and
+	 * thus cannot garantuee to them in the same order as they were converted from.
 	 * 
-	 * NOTE: this will return "" if the course has no lections in long periods.
+	 * This method heavily exploits the Bit-flags of the INTERNAL_*DAG_* constants.
+	 * The flags have been added in such an order that if one loops through them they will
+	 * appear in the order: A1 to A5 and then B1 to B5
 	 * 
-	 * @return The skema in the DTU format.
-	 * @see dataClass.Course#internalSkemaToExternString(int)
+	 * This has been exploited so that two simple math operations generate the digit and the trailing letter,
+	 * using the following: 
+	 * 		
+	 * 		((i%5)+1) + (1 == (i/5)?"B":"A")
+	 * 
+	 * NOTE: This will return "", if there are no days for long courses.
+	 * 
+	 * @return The DTU skema in a single string.
 	 */
 	public String skemaToString() {
 		if(0 == (internalSkema & INTERNAL_DAYS)) {
 			return "";
 		}
-		return internalSkemaToExternString(internalSkema);
+		int flag;
+		String toReturn = "";
+		int autumnDays, springDays;
+		
+		autumnDays = (internalSkema & INTERNAL_DAYS_AUTUMN) >> INTERNAL_SHIFT_AUTUMN;
+		springDays = (internalSkema & INTERNAL_DAYS_SPRING) >> INTERNAL_SHIFT_SPRING;
+		
+		for(int i = 0 ; i < 10 ; i++) {
+			flag = springDays >> i;
+			if(0 != (flag & 1)) {
+				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+			}
+		}
+		for(int i = 0 ; i < 10 ; i++) {
+			flag = autumnDays >> i;
+			if(0 != (flag & 1)) {
+				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
+			}
+		}
+		return toReturn.trim();
 	}
 
 	/**
@@ -471,10 +439,11 @@ public class Course implements Serializable{
 	 * 
 	 * It uses the Course.parseDTUSkema method.
 	 * 
-	 * @param skemagruppe The DTU based skema format with one entry per array-slot (e.g {"E1A", "E2A"} )
+	 * @param skemagruppe The DTU based skema format with exactly one space delimiting each of them.
 	 * @param add If true, the new data will be merged with the current rather than overwriting the current. 
+	 * @throws IllegalArgumentException If the Skemagruppe is malformatted.
 	 */
-	public void setSkemagruppe(String[] skemagruppe, boolean add) {
+	public void setSkemagruppe(String skemagruppe, boolean add) throws IllegalArgumentException {
 		if(add) {
 			internalSkema |= parseDTUSkema(skemagruppe);
 		} else {
@@ -546,7 +515,6 @@ public class Course implements Serializable{
 			temp &= temp - 1;
 		}
 		if(toReturn == 5) {
-			System.err.println(this.courseID + " is 5 periods ??");
 			toReturn = 4;
 		}
 		return toReturn;
@@ -666,7 +634,7 @@ public class Course implements Serializable{
 		if(hasDependencies()){
 			s += ", forudgående kurser: " + getDependencies();
 		}
-		s += ". Laengde: " + getAmountOfPeriods() + " 0x"+ Long.toHexString(internalSkema);
+		s += " Laengde: " + getAmountOfPeriods() +".";
 		return s;
 	}
 }

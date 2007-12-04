@@ -78,7 +78,7 @@ public class CourseBaseTest extends TestCase {
 	 * Test that the getAllCourses does not allow methods outside CourseBase to alter in the 
 	 * list inside CourseBase. 
 	 */
-	public void testRandomStuff() {
+	public void testOverwriteProtection() {
 		Course[] temp = base.getAllCourses();		
 		temp[0] = null;
 		assertNotNull(base.getAllCourses()[0]);
