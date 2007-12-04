@@ -614,38 +614,37 @@ public class Dialog extends UI {
 
 	/**
 	 * Saves the current studyplan
+	 * @throws IOException 
 	 */
-	private void savePlan() {
-		if (indtastet[1] != null) {
-			try {
-				getCore().saveStudyPlan(indtastet[1]);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-		} else {
-			// spoerger efter filnavn/studienummer
+	private void savePlan() throws IOException {
+		while(indtastet[1] == null) {
+			 input(1);
 		}
-		// TODO
+		try {
+			getCore().saveStudyPlan(indtastet[1]);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	/**
 	 * Load a previously saved studyplan
+	 * @throws IOException 
 	 */
-	private void loadPlan() {
-		if (indtastet[1] != null) {
-			try {
-				getCore().loadStudyPlan(indtastet[1]);
-			} catch (FilePermissionException e) {
-				System.out.println(e);
-			} catch (FileNotFoundException e) {
-				System.out.println(e);
-			} catch (CorruptStudyPlanFileException e) {
-				System.out.println(e);
-			} catch (IOException e) {
-				System.out.println(e);
-			}
-		} else {
-			// spoerger efter filnavn/studienummer
+	private void loadPlan() throws IOException {
+		while(indtastet[1]==null) {
+			input(1);
+		}
+		try {
+			getCore().loadStudyPlan(indtastet[1]);
+		} catch (FilePermissionException e) {
+			System.out.println(e);
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (CorruptStudyPlanFileException e) {
+			System.out.println(e);
+		} catch (IOException e) {
+			System.out.println(e);
 		}
 		// TODO
 	}
