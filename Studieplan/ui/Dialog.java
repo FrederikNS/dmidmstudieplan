@@ -565,7 +565,7 @@ public class Dialog extends UI {
 			input(1);
 		}
 		try {
-			getCore().getStudyPlan().printSemester(Integer.parseInt(indtastet[1]));
+			System.out.println(getCore().getStudyPlan().printSemester(Integer.parseInt(indtastet[1])));
 		} catch (Exception e) {
 			System.err.println(e);
 		}
@@ -583,10 +583,9 @@ public class Dialog extends UI {
 			} catch (Exception e) {
 			}
 			if (indtastet[1] == null || indtastet.equals("")) {
-				System.out.println("Indtast venligst et CourseID:");
+				System.out.println("Indtast venligst et kursus nummer:");
 			} else {
-				System.out
-						.println("The CourseID you entered was incorrect, please try again");
+				System.out.println("Det indtastede kursus nummer var ikke korrekt, prøv igen:");
 			}
 			input(1);
 		}
