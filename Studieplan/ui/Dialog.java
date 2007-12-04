@@ -395,9 +395,10 @@ public class Dialog extends UI {
 			input(2);
 		}
 		try{
-			if(getCore().isCourseInStudyPlan("1", indtastet[2])) {
-				getCore().removeCourseFromStudyPlan("1", indtastet[2]);
+			if(getCore().removeCourseFromStudyPlan("1", indtastet[2])) {
 				System.out.println("Kursus er fjernet fra studieplanen");
+			}else{
+				System.out.println("Kurset kunne ikke fjernes");
 			}
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
