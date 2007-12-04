@@ -208,13 +208,9 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * This is the metheod which receives the input from the keyboard
-	 * 
-	 * @param offset
-	 *            serves to change where the input from the keyboard will be put
-	 *            in the "indtastet[]" string array
-	 * @throws IOException
-	 *             triggers if buffered reader which comes from stdin is closed
+	 * This is the method which receives the input from the keyboard
+	 * @param offset serves to change where the input from the keyboard will be put in the "indtastet[]" string array
+	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	public void input(int offset) throws IOException {
 		String temp[];
@@ -246,7 +242,7 @@ public class Dialog extends UI {
 	public int commandCheck() {
 		if (indtastet[0].equalsIgnoreCase("afslut")) {
 			return COMMAND_AFSLUT;
-		} else if (indtastet[0].equalsIgnoreCase("hjælp")) {
+		} else if (indtastet[0].equalsIgnoreCase("hjaelp")) {
 			return COMMAND_HJAELP;
 		} else if (indtastet[0].equalsIgnoreCase("visplan")) {
 			return COMMAND_VIS_PLAN;
@@ -279,17 +275,17 @@ public class Dialog extends UI {
 		while ((test = courseCheck()) != INPUT_ACCEPTED) {
 			switch (test) {
 			case INPUT_NULL:
-				System.out.println("Indtast venligst et CourseID:");
+				System.out.println("Indtast venligst et kursus ID:");
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
 				System.out
-						.println("Det indtastede kursus ID var ikke korrekt, prøv igen:");
+						.println("Det indtastede kursus ID var ikke korrekt, proev igen:");
 				break;
 			}
 			input(1);
 		}
-		while ((test = semesterCheck()) != INPUT_ACCEPTED) {
+		while ((test = semesterCheck(2)) != INPUT_ACCEPTED) {
 			switch (test) {
 			case INPUT_NULL:
 				System.out.println("Indtast venligst et semesternummer:");
@@ -297,7 +293,7 @@ public class Dialog extends UI {
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
 				System.out
-						.println("Det indtastede semester nummer var ikke korrekt, prøv igen:");
+						.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
 				break;
 			}
 			input(2);
@@ -305,7 +301,7 @@ public class Dialog extends UI {
 		try {
 			getCore().addCourseToStudyPlan(indtastet[1],
 					Integer.parseInt(indtastet[2]));
-			System.out.println("Kursus er tilføjet til studieplanen");
+			System.out.println("Kursus er tilfoejet til studieplanen");
 			studyPlanChanged = true;
 		} catch (ConflictingCourseInStudyPlanException e) {
 			System.err.println(e);
@@ -348,11 +344,11 @@ public class Dialog extends UI {
 	 * 
 	 * @return true if the form is correct, else false
 	 */
-	private int semesterCheck() {
-		if (indtastet[1] == null)
+	private int semesterCheck(int offset) {
+		if (indtastet[offset] == null)
 			return INPUT_NULL;
 		try {
-			int temp2 = Integer.parseInt(indtastet[2]);
+			int temp2 = Integer.parseInt(indtastet[offset]);
 			if (temp2 > 0 && temp2 < 21) {
 				return INPUT_ACCEPTED;
 			}
@@ -377,19 +373,19 @@ public class Dialog extends UI {
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede kursus ID var ikke korrekt, prøv igen:");
+				System.out.println("Det indtastede kursus ID var ikke korrekt, proev igen:");
 				break;
 			}
 			input(1);
 		}
-		while ((test = semesterCheck()) != INPUT_ACCEPTED) {
+		while ((test = semesterCheck(2)) != INPUT_ACCEPTED) {
 			switch (test) {
 			case INPUT_NULL:
 				System.out.println("Indtast venligst et semesternummer:");
 				break;
 			case INPUT_NOT_INT:
 			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede semester nummer var ikke korrekt, prøv igen:");
+				System.out.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
 				break;
 			}
 			input(2);
@@ -505,7 +501,17 @@ public class Dialog extends UI {
 	private void printDatabaseList() {
 		System.out.println(getCore().getCourseBase().toString());
 	}
-
+	
+	private void search() {
+		for(int i=0;;)
+		try {
+			getCore().search(indtastet[1]);
+		} catch (CourseDoesNotExistException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Prints the plan as it is
 	 */
@@ -618,8 +624,7 @@ public class Dialog extends UI {
 	 * null, it will throw an exception.
 	 * 
 	 * @return the input without spaces
-	 * @throws IOException
-	 *             is thrown if the input is null
+	 * @throws IOException is thrown if the input is null
 	 */
 	private String readInput() throws IOException {
 		return keyboard.readLine().trim();
