@@ -86,7 +86,10 @@ public class CourseTest extends TestCase {
 			return;
 		}
 
-		assertTrue(cc.conflictingSkema(cc2));
+		System.out.println(Long.toHexString(cc.getFullSkemaData()));
+		System.out.println(Long.toHexString(cc2.getFullSkemaData()));
+		System.out.println(Long.toHexString(cc.conflictingSkema(cc2)));
+		assertTrue(cc.conflictingSkema(cc2) == 0);
 	}
 
 	/**

@@ -27,11 +27,11 @@ public class Course implements Serializable{
 	/**
 	 * The bit-flag for the long part of the autum semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x4000000000000000L;
+	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x2000000000000000L;
 	/**
 	 * The bit-flag for the short part of the spring semester
 	 */
-	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x2000000000000000L;
+	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x4000000000000000L;
 	/**
 	 * The bit-flag for the long part of the spring semester
 	 */
@@ -54,11 +54,11 @@ public class Course implements Serializable{
 	/**
 	 * The bit-flag for courses that must start in the long part of the autum semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0400000000000000L;
+	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0200000000000000L;
 	/**
 	 * The bit-flag for courses that must start in the short part of the spring semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0200000000000000L;
+	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0400000000000000L;
 	/**
 	 * The bit-flag for courses that must start in the long part of the spring semester
 	 */
@@ -70,13 +70,13 @@ public class Course implements Serializable{
 	 */
 	public static final int INTERNAL_SHIFT_SPRING_LONG     = 0;
 	/**
-	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Autumn part of the semester 
-	 */
-	public static final int INTERNAL_SHIFT_AUTUMN_LONG     = 12;
-	/**
 	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Spring part of the semester 
 	 */
 	public static final int INTERNAL_SHIFT_SPRING_SHORT    = 24;
+	/**
+	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Autumn part of the semester 
+	 */
+	public static final int INTERNAL_SHIFT_AUTUMN_LONG     = 12;
 	/**
 	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Autumn part of the semester 
 	 */
@@ -93,13 +93,13 @@ public class Course implements Serializable{
 	 */
 	public static final long INTERNAL_DAYS_AUTUMN_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_SHORT;
 	/**
-	 * Filter for isolating all the days bit-flags for the short spring. 
-	 */
-	public static final long INTERNAL_DAYS_SPRING_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_SHORT;
-	/**
 	 * Filter for isolating all the days bit-flags for the long autumn.
 	 */
 	public static final long INTERNAL_DAYS_AUTUMN_LONG     = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_LONG;
+	/**
+	 * Filter for isolating all the days bit-flags for the short spring. 
+	 */
+	public static final long INTERNAL_DAYS_SPRING_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_SHORT;
 	/**
 	 * Filter for isolating all the days bit-flags for the long spring. 
 	 */
@@ -345,8 +345,12 @@ public class Course implements Serializable{
 	 * @throws IllegalArgumentException Thrown if the ID is null, not exactly 5 characters long, is a negative number, or if the name is null or "".
 	 */
 	public Course(String courseID, String courseName) throws IllegalArgumentException {
-		if(courseID == null || courseID.length() != 5 || Integer.parseInt(courseID) < 0) {
-			throw new IllegalArgumentException("Course ID is invalid");
+		try {
+			if(courseID == null || courseID.length() != 5 || Integer.parseInt(courseID) < 0) {
+				throw new IllegalArgumentException("Course ID is invalid");
+			}
+		}catch(NumberFormatException e) {
+			throw new IllegalArgumentException("CourseID is invalid");
 		}
 		if(courseName == null || courseName.equals("")) {
 			throw new IllegalArgumentException("Name is blank");
@@ -403,12 +407,37 @@ public class Course implements Serializable{
 	/**
 	 * Test if two courses share at least one lession during the week.
 	 * @param compareTo the course to compare with.
-	 * @return true, if this course and compareTo have at least one lession at the same time during a week. 
+	 * @return 0 if there was no conflicts, else the season in which they have conflicts. 
 	 */
-	public boolean conflictingSkema(Course compareTo) {
+	public long conflictingSkema(Course compareTo) {
 		long compare = compareTo.getFullSkemaData();
-		compare &= ~(INTERNAL_DAYS_ALL);
-		return 0 != (compare & internalSkema);
+		long currentTest = 0, possibleConflict = 0;
+		long conflictPeriods = 0;
+		for(int i = 0 ; i < 4 ; i++) {
+			switch(i) {
+			case 0:
+				currentTest = INTERNAL_DAYS_SPRING_LONG;
+				possibleConflict = INTERNAL_SEASON_SPRING_LONG;
+				break;
+			case 1:
+				currentTest = INTERNAL_DAYS_SPRING_SHORT;
+				possibleConflict = INTERNAL_SEASON_SPRING_SHORT;
+				break;
+			case 2:
+				currentTest = INTERNAL_DAYS_AUTUMN_LONG;
+				possibleConflict = INTERNAL_SEASON_AUTUMN_LONG;
+				break;
+			case 3:
+				currentTest = INTERNAL_DAYS_AUTUMN_SHORT;
+				possibleConflict = INTERNAL_SEASON_AUTUMN_SHORT;
+				break;
+			}
+			
+			if(0 != ((currentTest & compare) & internalSkema)) {
+				conflictPeriods |= possibleConflict;
+			}
+		}
+		return conflictPeriods;
 	}
 
 	/**
@@ -700,7 +729,7 @@ public class Course implements Serializable{
 		if(hasDependencies()){
 			s += ", forudgående kurser: " + getDependencies();
 		}
-		s += ".";
+		s += ". 0x"+ Long.toHexString(internalSkema);
 		return s;
 	}
 }

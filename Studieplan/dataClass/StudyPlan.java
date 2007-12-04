@@ -132,7 +132,6 @@ public class StudyPlan implements Serializable {
 			throw new CourseCannotStartInThisSemesterException(toAdd.getCourseID(), toAdd.getStartingSemester());
 			
 		}
-		
 		int missingDependencies = toAdd.getAmountOfDependencies();
 		String dependencies = toAdd.getDependencies();
 		String met = null;
@@ -153,7 +152,9 @@ public class StudyPlan implements Serializable {
 					}
 				}
 				else if(placement == 0) {
-					if(planned[i].conflictingSkema(toAdd)) {
+					long conflicts = planned[i].conflictingSkema(toAdd);
+					if(conflicts != 0) {
+						System.err.println("Possible Conflict: " + Long.toHexString(toAdd.getFullSkemaData()) + " vs " + Long.toHexString(planned[i].getFullSkemaData()) + " - conflict in: " + Long.toHexString(conflicts) );
 						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 					}
 				}
