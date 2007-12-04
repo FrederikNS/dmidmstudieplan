@@ -40,14 +40,13 @@ public class CourseTest extends TestCase {
 	 */
 	public void testSkemaToString() {
 		try {
-			//Uses course 01005 because it got more schema groups
+			//Uses course 01005 because it got more "skema" groups
 			CourseBase cb = new CourseBase();
 			cc = new SelectedCourse(cb.findCourse("01005"), 1);
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
 		}
-		System.out.println(cc);
 		//Sets up a string array with the correct schema groups
 		String test[] = {"E5A","E5B","E3B","F5A","F5B","F3B"};
 		String skema = cc.skemaToString();
@@ -81,15 +80,11 @@ public class CourseTest extends TestCase {
 		Course cc2;
 		try {
 			CourseBase cb = new CourseBase();
-			cc2 = cb.findCourse("01005");
+			cc2 = cb.findCourse("02121");
 		} catch (Exception e) {
 			fail("Course not found");
 			return;
 		}
-
-		System.out.println(Long.toHexString(cc.getFullSkemaData()));
-		System.out.println(Long.toHexString(cc2.getFullSkemaData()));
-		System.out.println(Long.toHexString(cc.conflictingSkema(cc2)));
 		assertTrue(cc.conflictingSkema(cc2) == 0);
 	}
 
@@ -124,7 +119,7 @@ public class CourseTest extends TestCase {
 	 * Testing if the setFullSkemaData obeys the "ignore 0" as it says it will.
 	 */
 	public void testSetFullSkemaDataNegative() {
-		long currentSkema = cc.getFullSkemaData();
+		int currentSkema = cc.getFullSkemaData();
 		cc.setFullSkemaData(0);
 		assertTrue( cc.getFullSkemaData() == currentSkema);
 	}
@@ -133,14 +128,37 @@ public class CourseTest extends TestCase {
 	 * Test if the setSkemagruppe method accurately parse the data required.
 	 */
 	public void testSetSkemagruppePositive() {
-		fail("Not yet implemented");
+		cc.setSkemagruppe("E1A", false);
+		int test = 0;
+		int skema = ((Course.INTERNAL_MONDAY_MORNING << Course.INTERNAL_SHIFT_AUTUMN) | Course.INTERNAL_SEASON_AUTUMN_LONG);
+		if(cc.getFullSkemaData() == skema) {
+			test++;
+		}
+		cc.setSkemagruppe("E2A", true);
+		skema |= Course.INTERNAL_MONDAY_AFTERNOON << Course.INTERNAL_SHIFT_AUTUMN;
+		if(cc.getFullSkemaData() == skema)   {
+			test++;
+		}
+		cc.setSkemagruppe("F3A", false);
+		skema = ((Course.INTERNAL_TUESDAY_MORNING << Course.INTERNAL_SHIFT_SPRING) | Course.INTERNAL_SEASON_SPRING_LONG);
+		if(cc.getFullSkemaData() == skema)   {
+			test++;
+		}
+		assertTrue(test == 3);
 	}
 
 	/**
 	 * Test if the setSkemagruppe method ignore mal-formatted data as it claims it will
 	 */
 	public void testSetSkemagruppeNegative() {
-		fail("Not yet implemented");
+		try {
+			cc.setSkemagruppe("blah", false);
+		}catch(IllegalArgumentException e) {
+		}
+		try {
+			cc.setSkemagruppe("5A", false);
+		}catch(IllegalArgumentException e) {
+		}
 	}
 	
 	/**

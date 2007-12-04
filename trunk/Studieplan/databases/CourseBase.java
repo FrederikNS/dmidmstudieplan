@@ -267,7 +267,7 @@ public class CourseBase {
 	 * 
 	 * @author Niels Thykier
 	 */
-	public class DatabaseReader {
+	private class DatabaseReader {
 		
 		/**
 		 * Files objects, the databases loaded into memory.
@@ -395,7 +395,7 @@ public class CourseBase {
 							for(int i = 0 ; i < size ; i++) {
 								Course course = name.get(i);
 								if(course.isSameCourseID(data[0])) {
-									course.setSkemagruppe(data[1].split(" "), true);
+									course.setSkemagruppe(data[1], true);
 									skema.add(course);
 									break;
 								}

@@ -154,7 +154,6 @@ public class StudyPlan implements Serializable {
 				else if(placement == 0) {
 					long conflicts = planned[i].conflictingSkema(toAdd);
 					if(conflicts != 0) {
-						System.err.println("Possible Conflict: " + Long.toHexString(toAdd.getFullSkemaData()) + " vs " + Long.toHexString(planned[i].getFullSkemaData()) + " - conflict in: " + Long.toHexString(conflicts) );
 						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 					}
 				}
