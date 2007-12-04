@@ -652,8 +652,7 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * Trims the input to get rid of spaces in the ends. If the input turns to
-	 * null, it will throw an exception.
+	 * Trims the input to get rid of spaces in the ends. If the input is null, it will throw an exception.
 	 * 
 	 * @return the input without spaces
 	 * @throws IOException is thrown if the input is null
