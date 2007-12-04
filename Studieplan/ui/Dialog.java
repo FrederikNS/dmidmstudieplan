@@ -588,6 +588,7 @@ public class Dialog extends UI {
 			System.out.println(getCore().getStudyPlan().printSemester(Integer.parseInt(indtastet[1])));
 		} catch (Exception e) {
 			System.err.println(e);
+			e.printStackTrace();
 		}
 	}
 
