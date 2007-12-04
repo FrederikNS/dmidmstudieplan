@@ -442,7 +442,6 @@ public class CourseBase {
 				for(int j = i ; j < skema.size() ; j++) {
 					temp2 = skema.get(j);
 					if( (i < j) && temp1.equals(temp2) ) {
-						System.err.println(skema.get(j));
 						doubleCourses++;
 					}
 
