@@ -235,9 +235,7 @@ public class Dialog extends UI {
 			for (int rotation = 0; temp.length >= rotation + offset + 1; rotation++) {
 				indtastet[offset + rotation] = temp[rotation];
 			}
-		} else {
-			throw new IOException("Instream closed");
-		}
+		} 
 	}
 
 	/**
@@ -412,7 +410,7 @@ public class Dialog extends UI {
 			input(2);
 		}
 		try{
-			if(getCore().removeCourseFromStudyPlan(indtastet[2])) {
+			if(getCore().removeCourseFromStudyPlan(indtastet[1])) {
 				System.out.println("Kursus er fjernet fra studieplanen");
 			}else{
 				System.out.println("Kurset kunne ikke fjernes");
@@ -539,7 +537,7 @@ public class Dialog extends UI {
 	 * Prints the list of available courses
 	 */
 	private void printDatabaseList() {
-		System.out.println(getCore().getCourseBase().toString());
+		System.out.println(getCore().getCourseBase());
 	}
 	
 	/**
@@ -547,7 +545,7 @@ public class Dialog extends UI {
 	 */
 	private void search() {
 		String searchString = "";
-		for(int i=1;i<9;i++) {
+		for(int i=1 ; i<9 ; i++) {
 			if(indtastet[i]!=null) {
 				searchString += " " + indtastet[i];	
 			}
@@ -640,15 +638,14 @@ public class Dialog extends UI {
 		try {
 			getCore().loadStudyPlan(indtastet[1]);
 		} catch (FilePermissionException e) {
-			System.out.println(e);
+			System.err.println(e);
 		} catch (FileNotFoundException e) {
-			System.out.println(e);
+			System.err.println(e);
 		} catch (CorruptStudyPlanFileException e) {
-			System.out.println(e);
+			System.err.println(e);
 		} catch (IOException e) {
-			System.out.println(e);
+			System.err.println(e);
 		}
-		// TODO
 	}
 
 	/**
@@ -660,11 +657,12 @@ public class Dialog extends UI {
 	private String readInput() throws IOException {
 		String input=keyboard.readLine();
 		if(input==null){
-			input="";
-		} else {
-			input = input.trim();
+			throw new IOException("End of File");
 		}
+		input = input.trim();
+
 		return input;
+		
 	}
 
 	/**
@@ -673,8 +671,7 @@ public class Dialog extends UI {
 	private void end() {
 		if (studyPlanChanged == true) {
 			killSwitch = false;
-			System.out
-					.println("Vil du gemme din studieplan? (skriv \"gem\" for at gemme eller \"afslut\" for at afslutte uden at gemme");
+			System.out.println("Vil du gemme din studieplan? (skriv \"gem\" for at gemme eller \"afslut\" for at afslutte uden at gemme");
 			while (killSwitch == false) {
 				try {
 					input(0);
@@ -698,8 +695,3 @@ public class Dialog extends UI {
 		System.out.println("Tak for idag.");
 	}
 }
-
-// TODO
-// FIXME
-// XXX <-- programmøren valgte at gemme denne del til senere på grund af ... porno?
-// alle errors skal skrives paa system.err
