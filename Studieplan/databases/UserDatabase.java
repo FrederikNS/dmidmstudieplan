@@ -108,7 +108,9 @@ public class UserDatabase {
 	public StudyPlan loadStudyPlan(String file, String extension) throws FilePermissionException, FileNotFoundException, CorruptStudyPlanFileException {
 
 		//throws FileNotFoundException if it does not exist.
-		exists(file, extension);
+		if(!exists(file, extension))
+			throw new FileNotFoundException();
+			
 
 
 		File f = new File(file + "." + extension);

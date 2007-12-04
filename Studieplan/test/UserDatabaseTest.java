@@ -1,5 +1,6 @@
 package test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import junit.framework.TestCase;
@@ -22,6 +23,10 @@ public class UserDatabaseTest extends TestCase {
 	 * Sets up the class variable usr
 	 */
 	UserDatabase usr;
+	/**
+	 * Set to true if the Permission cannot be run.
+	 */
+	boolean disablePermissionTest = false;
 
 	/**
 	 * Initialises the UserDatabase
@@ -30,6 +35,22 @@ public class UserDatabaseTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		usr = new UserDatabase();
+		File f = new File("PermissionDenied.plan");
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		if(f.canRead()) {
+			if(!f.setReadable(false)) {
+				disablePermissionTest = true;
+				return;
+			}
+		}
+		if(f.canWrite()) {
+			if(!f.setWritable(false)){
+				disablePermissionTest = true;
+				return;
+			}
+		}
 	}
 
 	/**
@@ -130,6 +151,11 @@ public class UserDatabaseTest extends TestCase {
 		} catch (Exception e) {
 			fail(e.toString());
 		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			assertTrue(true);
+			return;
+		}
 		try {
 			//User tries to load a plan without the required read permission
 			usr.loadStudyPlan("PermissionDenied");
@@ -180,6 +206,10 @@ public class UserDatabaseTest extends TestCase {
 
 		} catch (Exception e) {
 			fail(e.toString());
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
 		}
 		try {
 			//User tries to delete a studyplan without the required permission
