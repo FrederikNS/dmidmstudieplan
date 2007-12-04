@@ -434,7 +434,10 @@ public class Dialog extends UI {
 		} else if (indtastet[1].equalsIgnoreCase("visplan")) {
 			System.out.println("Kommandoen visplan viser studieplanen for et valgt semester.");
 			System.out.println("Et eksempel paa en studieplan kan se saaledes ud: \n");
-			testPlan();
+			System.out.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
+			System.out.println("8:00-12:00       -----    02101   01005   -----    02121");
+			System.out.println("  Pause");
+			System.out.println("13:00-17:00      -----    -----   01005   01017    01005");
 			System.out.println("");
 			System.out.println("Kommandoen til at fremkalde en studieplan er: \"visplan <semester>\" (uden gaaseoejne og stoerre/mindre-end tegn)");
 			System.out.println("Bliver et semesternummer ikke indtastet, eller det er af forkert format, vil man blive spurgt efter et nyt");
@@ -507,36 +510,32 @@ public class Dialog extends UI {
 		try {
 			getCore().search(indtastet[1]);
 		} catch (CourseDoesNotExistException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e);
 		}
 	}
 	
 	/**
 	 * Prints the plan as it is
+	 * @throws IOException 
 	 */
-	// TODO - changed
-	private void showPlan() {
-		int temp2;
-		String season;
+	private void showPlan() throws IOException {
+		int test;
+		while ((test = semesterCheck(1)) != INPUT_ACCEPTED) {
+			switch (test) {
+			case INPUT_NULL:
+				System.out.println("Indtast venligst et semesternummer:");
+				break;
+			case INPUT_NOT_INT:
+			case INPUT_OUT_OF_BOUNDS:
+				System.out.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
+				break;
+			}
+			input(1);
+		}
 		try {
-			temp2 = Integer.parseInt(indtastet[1]);
-			if ((temp2 & 1) == 1) {
-				season = "e";
-			} else {
-				season = "f";
-			}
-			if (temp2 > 0 && temp2 <= 20) {
-				System.out.println("Semester: " + indtastet[1] + " " + season
-						+ "   mandag  tirsdag  onsdag  torsdag  fredag");
-				System.out
-						.println("8:00-12:00       test1    test2   test3   test4    test5");
-				System.out.println("  Pause");
-				System.out
-						.println("13:00-17:00      test1    test2   test3   test4    test5");
-			}
+			getCore().getStudyPlan().printSemester(Integer.parseInt(indtastet[1]));
 		} catch (Exception e) {
-
+			System.err.println(e);
 		}
 	}
 
@@ -566,19 +565,6 @@ public class Dialog extends UI {
 			System.out.println(e);
 		}
 
-	}
-
-	/**
-	 * Prints a demo studyplan
-	 */
-	private void testPlan() {
-		System.out
-				.println("Semester: 1 e   mandag  tirsdag  onsdag  torsdag  fredag");
-		System.out
-				.println("8:00-12:00       -----    02101   01005   -----    02121");
-		System.out.println("  Pause");
-		System.out
-				.println("13:00-17:00      -----    -----   01005   01017    01005");
 	}
 
 	/**
