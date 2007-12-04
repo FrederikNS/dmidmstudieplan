@@ -117,7 +117,10 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	}
 	
 	/**
-	 * Check if this course and the compareTo course are share at least one period.
+	 * Check if this course and the compareTo course are share at least one period. Used as a part of the test for determining conflicts between courses.
+	 * 
+	 * This, however, cannot tell if they have courses on the same days!
+	 * 
 	 * @param compareTo The course to test against.
 	 * @return -1,0 or 1 if this course is ends before, shares at least one period with or comes after the compareTo course.
 	 */
@@ -126,7 +129,10 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	}
 	
 	/**
-	 * Check if the course is within a given period. Used to test for conflicts between courses.
+	 * Check if the course is within a given period. Used as a part of the test for determining conflicts between courses.
+	 *
+	 * This, however, cannot tell if they have courses on the same days!
+	 * 
 	 * @param start The first period of interest.
 	 * @param finish The last period of interest. 
 	 * @return -1,0 or 1 if this course is ends before, shares at least one period with or comes after the period-range. 
@@ -138,6 +144,7 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		}
 		int courseStart = this.getStartingPeriod();
 		int courseEnd = this.getFinishingPeriod();
+		System.err.println(getCourseID() + " " + courseStart + " " + courseEnd + " vs " + start + " " + finish);
 		if(courseStart > finish) {
 			return 1;
 		}
@@ -145,6 +152,37 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 			return -1;
 		}
 		return 0; 
+	}
+	
+	/**
+	 * Test if this course has lectures in this single period.
+	 * @param period the period to test.
+	 * @return true if the course has something in that period.
+	 */
+	public boolean getHasSkemaInPeriod(int period) {
+		if(period < 1 || period > 41) {
+			throw new IllegalArgumentException();
+		}
+		if(period < this.getStartingPeriod() || period > this.getFinishingPeriod() ) {
+			return false;
+		}
+		int periodSkema = 0;
+		switch( period % 4) {
+		case 0:
+			periodSkema = INTERNAL_SEASON_SPRING_SHORT; 
+			break;
+		case 1:
+			periodSkema = INTERNAL_DAYS_AUTUMN;
+			break;
+		case 2:
+			periodSkema = INTERNAL_SEASON_AUTUMN_SHORT;
+			break;
+		case 3:
+			periodSkema = INTERNAL_DAYS_SPRING;
+			break;
+		}
+
+		return 0 != (getFullSkemaData() & periodSkema);
 	}
 	
 	
