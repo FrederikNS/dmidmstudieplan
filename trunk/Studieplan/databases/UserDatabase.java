@@ -151,7 +151,9 @@ public class UserDatabase {
 		 */
 		public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException{
 			String filename = file + "." + extension;
-			exists(file, extension); 
+			if(!exists(file, extension)) {
+				throw new FileNotFoundException(file + "." + extension);
+			}
 			File f = new File(filename);
 
 			if(!f.canWrite())

@@ -23,143 +23,127 @@ public class Course implements Serializable{
 	/**
 	 * The bit-flag for the short part of the autumn semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN_SHORT  = 0x8000000000000000L;
+	public static final int INTERNAL_SEASON_AUTUMN_SHORT  = 0x80000000;
 	/**
 	 * The bit-flag for the long part of the autum semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x2000000000000000L;
+	public static final int INTERNAL_SEASON_AUTUMN_LONG   = 0x20000000;
 	/**
 	 * The bit-flag for the short part of the spring semester
 	 */
-	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x4000000000000000L;
+	public static final int INTERNAL_SEASON_SPRING_SHORT  = 0x40000000;
 	/**
 	 * The bit-flag for the long part of the spring semester
 	 */
-	public static final long INTERNAL_SEASON_SPRING_LONG   = 0x1000000000000000L;
+	public static final int INTERNAL_SEASON_SPRING_LONG   = 0x10000000;
 	/**
 	 * Filter bit-flags for isolating all the season bit-flags.
 	 */
-	public static final long INTERNAL_SEASON_ALL           = 0xf000000000000000L;
+	public static final int INTERNAL_SEASON_ALL           = 0xf0000000;
 
 	/**
 	 * Filter for determining the starting season. 
 	 * If applying this filter on a internal skema is non-zero, the skema is for a multi-period course.
 	 */
-	public static final long INTERNAL_STARTING_PERIOD    = 0x0f00000000000000L;
+	public static final long INTERNAL_STARTING_PERIOD    = 0x0f000000;
 
 	/**
 	 * The bit-flag for courses that must start in the short part of the autumn semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_SHORT  = 0x0800000000000000L;
+	public static final int INTERNAL_STARTING_PERIOD_AUTUMN_SHORT  = 0x08000000;
 	/**
 	 * The bit-flag for courses that must start in the long part of the autum semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0200000000000000L;
+	public static final int INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x02000000;
 	/**
 	 * The bit-flag for courses that must start in the short part of the spring semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0400000000000000L;
+	public static final int INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x04000000;
 	/**
 	 * The bit-flag for courses that must start in the long part of the spring semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_SPRING_LONG   = 0x0100000000000000L;
+	public static final int INTERNAL_STARTING_PERIOD_SPRING_LONG   = 0x01000000;
 	
 	
 	/**
 	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Spring part of the semester 
 	 */
-	public static final int INTERNAL_SHIFT_SPRING_LONG     = 0;
-	/**
-	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Spring part of the semester 
-	 */
-	public static final int INTERNAL_SHIFT_SPRING_SHORT    = 24;
+	public static final int INTERNAL_SHIFT_SPRING     = 0;
 	/**
 	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the long Autumn part of the semester 
 	 */
-	public static final int INTERNAL_SHIFT_AUTUMN_LONG     = 12;
-	/**
-	 * Used to bit-shift a INTERNAL_*DAY_* into or out of the short Autumn part of the semester 
-	 */
-	public static final int INTERNAL_SHIFT_AUTUMN_SHORT    = 36;
+	public static final int INTERNAL_SHIFT_AUTUMN     = 12;
 
 	/**
 	 * Filter for isolating the days (post season to day shifts)
 	 * Use INTERNAL_DAYS_ALL to filter all days regardless of seasons.
 	 */
-	public static final long INTERNAL_DAYS                 = 0x0000000000000fffL;
+	public static final int INTERNAL_DAYS             = 0x000003ff;
 
-	/**
-	 * Filter for isolating all the days bit-flags for the short autumn.
-	 */
-	public static final long INTERNAL_DAYS_AUTUMN_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_SHORT;
 	/**
 	 * Filter for isolating all the days bit-flags for the long autumn.
 	 */
-	public static final long INTERNAL_DAYS_AUTUMN_LONG     = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN_LONG;
-	/**
-	 * Filter for isolating all the days bit-flags for the short spring. 
-	 */
-	public static final long INTERNAL_DAYS_SPRING_SHORT    = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_SHORT;
+	public static final int INTERNAL_DAYS_AUTUMN     = INTERNAL_DAYS<<INTERNAL_SHIFT_AUTUMN;
 	/**
 	 * Filter for isolating all the days bit-flags for the long spring. 
 	 */
-	public static final long INTERNAL_DAYS_SPRING_LONG     = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING_LONG;
+	public static final int INTERNAL_DAYS_SPRING     = INTERNAL_DAYS<<INTERNAL_SHIFT_SPRING;
 	/**
 	 * Filter for isolating all the day bit-flags
 	 */
-	public static final long INTERNAL_DAYS_ALL             = INTERNAL_DAYS_SPRING_LONG | INTERNAL_DAYS_AUTUMN_LONG | INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_SPRING_SHORT;
+	public static final int INTERNAL_DAYS_ALL        = INTERNAL_DAYS_SPRING | INTERNAL_DAYS_AUTUMN;
 
 	/**
 	 * The Monday morning class bit-flag. 
 	 * DTU alias: A1
 	 */
-	public static final long INTERNAL_MONDAY_MORNING       = 0x00000001;
+	public static final int INTERNAL_MONDAY_MORNING       = 0x00000001;
 	/**
 	 * The Monday afternoon class bit-flag. 
 	 * DTU alias: A2
 	 */
-	public static final long INTERNAL_MONDAY_AFTERNOON     = 0x00000002;
+	public static final int INTERNAL_MONDAY_AFTERNOON     = 0x00000002;
 	/**
 	 * The Tuesday morning class bit-flag. 
 	 * DTU alias: A3
 	 */
-	public static final long INTERNAL_TUESDAY_MORNING      = 0x00000004;
+	public static final int INTERNAL_TUESDAY_MORNING      = 0x00000004;
 	/**
 	 * The Tuesday afternoon class bit-flag. 
 	 * DTU alias: 4A
 	 */
-	public static final long INTERNAL_TUESDAY_AFTERNOON    = 0x00000008; 
+	public static final int INTERNAL_TUESDAY_AFTERNOON    = 0x00000008; 
 	/**
 	 * The Wednesday morning class bit-flag. 
 	 * DTU alias: 5A
 	 */
-	public static final long INTERNAL_WEDNESDAY_MORNING   = 0x00000010;
+	public static final int INTERNAL_WEDNESDAY_MORNING   = 0x00000010;
 
 	/**
 	 * The Thursday afternoon class bit-flag. 
 	 * DTU alias: 1B
 	 */
-	public static final long INTERNAL_THURSDAY_AFTERNOON   = 0x00000020; 
+	public static final int INTERNAL_THURSDAY_AFTERNOON   = 0x00000020; 
 	/**
 	 * The Thursdag morning class bit-flag. 
 	 * DTU alias: B2
 	 */
-	public static final long INTERNAL_THURSDAY_MORNING     = 0x00000040; 
+	public static final int INTERNAL_THURSDAY_MORNING     = 0x00000040; 
 	/**
 	 * The Friday afternoon class bit-flag. 
 	 * DTU alias: 3B
 	 */
-	public static final long INTERNAL_FRIDAY_AFTERNOON     = 0x00000080;
+	public static final int INTERNAL_FRIDAY_AFTERNOON     = 0x00000080;
 	/**
 	 * The Friday morning class bit-flag. 
 	 * DTU alias: 4B
 	 */
-	public static final long INTERNAL_FRIDAY_MORNING       = 0x00000100;
+	public static final int INTERNAL_FRIDAY_MORNING       = 0x00000100;
 	/**
 	 * The Wednesday afternoon class bit-flag. 
 	 * DTU alias: 5B
 	 */ 
-	public static final long INTERNAL_WEDNESDAY_AFTERNOON = 0x00000200;
+	public static final int INTERNAL_WEDNESDAY_AFTERNOON  = 0x00000200;
 
 
 	/**
@@ -170,7 +154,7 @@ public class Course implements Serializable{
 	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
-	public static long parseDTUSkema(String DTUdata) {
+	public static int parseDTUSkema(String DTUdata) {
 		String[] DTUarray = null;
 		if(DTUdata != null) {
 			DTUarray = DTUdata.split(" ");
@@ -185,21 +169,21 @@ public class Course implements Serializable{
 	 * @param DTUdata The skema in the DTU format (e.g. E1A is Mondag morning)
 	 * @return A bit-flagged integer containing all the flags that matched the input or 0 if the input was not DTU skema Data.
 	 */
-	public static long parseDTUSkema(String[] DTUdata) {
-		long data = 0;
+	public static int parseDTUSkema(String[] DTUdata) {
+		int data = 0;
 		if(DTUdata != null) {
 			for(int i = 0; i < DTUdata.length ; i++ ){
 				data |= parseSingleDTUSkema(DTUdata[i]);
 			}
 		}
-
-
+		
 		return data;
 	}
 
 
 	/**
-	 * Transforms an internal skema (bit-flags) to the DTU skema standard.
+	 * Transforms an internal skema (bit-flags) to the DTU skema standard. 
+	 * This will not print short courses skemas.
 	 * 
 	 * This will always output the skema in the same order (Spring before Autumn courses) and
 	 * thus cannot garantuee to them in the same order as they were converted from.
@@ -213,24 +197,29 @@ public class Course implements Serializable{
 	 * 		
 	 * 		((i%5)+1) + (1 == (i/5)?"B":"A")
 	 * 
+	 * NOTE: This will return "", if there are no days for long courses.
+	 * 
 	 * @param internalRepresentation An internal representation (bit-flags) of the skema.
 	 * @return The DTU skema in a single string.
 	 */
-	public static String internalSkemaToExternString(long internalRepresentation) {
-		long flag;
+	public static String internalSkemaToExternString(int internalRepresentation) {
+		if(0 == (internalRepresentation & INTERNAL_DAYS)) {
+			return "";
+		}
+		int flag;
 		String toReturn = "";
-		long autumnDays, springDays;
+		int autumnDays, springDays;
 		
-		autumnDays = ((internalRepresentation & INTERNAL_DAYS_AUTUMN_LONG) >> INTERNAL_SHIFT_AUTUMN_LONG) | ((internalRepresentation & INTERNAL_DAYS_AUTUMN_SHORT) >> INTERNAL_SHIFT_AUTUMN_SHORT);
-		springDays = ((internalRepresentation & INTERNAL_DAYS_SPRING_LONG) >> INTERNAL_SHIFT_SPRING_LONG) | ((internalRepresentation & INTERNAL_DAYS_SPRING_SHORT) >> INTERNAL_SHIFT_SPRING_SHORT);
+		autumnDays = (internalRepresentation & INTERNAL_DAYS_AUTUMN) >> INTERNAL_SHIFT_AUTUMN;
+		springDays = (internalRepresentation & INTERNAL_DAYS_SPRING) >> INTERNAL_SHIFT_SPRING;
 		
-		for(int i = 0 ; i < 12 ; i++) {
+		for(int i = 0 ; i < 10 ; i++) {
 			flag = springDays >> i;
 			if(0 != (flag & 1)) {
 				toReturn += "F" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
 			}
 		}
-		for(int i = 0 ; i < 12 ; i++) {
+		for(int i = 0 ; i < 10 ; i++) {
 			flag = autumnDays >> i;
 			if(0 != (flag & 1)) {
 				toReturn += "E" + ((i%5)+1) + (1 == (i/5)?"B":"A") + " ";
@@ -254,7 +243,7 @@ public class Course implements Serializable{
 	 * @param DTUplan A single DTU skema group (e.g. E1A for monday morning)
 	 * @return A set of internal skema bit-flags or 0, if the input was not a DTU skema group. 
 	 */
-	public static long parseSingleDTUSkema(String DTUplan) {
+	public static int parseSingleDTUSkema(String DTUplan) {
 		//Reading only the three last characters
 		DTUplan = DTUplan.trim();
 		int length = DTUplan.length();
@@ -267,7 +256,7 @@ public class Course implements Serializable{
 		} catch(Exception e) {
 			return 0;
 		}
-		long toReturn = 0;
+		int toReturn = 0;
 		switch(skema & 0xff) {
 		case 0x1A:
 			toReturn = INTERNAL_MONDAY_MORNING;
@@ -304,10 +293,13 @@ public class Course implements Serializable{
 		}
 
 		if((skema & 0xf00) == 0xf00) {
+			toReturn <<= INTERNAL_SHIFT_SPRING;
 			toReturn |= INTERNAL_SEASON_SPRING_LONG;
 		} else if((skema & 0xf00) == 0xe00) {
-			toReturn <<= 12;
+			toReturn <<= INTERNAL_SHIFT_AUTUMN;
 			toReturn |= INTERNAL_SEASON_AUTUMN_LONG;
+		} else {
+			System.err.println("Malformated skemagruppe... Did not contain period");
 		}
 
 		return toReturn;
@@ -330,7 +322,7 @@ public class Course implements Serializable{
 	/**
 	 * The internal skema representation bit-flag field.
 	 */
-	private long internalSkema;
+	private int internalSkema;
 
 	/**
 	 * Creates a new Course. This is used by the DatabaseReader, when loading the 
@@ -381,10 +373,15 @@ public class Course implements Serializable{
 	 * 
 	 * This method uses the Course.internalSkemaToExternString(int) method.
 	 * 
+	 * NOTE: this will return "" if the course has no lections in long periods.
+	 * 
 	 * @return The skema in the DTU format.
 	 * @see dataClass.Course#internalSkemaToExternString(int)
 	 */
-	public String skemaToString() {		
+	public String skemaToString() {
+		if(0 == (internalSkema & INTERNAL_DAYS)) {
+			return "";
+		}
 		return internalSkemaToExternString(internalSkema);
 	}
 
@@ -409,27 +406,19 @@ public class Course implements Serializable{
 	 * @param compareTo the course to compare with.
 	 * @return 0 if there was no conflicts, else the season in which they have conflicts. 
 	 */
-	public long conflictingSkema(Course compareTo) {
-		long compare = compareTo.getFullSkemaData();
-		long currentTest = 0, possibleConflict = 0;
-		long conflictPeriods = 0;
-		for(int i = 0 ; i < 4 ; i++) {
+	public int conflictingSkema(Course compareTo) {
+		int compare = compareTo.getFullSkemaData();
+		int currentTest = 0, possibleConflict = 0;
+		int conflictPeriods = 0;
+		for(int i = 0 ; i < 2 ; i++) {
 			switch(i) {
 			case 0:
-				currentTest = INTERNAL_DAYS_SPRING_LONG;
+				currentTest = INTERNAL_DAYS_SPRING;
 				possibleConflict = INTERNAL_SEASON_SPRING_LONG;
 				break;
 			case 1:
-				currentTest = INTERNAL_DAYS_SPRING_SHORT;
-				possibleConflict = INTERNAL_SEASON_SPRING_SHORT;
-				break;
-			case 2:
-				currentTest = INTERNAL_DAYS_AUTUMN_LONG;
+				currentTest = INTERNAL_DAYS_AUTUMN;
 				possibleConflict = INTERNAL_SEASON_AUTUMN_LONG;
-				break;
-			case 3:
-				currentTest = INTERNAL_DAYS_AUTUMN_SHORT;
-				possibleConflict = INTERNAL_SEASON_AUTUMN_SHORT;
 				break;
 			}
 			
@@ -437,6 +426,7 @@ public class Course implements Serializable{
 				conflictPeriods |= possibleConflict;
 			}
 		}
+		conflictPeriods |=  ((compare & internalSkema) & (INTERNAL_SEASON_AUTUMN_SHORT | INTERNAL_SEASON_SPRING_SHORT));
 		return conflictPeriods;
 	}
 
@@ -458,7 +448,7 @@ public class Course implements Serializable{
 	 * 
 	 * @return internalSkema The internal skema data of the course.
 	 */
-	public long getFullSkemaData() {
+	public int getFullSkemaData() {
 		return internalSkema;
 	}
 
@@ -469,7 +459,7 @@ public class Course implements Serializable{
 	 * 
 	 * @param skema The new bit-flags.
 	 */
-	public void setFullSkemaData(long skema) {
+	public void setFullSkemaData(int skema) {
 		if(skema != 0) {
 			this.internalSkema = skema;
 		}
@@ -485,11 +475,13 @@ public class Course implements Serializable{
 	 * @param add If true, the new data will be merged with the current rather than overwriting the current. 
 	 */
 	public void setSkemagruppe(String[] skemagruppe, boolean add) {
+		System.out.println("SkemaGruppe: " + this.courseID + " currentSkema: " + Integer.toHexString(internalSkema));
 		if(add) {
 			internalSkema |= parseDTUSkema(skemagruppe);
 		} else {
 			internalSkema = parseDTUSkema(skemagruppe);
 		}
+		System.out.println("SkemaGruppe: " + this.courseID + " new skema: " + Integer.toHexString(internalSkema));
 	}
 
 	/**
@@ -548,12 +540,16 @@ public class Course implements Serializable{
 	public int getAmountOfPeriods() {
 		if(!isMultiPeriodCourse() )
 			return 1;
-		long temp = internalSkema & INTERNAL_SEASON_ALL;
+		int temp = internalSkema & INTERNAL_SEASON_ALL;
 		int toReturn = 1;
 		//Count amount of bits, the "Brian Kernighan's way".
 		//Repeatedly clear the least significant
 		for(; temp != 0 ; toReturn++) {
 			temp &= temp - 1;
+		}
+		if(toReturn == 5) {
+			System.err.println(this.courseID + " is 5 periods ??");
+			toReturn = 1;
 		}
 		return toReturn;
 	}
@@ -570,8 +566,7 @@ public class Course implements Serializable{
 	 * Update the period/semester data for the course.
 	 * 
 	 * NB: This method will assume that previous data about days are still valid and update accordingly.
-	 * If a new period is added, it will receive the same days as its semester counter part. (autumn inheirts from autumn and spring from spring)
-	 * If a period is removed, all days related to it will be removed (after the update is complete, so its counter-part if added can still inheirt from it)
+	 * If a period is removed, all days related to it will be removed.
 	 * 
 	 * @param periods The periods.
 	 * @param multiPeriodCourse If true, the input should be treated as the periods the course occupies rather than the periods, it can be selected.
@@ -579,9 +574,9 @@ public class Course implements Serializable{
 	public void updateSeason(String periods, boolean multiPeriodCourse) {
 		if(periods == null)
 			return;
-		long temp = 0L, days = internalSkema & INTERNAL_DAYS_ALL;
-		long clear = 0L;
-		long shift;
+		int temp = 0, days = internalSkema & INTERNAL_DAYS_ALL;
+		int clear = 0;
+		System.out.println("UpdateSeason: " + this.courseID + " " + periods +" Multi: " + multiPeriodCourse + ", currentSkema: " + Integer.toHexString(internalSkema));
 		String[] periodArray = periods.trim().split(" ");
 		for(int i = 0 ; i < periodArray.length ; i++ ) {
 			if(periodArray[i].equals("E")) {
@@ -607,71 +602,21 @@ public class Course implements Serializable{
 			}
 		}
 
-		if(0 != (days & (INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_AUTUMN_LONG)) ) {
-
-			if(0 != (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
-				//Course runs in the long autumn period.  
-				if(0 == (days & INTERNAL_DAYS_AUTUMN_LONG) ) {
-					//But have no days in it and yet it has in the short?
-					//Shift days into place.
-					shift = (days & INTERNAL_DAYS_AUTUMN_SHORT)>>INTERNAL_SHIFT_AUTUMN_SHORT;
-		days |= shift << INTERNAL_SHIFT_AUTUMN_LONG; 
-				}
-			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_LONG)) {
+		/*if(0 != (days & INTERNAL_DAYS_AUTUMN) && 0 == (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
 				//There was class in the long part of the autumn semester
 				//but this course ought not to have it.
-				clear |= INTERNAL_DAYS_AUTUMN_LONG;
-			}
-
-			if(0 != (temp & INTERNAL_SEASON_AUTUMN_SHORT) ) {
-				//Course runs in the short autumn period.  
-				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
-					//But have no days in it and yet it has in the long?
-					//Shift days into place.
-					shift = (days & INTERNAL_DAYS_AUTUMN_LONG)>>INTERNAL_SHIFT_AUTUMN_LONG;
-		days |= shift << INTERNAL_SHIFT_AUTUMN_SHORT; 
-				}
-			} else if(0 != (days & INTERNAL_DAYS_AUTUMN_SHORT)) {
-				//There was class in the short part of the autumn semester
-				//but this course ought not to have it.
-				clear |= INTERNAL_DAYS_AUTUMN_SHORT;
-			}
-
-		} 
-
-		if(0 != (days & (INTERNAL_DAYS_SPRING_SHORT | INTERNAL_DAYS_SPRING_LONG)) ) {
-
-			if(0 != (temp & INTERNAL_SEASON_SPRING_LONG) ) {
-				//Course runs in the long spring period.  
-				if(0 == (days & INTERNAL_DAYS_SPRING_LONG) ) {
-					//But have no days in it and yet it has in the short?
-					//Shift days into place.
-					shift = (days & INTERNAL_DAYS_SPRING_SHORT)>>INTERNAL_SHIFT_SPRING_SHORT;
-		days |= shift << INTERNAL_SHIFT_SPRING_LONG; 
-				}
-			} else if(0 != (days & INTERNAL_DAYS_SPRING_LONG)) {
-				//There was class in the long part of the spring semester
-				//but this course ought not to have it.
-				clear |= INTERNAL_DAYS_SPRING_LONG;
-			}
-
-			if(0 != (temp & INTERNAL_SEASON_SPRING_SHORT) ) {
-				//Course runs in the short spring period.  
-				if(0 == (days & INTERNAL_DAYS_AUTUMN_SHORT) ) {
-					//But have no days in it and yet it has in the long?
-					//Shift days into place.
-					shift = (days & INTERNAL_DAYS_SPRING_LONG)>>INTERNAL_SHIFT_SPRING_LONG;
-		days |= shift << INTERNAL_SHIFT_SPRING_SHORT; 
-				}
-			} else if(0 != (days & INTERNAL_DAYS_SPRING_SHORT)) {
-				//There was class in the short part of the spring semester
-				//but this course ought not to have it.
-				clear |= INTERNAL_DAYS_SPRING_SHORT;
-			}
-
+				clear |= INTERNAL_DAYS_AUTUMN;
 		}
 
-		internalSkema = temp | (days & ~clear); 
+		if(0 != (days & ( INTERNAL_DAYS_SPRING)) && 0 == (temp & INTERNAL_SEASON_SPRING_LONG) ) {
+
+				//There was class in the long part of the spring semester
+				//but this course ought not to have it.
+				clear |= INTERNAL_DAYS_SPRING;
+		}*/
+		internalSkema = temp | (days & ~clear);
+		System.out.println("UpdateSeason: " + this.courseID + " new Skema: " + Integer.toHexString(internalSkema));
+		System.out.println(this);
 	}
 	
 	
@@ -690,9 +635,9 @@ public class Course implements Serializable{
 			}
 		} else {
 			if((semester & 1) == 1) {
-				toReturn = 0 != (internalSkema & (INTERNAL_DAYS_AUTUMN_SHORT | INTERNAL_DAYS_AUTUMN_LONG));
+				toReturn = 0 != (internalSkema & (INTERNAL_SEASON_AUTUMN_SHORT | INTERNAL_SEASON_AUTUMN_LONG));
 			} else {
-				toReturn = 0 != (internalSkema & (INTERNAL_DAYS_SPRING_SHORT | INTERNAL_DAYS_SPRING_LONG));
+				toReturn = 0 != (internalSkema & (INTERNAL_SEASON_SPRING_SHORT | INTERNAL_SEASON_SPRING_LONG));
 			}
 		}
 		return toReturn;
@@ -701,35 +646,32 @@ public class Course implements Serializable{
 	/**
 	 * Turns the Course into a string in the following format:
 	 * 
-	 * ID Name, skemagruppe: "the DTU skema", "perioder" (, forudgående kurser: [the ID of dependency courses]) 
+	 * ID Name, skemagruppe: ("the DTU skema",) "perioder" (, forudgående kurser: [the ID of dependency courses]) 
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		String s = courseID  + " " + courseName + ", skemagruppe: " + skemaToString();
-		long skema = internalSkema >> 60;
-		for(int i = 0 ; i < 4 ; i++) {
-			if(0 != ((skema>>i) & 1) ) {
-				switch(i) {
-				case 0:
-					s += ", F";
-					break;
-				case 1:
-					s += ", Juni";
-					break;
-				case 2:
-					s += ", E";
-					break;
-				case 3:
-					s += ", Januar";
-					break;
-				}
-			}
+		String s = courseID  + " " + courseName;
+		String gruppe = skemaToString();
+		if(!gruppe.equals("")) {
+			s += ", skemagruppe: " + gruppe;
+		}
+		if(0 != (internalSkema & INTERNAL_SEASON_SPRING_LONG ) ) {
+			s += ", F";
+		}
+		if(0 != (internalSkema & INTERNAL_SEASON_SPRING_SHORT ) ) {
+			s += ", Juni";
+		}
+		if(0 != (internalSkema & INTERNAL_SEASON_AUTUMN_LONG ) ) {
+			s += ", E";
+		}
+		if(0 != (internalSkema & INTERNAL_SEASON_AUTUMN_SHORT ) ) {
+			s += ", Januar";
 		}
 		if(hasDependencies()){
 			s += ", forudgående kurser: " + getDependencies();
 		}
-		s += ". 0x"+ Long.toHexString(internalSkema);
+		s += ". Laengde: " + getAmountOfPeriods() + " 0x"+ Long.toHexString(internalSkema);
 		return s;
 	}
 }
