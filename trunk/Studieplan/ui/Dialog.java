@@ -701,7 +701,5 @@ public class Dialog extends UI {
 
 // TODO
 // FIXME
-// XXX <-- programmøren valgte at gemme denne del til senere på grund af porno....?
-// lav en soeg kommando. input skal bare kastes direkte videre i systemet
-// ukritisk.
+// XXX <-- programmøren valgte at gemme denne del til senere på grund af ... porno?
 // alle errors skal skrives paa system.err
