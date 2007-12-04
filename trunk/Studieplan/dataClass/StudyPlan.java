@@ -246,18 +246,10 @@ public class StudyPlan implements Serializable {
 		boolean toPrint = false;
 		int semesterEnd = (semester<<1);
 		int semesterStart = semesterEnd - 1;
-		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
-		Arrays.sort( planned );
 		int semesterPattern = 0;
 		int shift = 0;
 		
-		if( (semester & 1) == 1) {
-			semesterPattern = Course.INTERNAL_SEASON_AUTUMN_LONG | Course.INTERNAL_SEASON_AUTUMN_SHORT;
-			shift = Course.INTERNAL_SHIFT_AUTUMN;
-		} else {
-			semesterPattern = Course.INTERNAL_SEASON_SPRING_LONG | Course.INTERNAL_SEASON_SPRING_SHORT;
-			shift = Course.INTERNAL_SHIFT_SPRING;
-		}
+		
 		
 	    int skema = 0;
 		String toReturn = "";
@@ -266,8 +258,18 @@ public class StudyPlan implements Serializable {
 
 		String[] courses = {"-----","-----","-----","-----","-----",
 				  			"-----","-----","-----","-----","-----"};
-		int length = planned.length;
+		int length = plan.size();
 		if(length > 0) {
+			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
+			Arrays.sort( planned );
+			if( (semester & 1) == 1) {
+				semesterPattern = Course.INTERNAL_SEASON_AUTUMN_LONG | Course.INTERNAL_SEASON_AUTUMN_SHORT;
+				shift = Course.INTERNAL_SHIFT_AUTUMN;
+			} else {
+				semesterPattern = Course.INTERNAL_SEASON_SPRING_LONG | Course.INTERNAL_SEASON_SPRING_SHORT;
+				shift = Course.INTERNAL_SHIFT_SPRING;
+			}
+			
 			for(int i = 0 ; i < length ; i++) {
 				if(planned[i].getIsInPeriod(semesterEnd, semesterEnd) == 0) {
 					shortCourse = planned[i].getCourseID();
