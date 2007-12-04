@@ -527,5 +527,15 @@ public class ProgramCore implements Core {
 		return currentPlan;
 	}
 
+	/**
+	 * Saves the current StudyPlan under a different name
+	 * @param newName This is the name of the file the use wants to save the studyplan to
+	 * @throws CannotSaveStudyPlanException Thrown if the studyplan could not be saved
+	 * @throws FilePermissionException Thrown if the user does not have the permissions required to write to the file
+	 */
+	public void saveStudyPlanAs(String newName) throws CannotSaveStudyPlanException, FilePermissionException {
+		saveStudyPlanAs(currentPlan, newName);
+	}
+
 	
 }
