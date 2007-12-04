@@ -272,8 +272,7 @@ public class Dialog extends UI {
 	 * wrong format (eg. too high semester number, or the course ID contains
 	 * letters).
 	 * 
-	 * @throws IOException
-	 *             triggers if buffered reader which comes from stdin is closed
+	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	private void add() throws IOException {
 		int test = 0;
@@ -366,6 +365,7 @@ public class Dialog extends UI {
 	/**
 	 * Removes a course from the users study plan. If the format of the inputted
 	 * courseID is wrong, it will ask for a new courseID
+	 * @author Frederik Nordahl Sabroe
 	 * @throws IOException triggers if buffered reader which comes from stdin is closed
 	 */
 	private void remove() throws IOException {
@@ -395,8 +395,10 @@ public class Dialog extends UI {
 			input(2);
 		}
 		try{
-			getCore().isCourseInStudyPlan("1", indtastet[2]);
-			System.out.println("Kursus er fjernet fra studieplanen");
+			if(getCore().isCourseInStudyPlan("1", indtastet[2])) {
+				getCore().removeCourseFromStudyPlan("1", indtastet[2]);
+				System.out.println("Kursus er fjernet fra studieplanen");
+			}
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
 		} catch (StudyPlanDoesNotExistException e) {
