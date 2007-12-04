@@ -5,6 +5,8 @@ package exceptions;
 
 /**
  * Thrown if the course does already exist
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CourseAlreadyExistsException extends CourseException {

@@ -4,7 +4,9 @@ import java.io.IOException;
 
 /**
  * Exception for the case where the studyplan file is corrupt
- * @author frederikns
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class CorruptStudyPlanFileException extends IOException {
 

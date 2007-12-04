@@ -2,7 +2,9 @@ package exceptions;
 
 /**
  * This is a general exception extended by all the other exceptions to save code
- * @author frederikns
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public abstract class CourseException extends Exception {
 	

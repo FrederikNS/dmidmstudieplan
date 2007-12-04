@@ -13,6 +13,8 @@ import exceptions.FilePermissionException;
 /**
  * This test class runs a series of tests on the class UserDatabase using jUnit
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class UserDatabaseTest extends TestCase {
 

@@ -8,6 +8,8 @@ import databases.CourseBase;
 /**
  * Tests the class SelectedCourses by usint jUnit
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class SelectedCourseTest extends TestCase {
 

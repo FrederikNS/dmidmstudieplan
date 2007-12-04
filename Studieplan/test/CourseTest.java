@@ -8,6 +8,7 @@ import databases.CourseBase;
 /**
  * This test class tests the class Course
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CourseTest extends TestCase {

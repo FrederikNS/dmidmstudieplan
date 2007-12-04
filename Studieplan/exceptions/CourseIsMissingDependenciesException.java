@@ -4,6 +4,8 @@
 package exceptions;
 
 /**
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CourseIsMissingDependenciesException extends Exception {

@@ -2,7 +2,9 @@ package exceptions;
 
 /**
  * Exception in case the studyplan does not exist
- * @author frederikns
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class StudyPlanDoesNotExistException extends Exception {
 

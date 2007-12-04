@@ -9,6 +9,8 @@ import cores.Core;
  * the core is ready for User interaction. 
  * @see Core
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public abstract class UI {
 	

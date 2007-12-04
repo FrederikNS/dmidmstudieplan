@@ -6,6 +6,8 @@ import dataClass.StudyPlan;
 
 /**
  * Thrown if the studyplan cannot be saved
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CannotSaveStudyPlanException extends IOException {

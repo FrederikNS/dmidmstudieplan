@@ -2,6 +2,8 @@ package exceptions;
 
 /**
  * Exception thrown when a Course cannot be selected in a given semester.
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CourseCannotStartInThisSemesterException extends Exception {

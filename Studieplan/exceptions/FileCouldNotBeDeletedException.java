@@ -7,6 +7,8 @@ import java.io.IOException;
 
 /**
  * This is and exception in case the file could not be deleted
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class FileCouldNotBeDeletedException extends IOException {
