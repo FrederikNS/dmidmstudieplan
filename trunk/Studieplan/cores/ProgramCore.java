@@ -218,7 +218,8 @@ public class ProgramCore implements Core {
 	 * @throws CorruptStudyPlanFileException Thrown if the file could be found, but the data was not understandable.
 	 */
 	public StudyPlan loadStudyPlan(String studentID) throws FilePermissionException, FileNotFoundException, IOException, CorruptStudyPlanFileException {
-		return userDB.loadStudyPlan(studentID);
+		currentPlan = userDB.loadStudyPlan(studentID);
+		return currentPlan;
 	}
 
 	/**
