@@ -243,7 +243,7 @@ public class StudyPlan implements Serializable {
 		if(!SelectedCourse.isValidSemester(semester)) {
 			throw new IllegalArgumentException();
 		} 
-		//FIXME nullpointer when plan is empty
+		boolean toPrint = false;
 		int semesterEnd = (semester<<1);
 		int semesterStart = semesterEnd - 1;
 		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
@@ -266,50 +266,57 @@ public class StudyPlan implements Serializable {
 
 		String[] courses = {"-----","-----","-----","-----","-----",
 				  			"-----","-----","-----","-----","-----"};
-		
-		for(int i = 0 ; i < planned.length ; i++) {
-			if(planned[i].getIsInPeriod(semesterEnd, semesterEnd) == 0) {
-				shortCourse = planned[i].getCourseID();
-			}
-			
-			if(planned[i].getIsInPeriod(semesterStart, semesterStart) == 0) {
-				skema = (planned[i].getFullSkemaData() & semesterPattern)>>shift;
+		int length = planned.length;
+		if(length > 0) {
+			for(int i = 0 ; i < length ; i++) {
+				if(planned[i].getIsInPeriod(semesterEnd, semesterEnd) == 0) {
+					shortCourse = planned[i].getCourseID();
+					toPrint = true;
+				}
 				
-				if(skema != 0) {
-					for(int j = 0 ; j < 5 ; j++) {
-						if(((skema>>j) & 1) == 1) {
-							courses[j] = planned[i].getCourseID();
+				if(planned[i].getIsInPeriod(semesterStart, semesterStart) == 0) {
+					skema = (planned[i].getFullSkemaData() & semesterPattern)>>shift;
+					
+					if(skema != 0) {
+						toPrint = true;
+						for(int j = 0 ; j < 5 ; j++) {
+							if(((skema>>j) & 1) == 1) {
+								courses[j] = planned[i].getCourseID();
+							}
+						}				
+						if((skema & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
+							courses[5] = planned[i].getCourseID();
 						}
-					}				
-					if((skema & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
-						courses[5] = planned[i].getCourseID();
-					}
-					if((skema & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
-						courses[6] = planned[i].getCourseID();
-					}
-					if((skema & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
-						courses[7] = planned[i].getCourseID();
-					}
-					if((skema & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
-						courses[8] = planned[i].getCourseID();
-					}
-					if((skema & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
-						courses[9] = planned[i].getCourseID();
+						if((skema & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
+							courses[6] = planned[i].getCourseID();
+						}
+						if((skema & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
+							courses[7] = planned[i].getCourseID();
+						}
+						if((skema & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
+							courses[8] = planned[i].getCourseID();
+						}
+						if((skema & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
+							courses[9] = planned[i].getCourseID();
+						}
 					}
 				}
 			}
-		}
-
-		String semesterString = (semester < 10?" ":"") + semester;
-		toReturn  = "Semester: "+ semesterString +" "+((semester&1)==1?"e":"f")+" 13-ugers  mandag  tirsdag  onsdag  torsdag  fredag\n";
-		toReturn += " 8:00-12:00              "+ courses[0] + "    "+ courses[2] + "   "+ courses[4] + "   "+ courses[6] + "    "+ courses[8] + "\n";
-		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ courses[1] + "    "+ courses[3] + "   "+ courses[5] + "   "+ courses[7] + "    "+ courses[9] + "\n";
-		toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
-		toReturn += " 8:00-12:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse + "\n";
-		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse  + "   "+ shortCourse;
+		} 
 		
+		String semesterString = (semester < 10?" ":"") + semester;
+		if(toPrint) {
+			toReturn  = "Semester: "+ semesterString +" "+((semester&1)==1?"e":"f")+" 13-ugers  mandag  tirsdag  onsdag  torsdag  fredag\n";
+			toReturn += " 8:00-12:00              "+ courses[0] + "    "+ courses[2] + "   "+ courses[4] + "   "+ courses[6] + "    "+ courses[8] + "\n";
+			toReturn += "  Pause\n";
+			toReturn += "13:00-17:00              "+ courses[1] + "    "+ courses[3] + "   "+ courses[5] + "   "+ courses[7] + "    "+ courses[9] + "\n";
+			toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
+			toReturn += " 8:00-12:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse + "\n";
+			toReturn += "  Pause\n";
+			toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse  + "   "+ shortCourse;
+		} else {
+			toReturn = "Semester: " + semesterString + " " + ((semester&1)==1?"e":"f") + " - ingen valgte kurser";
+		}
 		return toReturn;
 	}
 
