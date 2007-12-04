@@ -423,6 +423,7 @@ public class Dialog extends UI {
 			System.err.println(e);
 		} catch (IllegalArgumentException e) {
 			System.err.println(e);
+			e.printStackTrace();
 		} catch (AnotherCourseDependsOnThisCourseException e) {
 			System.err.println(e);
 		}
