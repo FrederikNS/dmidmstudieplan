@@ -25,13 +25,13 @@ public class Course implements Serializable{
 	 */
 	public static final long INTERNAL_SEASON_AUTUMN_SHORT  = 0x8000000000000000L;
 	/**
-	 * The bit-flag for the short part of the spring semester
-	 */
-	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x4000000000000000L;
-	/**
 	 * The bit-flag for the long part of the autum semester
 	 */
-	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x2000000000000000L;
+	public static final long INTERNAL_SEASON_AUTUMN_LONG   = 0x4000000000000000L;
+	/**
+	 * The bit-flag for the short part of the spring semester
+	 */
+	public static final long INTERNAL_SEASON_SPRING_SHORT  = 0x2000000000000000L;
 	/**
 	 * The bit-flag for the long part of the spring semester
 	 */
@@ -52,13 +52,13 @@ public class Course implements Serializable{
 	 */
 	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_SHORT  = 0x0800000000000000L;
 	/**
-	 * The bit-flag for courses that must start in the short part of the spring semester
-	 */
-	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0400000000000000L;
-	/**
 	 * The bit-flag for courses that must start in the long part of the autum semester
 	 */
-	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0200000000000000L;
+	public static final long INTERNAL_STARTING_PERIOD_AUTUMN_LONG   = 0x0400000000000000L;
+	/**
+	 * The bit-flag for courses that must start in the short part of the spring semester
+	 */
+	public static final long INTERNAL_STARTING_PERIOD_SPRING_SHORT  = 0x0200000000000000L;
 	/**
 	 * The bit-flag for courses that must start in the long part of the spring semester
 	 */
@@ -560,7 +560,7 @@ public class Course implements Serializable{
 				if(i == 0 && multiPeriodCourse) {
 					temp |= INTERNAL_STARTING_PERIOD_AUTUMN_LONG;
 				}
-			} else if(periodArray[i].equals("januar")) {
+			} else if(periodArray[i].equalsIgnoreCase("januar")) {
 				temp |= INTERNAL_SEASON_AUTUMN_SHORT;
 				if(i == 0 && multiPeriodCourse) {
 					temp |= INTERNAL_STARTING_PERIOD_AUTUMN_SHORT;
@@ -570,7 +570,7 @@ public class Course implements Serializable{
 				if(i == 0 && multiPeriodCourse) {
 					temp |= INTERNAL_STARTING_PERIOD_SPRING_LONG;
 				}
-			} else if(periodArray[i].equals("juni")) {
+			} else if(periodArray[i].equalsIgnoreCase("juni")) {
 				temp |= INTERNAL_SEASON_SPRING_SHORT;
 				if(i == 0 && multiPeriodCourse) {
 					temp |= INTERNAL_STARTING_PERIOD_SPRING_SHORT;
@@ -686,13 +686,13 @@ public class Course implements Serializable{
 					s += ", F";
 					break;
 				case 1:
-					s += ", E";
+					s += ", Juni";
 					break;
 				case 2:
-					s += ", juni";
+					s += ", E";
 					break;
 				case 3:
-					s += ", januar";
+					s += ", Januar";
 					break;
 				}
 			}
