@@ -22,6 +22,8 @@ import exceptions.StudyPlanDoesNotExistException;
 /**
  * Tests the class Core by using jUnit
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class CoreTest extends TestCase {
 

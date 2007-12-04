@@ -6,8 +6,9 @@ package exceptions;
 import java.io.IOException;
 
 /**
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
- *
  */
 public class FilePermissionException extends IOException {
 

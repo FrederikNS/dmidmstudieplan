@@ -13,6 +13,8 @@ import exceptions.CourseIsMissingDependenciesException;
 /**
  * This test class tests the class StudyPlan by usint jUnit
  * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class StudyPlanTest extends TestCase {
 

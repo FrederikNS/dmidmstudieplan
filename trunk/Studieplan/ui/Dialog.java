@@ -26,6 +26,7 @@ import exceptions.StudyPlanDoesNotExistException;
  * 
  * @author Frederik Nordahl Sabroe
  * @author Morten Soerensen
+ * @author Niels Thykier
  */
 public class Dialog extends UI {
 	/**
@@ -144,7 +145,6 @@ public class Dialog extends UI {
 	 * This is a rewrite of {@link ui.UI#start()}
 	 * 
 	 * @see ui.UI#start()
-	 * @author Frederik Nordahl Sabroe
 	 */
 	public void start() {
 		intro();
@@ -210,7 +210,6 @@ public class Dialog extends UI {
 	/**
 	 * This is the metheod which receives the input from the keyboard
 	 * 
-	 * @author Frederik Nordahl Sabroe
 	 * @param offset
 	 *            serves to change where the input from the keyboard will be put
 	 *            in the "indtastet[]" string array
@@ -240,7 +239,6 @@ public class Dialog extends UI {
 	/**
 	 * Checks if the command is recognized by the program
 	 * 
-	 * @author Frederik Nordahl Sabroe
 	 * @return is one of the constants defined at the start of the program,
 	 *         which is used by start() to trigger the part of the program the
 	 *         user wishes to use
@@ -274,7 +272,6 @@ public class Dialog extends UI {
 	 * wrong format (eg. too high semester number, or the course ID contains
 	 * letters).
 	 * 
-	 * @author Frederik Nordahl Sabroe
 	 * @throws IOException
 	 *             triggers if buffered reader which comes from stdin is closed
 	 */
@@ -331,7 +328,6 @@ public class Dialog extends UI {
 	/**
 	 * Checks if the form of courseID is a possible courseID
 	 * 
-	 * @author Frederik Nordahl Sabroe
 	 * @return true if the form is correct, else false
 	 */
 	private int courseCheck() {
@@ -351,7 +347,6 @@ public class Dialog extends UI {
 	/**
 	 * Checks if the form of semester number is a possible semester number
 	 * 
-	 * @author Frederik Nordahl Sabroe
 	 * @return true if the form is correct, else false
 	 */
 	private int semesterCheck() {
@@ -509,7 +504,7 @@ public class Dialog extends UI {
 	}
 
 	/**
-	 * Prints the plan as is
+	 * Prints the plan as it is
 	 */
 	// TODO - changed
 	private void showPlan() {
@@ -629,21 +624,17 @@ public class Dialog extends UI {
 
 	/**
 	 * Exits the program.
-	 * 
-	 * @author Frederik Nordahl Sabroe
 	 */
 	private void end() {
 		if (studyPlanChanged == true) {
 			killSwitch = false;
 			System.out
 					.println("Vil du gemme din studieplan? (skriv \"gem\" for at gemme eller \"afslut\" for at afslutte uden at gemme");
-			System.out.println("woot");
 			while (killSwitch == false) {
 				try {
 					input(0);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.err.println(e);
 				}
 				switch (commandCheck()) {
 				case COMMAND_AFSLUT:

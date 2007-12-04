@@ -4,8 +4,11 @@
 package exceptions;
 
 /**
- * @author Niels Thykier
  * Thrown whenever critial course data is missing from the databases.
+ * 
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class CritalCourseDataMissingException extends Exception {
 

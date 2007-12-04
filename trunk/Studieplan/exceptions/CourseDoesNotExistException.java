@@ -6,6 +6,8 @@ package exceptions;
 /**
  * Thrown whenever the applications attempts to look up a course that does not exist in the database.
  * This is likely due to a malformatted course number or the database is not up to date.
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
  * @author Niels Thykier
  */
 public class CourseDoesNotExistException extends CourseException {

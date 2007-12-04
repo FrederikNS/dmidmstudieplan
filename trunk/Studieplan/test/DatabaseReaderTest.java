@@ -7,7 +7,9 @@ import databases.CourseBase.DatabaseReader;
 
 /**
  * This test class performs a series of tests on the class DatabaseReader
+ * @author Morten Sørensen
  * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
  */
 public class DatabaseReaderTest extends TestCase{
 
