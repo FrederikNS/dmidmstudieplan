@@ -210,8 +210,7 @@ public class Dialog extends UI {
 		System.out.println("Velkommen til 'Laeg en Studieplan'");
 		System.out.println("");
 		System.out.println("Programmet kender foelgende kommandoer:");
-		System.out
-				.println("hjaelp  tilfoej  fjern  udskrivbase  visplan  gem  hent  soeg  viskursus  afslut");
+		System.out.println("hjaelp  tilfoej  fjern  udskrivbase  visplan  gem  hent  soeg  viskursus  afslut");
 		System.out.println("");
 	}
 
@@ -226,18 +225,16 @@ public class Dialog extends UI {
 		temp = new String[10];
 
 		System.out.print("> ");
-		if ((input = this.readInput()) != null) {
-			if (input.contains(" ")) {
-				temp = input.split(" ");
-			} else {
-				temp[0] = input;
-			}
-			for (int rotation = 0; temp.length >= rotation + offset + 1; rotation++) {
-				indtastet[offset + rotation] = temp[rotation];
-			}
-		} 
-	}
-
+		input = this.readInput();
+		if (input.contains(" ")) {
+			temp = input.split(" ");
+		} else {
+			temp[0] = input;
+		}
+		for (int rotation = 0; temp.length >= rotation + offset + 1; rotation++) {
+			indtastet[offset + rotation] = temp[rotation];
+		}
+	} 
 	/**
 	 * Checks if the command is recognized by the program
 	 * @return is one of the constants defined at the start of the program,
