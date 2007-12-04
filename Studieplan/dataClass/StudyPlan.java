@@ -246,6 +246,7 @@ public class StudyPlan implements Serializable {
 		boolean toPrint = false;
 		int semesterEnd = (semester<<1);
 		int semesterStart = semesterEnd - 1;
+		System.err.println(semesterStart + " " + semesterEnd);
 		int semesterPattern = 0;
 		int shift = 0;
 		
@@ -263,22 +264,20 @@ public class StudyPlan implements Serializable {
 			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
 			Arrays.sort( planned );
 			if( (semester & 1) == 1) {
-				semesterPattern = Course.INTERNAL_SEASON_AUTUMN_LONG | Course.INTERNAL_SEASON_AUTUMN_SHORT;
+				semesterPattern = Course.INTERNAL_DAYS_AUTUMN;
 				shift = Course.INTERNAL_SHIFT_AUTUMN;
 			} else {
-				semesterPattern = Course.INTERNAL_SEASON_SPRING_LONG | Course.INTERNAL_SEASON_SPRING_SHORT;
+				semesterPattern = Course.INTERNAL_DAYS_SPRING;
 				shift = Course.INTERNAL_SHIFT_SPRING;
 			}
 			
 			for(int i = 0 ; i < length ; i++) {
-				if(planned[i].getIsInPeriod(semesterEnd, semesterEnd) == 0) {
+				if(planned[i].getHasSkemaInPeriod(semesterEnd)) {
 					shortCourse = planned[i].getCourseID();
 					toPrint = true;
-				}
-				
-				if(planned[i].getIsInPeriod(semesterStart, semesterStart) == 0) {
+				} 
+				if(planned[i].getHasSkemaInPeriod(semesterStart)) {
 					skema = (planned[i].getFullSkemaData() & semesterPattern)>>shift;
-					
 					if(skema != 0) {
 						toPrint = true;
 						for(int j = 0 ; j < 5 ; j++) {
@@ -315,7 +314,7 @@ public class StudyPlan implements Serializable {
 			toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
 			toReturn += " 8:00-12:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse + "\n";
 			toReturn += "  Pause\n";
-			toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse  + "   "+ shortCourse;
+			toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse;
 		} else {
 			toReturn = "Semester: " + semesterString + " " + ((semester&1)==1?"e":"f") + " - ingen valgte kurser";
 		}

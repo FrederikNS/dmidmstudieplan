@@ -475,13 +475,11 @@ public class Course implements Serializable{
 	 * @param add If true, the new data will be merged with the current rather than overwriting the current. 
 	 */
 	public void setSkemagruppe(String[] skemagruppe, boolean add) {
-		System.out.println("SkemaGruppe: " + this.courseID + " currentSkema: " + Integer.toHexString(internalSkema));
 		if(add) {
 			internalSkema |= parseDTUSkema(skemagruppe);
 		} else {
 			internalSkema = parseDTUSkema(skemagruppe);
 		}
-		System.out.println("SkemaGruppe: " + this.courseID + " new skema: " + Integer.toHexString(internalSkema));
 	}
 
 	/**
@@ -549,7 +547,7 @@ public class Course implements Serializable{
 		}
 		if(toReturn == 5) {
 			System.err.println(this.courseID + " is 5 periods ??");
-			toReturn = 1;
+			toReturn = 4;
 		}
 		return toReturn;
 	}
@@ -576,7 +574,6 @@ public class Course implements Serializable{
 			return;
 		int temp = 0, days = internalSkema & INTERNAL_DAYS_ALL;
 		int clear = 0;
-		System.out.println("UpdateSeason: " + this.courseID + " " + periods +" Multi: " + multiPeriodCourse + ", currentSkema: " + Integer.toHexString(internalSkema));
 		String[] periodArray = periods.trim().split(" ");
 		for(int i = 0 ; i < periodArray.length ; i++ ) {
 			if(periodArray[i].equals("E")) {
@@ -602,7 +599,7 @@ public class Course implements Serializable{
 			}
 		}
 
-		/*if(0 != (days & INTERNAL_DAYS_AUTUMN) && 0 == (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
+		if(0 != (days & INTERNAL_DAYS_AUTUMN) && 0 == (temp & INTERNAL_SEASON_AUTUMN_LONG) ) {
 				//There was class in the long part of the autumn semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_AUTUMN;
@@ -613,10 +610,8 @@ public class Course implements Serializable{
 				//There was class in the long part of the spring semester
 				//but this course ought not to have it.
 				clear |= INTERNAL_DAYS_SPRING;
-		}*/
+		}
 		internalSkema = temp | (days & ~clear);
-		System.out.println("UpdateSeason: " + this.courseID + " new Skema: " + Integer.toHexString(internalSkema));
-		System.out.println(this);
 	}
 	
 	
