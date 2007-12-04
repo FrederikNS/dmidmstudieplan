@@ -47,6 +47,7 @@ public class CourseTest extends TestCase {
 			fail(e.toString());
 			return;
 		}
+		System.out.println(cc);
 		//Sets up a string array with the correct schema groups
 		String test[] = {"E5A","E5B","E3B","F5A","F5B","F3B"};
 		String skema = cc.skemaToString();
@@ -107,14 +108,14 @@ public class CourseTest extends TestCase {
 	 * Testing if it can get the skema data of the course (and that is matches the expected values from the database converted into the internal data pattern)
 	 */
 	public void testGetFullSkemaData() {
-		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNESDAY_MORNING<<Course.INTERNAL_SHIFT_AUTUMN_LONG) | Course.INTERNAL_SEASON_AUTUMN_LONG) );
+		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNESDAY_MORNING<<Course.INTERNAL_SHIFT_AUTUMN) | Course.INTERNAL_SEASON_AUTUMN_LONG) );
 	}
 
 	/**
 	 * Testing if the setFullSkemaData overwrites the skema data in the course as expected.
 	 */
 	public void testSetFullSkemaDataPositive() {
-		long newSkema = Course.INTERNAL_WEDNESDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
+		int newSkema = Course.INTERNAL_WEDNESDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
 		cc.setFullSkemaData(newSkema);
 		assertTrue( cc.getFullSkemaData() == newSkema);
 	}

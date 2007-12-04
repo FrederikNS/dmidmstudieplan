@@ -243,65 +243,58 @@ public class StudyPlan implements Serializable {
 		if(!SelectedCourse.isValidSemester(semester)) {
 			throw new IllegalArgumentException();
 		} 
+		//FIXME nullpointer when plan is empty
 		int semesterEnd = (semester<<1);
 		int semesterStart = semesterEnd - 1;
 		SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
 		Arrays.sort( planned );
-		long semesterPattern = 0L;
-		int shiftShort = 0;
-		int shiftLong = 0;
+		int semesterPattern = 0;
+		int shift = 0;
 		
 		if( (semester & 1) == 1) {
-			semesterPattern = Course.INTERNAL_DAYS_AUTUMN_LONG | Course.INTERNAL_DAYS_AUTUMN_SHORT;
-			shiftShort = Course.INTERNAL_SHIFT_AUTUMN_SHORT;
-			shiftLong = Course.INTERNAL_SHIFT_AUTUMN_LONG;
+			semesterPattern = Course.INTERNAL_SEASON_AUTUMN_LONG | Course.INTERNAL_SEASON_AUTUMN_SHORT;
+			shift = Course.INTERNAL_SHIFT_AUTUMN;
 		} else {
-			semesterPattern = Course.INTERNAL_DAYS_SPRING_LONG | Course.INTERNAL_DAYS_SPRING_SHORT;
-			shiftShort = Course.INTERNAL_SHIFT_SPRING_SHORT;
-			shiftLong = Course.INTERNAL_SHIFT_SPRING_LONG;
+			semesterPattern = Course.INTERNAL_SEASON_SPRING_LONG | Course.INTERNAL_SEASON_SPRING_SHORT;
+			shift = Course.INTERNAL_SHIFT_SPRING;
 		}
 		
-	    long skema = 0L, skemaTest = 0L;
+	    int skema = 0;
 		String toReturn = "";
+		String shortCourse = "-----";
 
 
-		String[][] courses = {{"-----","-----","-----","-----","-----",
-				  				"-----","-----","-----","-----","-----"},
-				  			   {"-----","-----","-----","-----","-----",
-				  				"-----","-----","-----","-----","-----"}};
+		String[] courses = {"-----","-----","-----","-----","-----",
+				  			"-----","-----","-----","-----","-----"};
 		
 		for(int i = 0 ; i < planned.length ; i++) {
+			if(planned[i].getIsInPeriod(semesterEnd, semesterEnd) == 0) {
+				shortCourse = planned[i].getCourseID();
+			}
 			
-			if(planned[i].getIsInPeriod(semesterStart, semesterEnd) == 0) {
-				skema = planned[i].getFullSkemaData() & semesterPattern;
+			if(planned[i].getIsInPeriod(semesterStart, semesterStart) == 0) {
+				skema = (planned[i].getFullSkemaData() & semesterPattern)>>shift;
 				
-				for(int period = 0 ; period < 2 ; period++) {
-					if(period == 0) {
-						skemaTest = skema >> shiftLong;
-					} else {
-						skemaTest = skema >> shiftShort;
+				if(skema != 0) {
+					for(int j = 0 ; j < 5 ; j++) {
+						if(((skema>>j) & 1) == 1) {
+							courses[j] = planned[i].getCourseID();
+						}
+					}				
+					if((skema & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
+						courses[5] = planned[i].getCourseID();
 					}
-					if(skemaTest != 0) {
-						for(int j = 0 ; j < 5 ; j++) {
-							if(((skemaTest>>j) & 1) == 1) {
-								courses[period][j] = planned[i].getCourseID();
-							}
-						}				
-						if((skemaTest & Course.INTERNAL_WEDNESDAY_AFTERNOON) != 0)  {
-							courses[period][5] = planned[i].getCourseID();
-						}
-						if((skemaTest & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
-							courses[period][6] = planned[i].getCourseID();
-						}
-						if((skemaTest & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
-							courses[period][7] = planned[i].getCourseID();
-						}
-						if((skemaTest & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
-							courses[period][8] = planned[i].getCourseID();
-						}
-						if((skemaTest & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
-							courses[period][9] = planned[i].getCourseID();
-						}
+					if((skema & Course.INTERNAL_THURSDAY_MORNING) != 0)  {
+						courses[6] = planned[i].getCourseID();
+					}
+					if((skema & Course.INTERNAL_THURSDAY_AFTERNOON) != 0)  {
+						courses[7] = planned[i].getCourseID();
+					}
+					if((skema & Course.INTERNAL_FRIDAY_MORNING) != 0)  {
+						courses[8] = planned[i].getCourseID();
+					}
+					if((skema & Course.INTERNAL_FRIDAY_AFTERNOON) != 0)  {
+						courses[9] = planned[i].getCourseID();
 					}
 				}
 			}
@@ -309,13 +302,14 @@ public class StudyPlan implements Serializable {
 
 		String semesterString = (semester < 10?" ":"") + semester;
 		toReturn  = "Semester: "+ semesterString +" "+((semester&1)==1?"e":"f")+" 13-ugers  mandag  tirsdag  onsdag  torsdag  fredag\n";
-		toReturn += " 8:00-12:00              "+ courses[0][0] + "    "+ courses[0][2] + "   "+ courses[0][4] + "   "+ courses[0][6] + "    "+ courses[0][8] + "\n";
+		toReturn += " 8:00-12:00              "+ courses[0] + "    "+ courses[2] + "   "+ courses[4] + "   "+ courses[6] + "    "+ courses[8] + "\n";
 		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ courses[0][1] + "    "+ courses[0][3] + "   "+ courses[0][5] + "   "+ courses[0][7] + "    "+ courses[0][9] + "\n";
+		toReturn += "13:00-17:00              "+ courses[1] + "    "+ courses[3] + "   "+ courses[5] + "   "+ courses[7] + "    "+ courses[9] + "\n";
 		toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
-		toReturn += " 8:00-12:00              "+ courses[1][0] + "    "+ courses[1][2] + "   "+ courses[1][4] + "   "+ courses[1][6] + "    "+ courses[1][8] + "\n";
+		toReturn += " 8:00-12:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse + "\n";
 		toReturn += "  Pause\n";
-		toReturn += "13:00-17:00              "+ courses[1][1] + "    "+ courses[1][3] + "   "+ courses[1][5] + "   "+ courses[1][7] + "    "+ courses[1][9];		
+		toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse  + "   "+ shortCourse;
+		
 		return toReturn;
 	}
 
