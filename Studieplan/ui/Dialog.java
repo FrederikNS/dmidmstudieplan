@@ -664,7 +664,7 @@ public class Dialog extends UI {
 		} else {
 			input = input.trim();
 		}
-		return keyboard.readLine().trim();
+		return input;
 	}
 
 	/**
