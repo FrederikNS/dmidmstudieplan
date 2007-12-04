@@ -154,10 +154,10 @@ public class Dialog extends UI {
 	public void start() {
 		intro();
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
-		indtastet = new String[10];
 		try {
 			while (killSwitch == false) {
 				System.out.println("Indtast venligst din kommando:");
+				indtastet = new String[10];
 				input(0);
 				switch (commandCheck()) {
 				case COMMAND_NOT_RECOGNIZED:
@@ -199,7 +199,11 @@ public class Dialog extends UI {
 			// This happens if someone hits CTRL + D in Linux (among things)
 			// in that case, a NullPointerException is thrown.
 			System.out.println();
-			System.err.println("InputStream closed.");
+			if(e.getLocalizedMessage().contains("End of File")) {
+				System.out.println(e.getLocalizedMessage());
+			} else {
+				System.err.println(e);
+			}
 		}
 	}
 
@@ -657,7 +661,6 @@ public class Dialog extends UI {
 			throw new IOException("End of File");
 		}
 		input = input.trim();
-
 		return input;
 		
 	}
