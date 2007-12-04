@@ -30,10 +30,12 @@ import exceptions.StudyPlanDoesNotExistException;
 
 
 /**
- * @author Niels Thykier
  * This is our main class and links all the classes together.
  * 
- * The ProgramCore will start everything at Construction. 
+ * The ProgramCore will start everything at Construction.
+ * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class ProgramCore implements Core {
 

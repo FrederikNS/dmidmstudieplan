@@ -10,6 +10,8 @@ import java.io.Serializable;
  * it can be taken, whether it is single or a multi-period course and what courses, that it depends on.
  * 
  * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class Course implements Serializable{
 

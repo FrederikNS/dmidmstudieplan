@@ -21,7 +21,9 @@ import exceptions.StudyPlanDoesNotExistException;
 
 /**
  * This is an interface which acts as a middleman for the outer parts of the program and the core of the program
- * @author
+ * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public interface Core {
 	

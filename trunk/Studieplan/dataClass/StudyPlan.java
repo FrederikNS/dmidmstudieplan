@@ -16,6 +16,8 @@ import exceptions.CourseIsMissingDependenciesException;
 /**
  * A StudyPlan containing a list of courses and a studentID.
  * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class StudyPlan implements Serializable {
 	

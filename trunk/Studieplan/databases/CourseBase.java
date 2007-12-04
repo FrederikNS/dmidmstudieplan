@@ -18,6 +18,8 @@ import exceptions.FilePermissionException;
  * CourseBase contains all valid read from databases.
  * It uses the DatabaseReader to read the course from the databases.
  * @author Niels Thykier
+ * @author Frederik Nordahl Sabroe
+ * @author Morten Sørensen
  */
 public class CourseBase {
 	
