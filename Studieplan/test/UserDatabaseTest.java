@@ -84,6 +84,11 @@ public class UserDatabaseTest extends TestCase {
 			fail(e.toString());
 		}
 		StudyPlan testPlan2 = new StudyPlan("PermissionDenied");
+		//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+		//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+		//and set up permissions for it (only root can read and write).
+		//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+		//always got full access to the system.
 		try {
 			//User tries to save to a file he doesn't have permissions to write in
 			usr.saveStudyPlan(testPlan2);
@@ -128,6 +133,11 @@ public class UserDatabaseTest extends TestCase {
 		try {
 			//User tries to load a plan without the required read permission
 			usr.loadStudyPlan("PermissionDenied");
+			//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+			//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+			//and set up permissions for it (only root can read and write).
+			//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+			//always got full access to the system.
 			fail("Permission denied");
 		} catch (FilePermissionException e) {
 
@@ -174,6 +184,11 @@ public class UserDatabaseTest extends TestCase {
 		try {
 			//User tries to delete a studyplan without the required permission
 			usr.deleteFile("PermissionDenied");
+			//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+			//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+			//and set up permissions for it (only root can read and write).
+			//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+			//always got full access to the system.
 			fail("Permission Denied");
 		} catch (FilePermissionException e) {
 
