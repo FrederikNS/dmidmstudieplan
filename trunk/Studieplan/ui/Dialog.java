@@ -398,18 +398,6 @@ public class Dialog extends UI {
 			}
 			input(1);
 		}
-		while ((test = semesterCheck(2)) != INPUT_ACCEPTED) {
-			switch (test) {
-			case INPUT_NULL:
-				System.out.println("Indtast venligst et semesternummer:");
-				break;
-			case INPUT_NOT_INT:
-			case INPUT_OUT_OF_BOUNDS:
-				System.out.println("Det indtastede semester nummer var ikke korrekt, proev igen:");
-				break;
-			}
-			input(2);
-		}
 		try{
 			if(getCore().removeCourseFromStudyPlan(indtastet[1])) {
 				System.out.println("Kursus er fjernet fra studieplanen");
@@ -543,6 +531,7 @@ public class Dialog extends UI {
 	
 	/**
 	 * Searches for a given string in any course
+	 * @author Frederik Nordahl Sabroe
 	 */
 	private void search() {
 		String searchString = "";
@@ -586,7 +575,6 @@ public class Dialog extends UI {
 
 	/**
 	 * Presents the data associated with a certain course given it's ID
-	 * 
 	 * @throws IOException
 	 */
 	private void showCourse() throws IOException {
