@@ -252,11 +252,11 @@ public class StudyPlan implements Serializable {
 		
 	    int skema = 0;
 		String toReturn = "";
-		String shortCourse = "-----";
+		String shortCourse = "     ";
 
 
-		String[] courses = {"-----","-----","-----","-----","-----",
-				  			"-----","-----","-----","-----","-----"};
+		String[] courses = {"     ","     ","     ","     ","     ",
+				            "     ","     ","     ","     ","     "};
 		int length = plan.size();
 		if(length > 0) {
 			SelectedCourse planned[] = plan.toArray(new SelectedCourse[1]);		
@@ -305,16 +305,32 @@ public class StudyPlan implements Serializable {
 		
 		String semesterString = (semester < 10?" ":"") + semester;
 		if(toPrint) {
-			toReturn  = "Semester: "+ semesterString +" "+((semester&1)==1?"e":"f")+" 13-ugers  mandag  tirsdag  onsdag  torsdag  fredag\n";
-			toReturn += " 8:00-12:00              "+ courses[0] + "    "+ courses[2] + "   "+ courses[4] + "   "+ courses[6] + "    "+ courses[8] + "\n";
-			toReturn += "  Pause\n";
-			toReturn += "13:00-17:00              "+ courses[1] + "    "+ courses[3] + "   "+ courses[5] + "   "+ courses[7] + "    "+ courses[9] + "\n";
-			toReturn += "3-ugers perioden af semester: " + semesterString + "\n";
-			toReturn += " 8:00-12:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse + "\n";
-			toReturn += "  Pause\n";
-			toReturn += "13:00-17:00              "+ shortCourse + "    "+ shortCourse + "   "+ shortCourse + "   "+ shortCourse + "    "+ shortCourse;
+				     //  |234567890123456789012345678901234567890123456789012345678901234567890123456789|
+			toReturn =  "+------------------------------------------------+\n";
+			toReturn += "|Semester: "+ semesterString +", "+((semester&1)==1?"efterår          ":"forår            ")+"13-ugers perioden|\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "|           |mandag|tirsdag|onsdag|torsdag|fredag|\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "| 8:00-12:00|"+ courses[0] + " | "+ courses[2] + " |"+ courses[4] + " | "+ courses[6] + " |"+ courses[8] + " |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "|           |               Pause                |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "|13:00-17:00|"+ courses[1] + " | "+ courses[3] + " |"+ courses[5] + " | "+ courses[7] + " |"+ courses[9] + " |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "\n";
+			toReturn += "+------------------------------------------------+\n";
+			toReturn += "|Semester: "+ semesterString +", "+((semester&1)==1?"vinter":"sommer")+"            3-ugers perioden|\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "| 8:00-12:00|"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "|           |               Pause                |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+\n";
+			toReturn += "|13:00-17:00|"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " |\n";
+			toReturn += "+-----------+------+-------+------+-------+------+";
 		} else {
-			toReturn = "Semester: " + semesterString + " " + ((semester&1)==1?"e":"f") + " - ingen valgte kurser";
+			toReturn =  "+-------------------------------------------+\n";
+			toReturn += "|Semester: " + semesterString + ", " + ((semester&1)==1?"efterår":"forår") + " - ingen valgte kurser|\n";
+			toReturn += "+-------------------------------------------+";
 		}
 		return toReturn;
 	}
