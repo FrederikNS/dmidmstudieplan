@@ -329,6 +329,4 @@ public class SelectedCourseTest extends TestCase {
 		super.tearDown();
 		sc = null;
 	}
-
-
 }

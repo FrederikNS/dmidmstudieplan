@@ -350,5 +350,4 @@ public class StudyPlan implements Serializable {
 		}	 
 		return s;  
 	}
-
 }

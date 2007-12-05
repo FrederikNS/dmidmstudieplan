@@ -34,5 +34,4 @@ public class StudyPlanDoesNotExistException extends Exception {
 	public String getStudentID() {
 		return studentID;
 	}
-
 }

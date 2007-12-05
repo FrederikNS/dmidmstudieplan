@@ -40,5 +40,4 @@ public class FilePermissionException extends IOException {
 	public String getMissingPermissions() {
 		return missingPermissions;
 	}
-
 }

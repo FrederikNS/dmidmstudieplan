@@ -51,5 +51,4 @@ public class ConflictingCourseInStudyPlanException extends Exception {
 	public String getCourse2() {
 		return course2;
 	}
-	
 }

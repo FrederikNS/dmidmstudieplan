@@ -383,5 +383,4 @@ public class CoreTest extends TestCase {
 		super.tearDown();
 		core = null;
 	}
-
 }

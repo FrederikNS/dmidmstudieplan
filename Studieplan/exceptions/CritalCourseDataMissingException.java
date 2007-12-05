@@ -37,6 +37,5 @@ public class CritalCourseDataMissingException extends Exception {
 	 */
 	public String getMissingData() {
 		return missingData;
-	}
-	
+	}	
 }
