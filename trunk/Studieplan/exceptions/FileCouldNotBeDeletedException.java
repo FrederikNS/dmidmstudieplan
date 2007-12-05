@@ -39,5 +39,4 @@ public class FileCouldNotBeDeletedException extends IOException {
 	public String getFilename() {
 		return filename;
 	}
-
 }

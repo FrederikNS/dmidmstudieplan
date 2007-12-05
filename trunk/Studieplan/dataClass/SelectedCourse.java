@@ -192,7 +192,5 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 	 */
 	public static boolean isValidSemester(int semester) {
 		return semester < 21 && semester > 0;
-	}
-	
-	
+	}	
 }

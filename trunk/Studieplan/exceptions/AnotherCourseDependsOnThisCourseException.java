@@ -44,6 +44,5 @@ public class AnotherCourseDependsOnThisCourseException extends Exception {
 	 */
 	public String getCourseID() {
 		return courseID;
-	}
-	
+	}	
 }

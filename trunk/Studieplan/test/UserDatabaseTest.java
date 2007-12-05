@@ -235,5 +235,4 @@ public class UserDatabaseTest extends TestCase {
 		super.tearDown();
 		usr = null;
 	}
-
 }

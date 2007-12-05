@@ -92,5 +92,4 @@ public class CourseBaseTest extends TestCase {
 		super.tearDown();
 		base = null;
 	}
-
 }

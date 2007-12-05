@@ -48,6 +48,5 @@ public class CourseIsMissingDependenciesException extends Exception {
 	 */
 	public String getCourseID() {
 		return courseID;
-	}
-	
+	}	
 }

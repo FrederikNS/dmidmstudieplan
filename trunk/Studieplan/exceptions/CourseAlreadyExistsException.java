@@ -23,5 +23,4 @@ public class CourseAlreadyExistsException extends CourseException {
 	public CourseAlreadyExistsException(String courseID) {
 		super("*** Kurset",courseID, "findes allerede i studieplanen. ***");
 	}
-
 }

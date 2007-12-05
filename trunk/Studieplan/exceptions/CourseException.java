@@ -31,5 +31,4 @@ public abstract class CourseException extends Exception {
 	public String getCourseID() {
 		return courseID;
 	}
-
 }

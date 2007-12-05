@@ -52,5 +52,4 @@ public class CannotSaveStudyPlanException extends IOException {
 	public StudyPlan getStudyPlan() {
 		return studyPlan;
 	}
-
 }
