@@ -150,6 +150,49 @@ public class SelectedCourse extends Course implements Comparable<SelectedCourse>
 		return 0; 
 	}
 	
+	
+	
+	/**
+	 * Check if two courses have courses in the same periods. Unlike its super-class method of similar name, this 
+	 * one takes the semester data for the course into consideration and therefore prevent false-positives.
+	 * 
+	 * @param compareTo The SelectedCourse to compare with.
+	 * @return true, if they conflict.
+	 */
+	public boolean conflictingSkema(SelectedCourse compareTo) {
+		int conflicts = super.conflictingSkema(compareTo);
+		boolean toReturn = false;
+		if(0 != conflicts) {
+			int start = getStartingPeriod();
+			int finish = this.getFinishingPeriod();
+			periodLoop:
+			for(int i = start ; i <= finish ; i++) {
+				if(this.getHasSkemaInPeriod(i) && compareTo.getHasSkemaInPeriod(i) ) {
+					if(0 != (i & 1)) {
+						
+						break periodLoop;
+					}
+					switch( i % 3 ) {
+					case 1:
+						if( 0 != ((getFullSkemaData() & compareTo.getFullSkemaData()) & INTERNAL_DAYS_AUTUMN)) {
+							toReturn = true;
+							break periodLoop;	
+						}
+						break;
+					case 3:
+						if( 0 != ((getFullSkemaData() & compareTo.getFullSkemaData()) & INTERNAL_DAYS_SPRING)) {
+							toReturn = true;
+							break periodLoop;	
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		return toReturn;
+	}
+
 	/**
 	 * Test if this course has lectures in this single period.
 	 * @param period the period to test.

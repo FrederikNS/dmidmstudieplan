@@ -149,8 +149,7 @@ public class StudyPlan implements Serializable {
 					}
 				}
 				else if(placement == 0) {
-					long conflicts = planned[i].conflictingSkema(toAdd);
-					if(conflicts != 0) {
+					if(planned[i].conflictingSkema(toAdd)) {
 						throw new ConflictingCourseInStudyPlanException(toAdd.getCourseID(), planned[i].getCourseID());
 					}
 				}
@@ -162,17 +161,18 @@ public class StudyPlan implements Serializable {
 			if(met != null) {
 				String[] metArray = met.trim().split(" ");
 				for(int i = 0 ; i < metArray.length ; i++) {
-					dependencies = dependencies.replaceFirst(metArray[1], "").trim();
+					dependencies = dependencies.replaceFirst(metArray[i], "").trim();
 				}
 			}
 			throw new CourseIsMissingDependenciesException(toAdd.getCourseID(), dependencies);
 		}
-		for(int i = 0 ; i < temp.size(); i++) {
-			if(!dependencyCourses.contains(temp.get(i))) {
-				dependencyCourses.add(temp.get(i));
+		if(temp.size() > 0 ) {
+			for(int i = 0 ; i < temp.size(); i++) {
+				if(!dependencyCourses.contains(temp.get(i))) {
+					dependencyCourses.add(temp.get(i));
+				}
 			}
 		}
-		System.out.println();
 		return plan.add(toAdd);
 	}
 
