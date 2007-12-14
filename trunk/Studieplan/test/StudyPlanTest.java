@@ -56,7 +56,7 @@ public class StudyPlanTest extends TestCase {
 		SelectedCourse sc;
 		try {
 			cb = new CourseBase();
-			sc = new SelectedCourse(cb.findCourse("01005"), 1);
+			sc = new SelectedCourse(cb.findCourse("01005"), 3);
 		} catch (Exception e) {
 			fail(e.toString());
 			return;
@@ -66,6 +66,14 @@ public class StudyPlanTest extends TestCase {
 			sp.add(sc);
 		} catch (Exception e) {
 			fail(e.toString());
+		}
+		
+		try {
+			sp.add(new SelectedCourse(cb.findCourse("02121"),3));
+			sp.add(new SelectedCourse(cb.findCourse("02405"),4));
+		}catch (Exception e) {
+			fail(e.toString());
+			return;
 		}
 	}
 
@@ -80,7 +88,8 @@ public class StudyPlanTest extends TestCase {
 		SelectedCourse sc1, sc2;
 		try {
 			cb = new CourseBase();
-			sc1 = new SelectedCourse(cb.findCourse("01715"), 1);
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 1));
+			sc1 = new SelectedCourse(cb.findCourse("01715"), 3);
 
 			sp.add(sc1);
 		} catch (ConflictingCourseInStudyPlanException e) {
@@ -110,6 +119,7 @@ public class StudyPlanTest extends TestCase {
 		} catch (CourseIsMissingDependenciesException Success) {
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail(e.toString());
 		}
 	}
