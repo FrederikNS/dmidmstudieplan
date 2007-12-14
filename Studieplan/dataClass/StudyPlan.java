@@ -1,6 +1,3 @@
-/**
- * 
- */
 package dataClass;
 
 import java.io.Serializable;
@@ -307,7 +304,7 @@ public class StudyPlan implements Serializable {
 		if(toPrint) {
 				     //  |234567890123456789012345678901234567890123456789012345678901234567890123456789|
 			toReturn =  "+------------------------------------------------+\n";
-			toReturn += "|Semester: "+ semesterString +", "+((semester&1)==1?"efterår          ":"forår            ")+"13-ugers perioden|\n";
+			toReturn += "|Semester: "+ semesterString +", "+((semester&1)==1?"efteraar         ":"foraar           ")+"13-ugers perioden|\n";
 			toReturn += "+-----------+------+-------+------+-------+------+\n";
 			toReturn += "|           |mandag|tirsdag|onsdag|torsdag|fredag|\n";
 			toReturn += "+-----------+------+-------+------+-------+------+\n";
@@ -328,9 +325,9 @@ public class StudyPlan implements Serializable {
 			toReturn += "|13:00-17:00|"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " | "+ shortCourse + " |"+ shortCourse + " |\n";
 			toReturn += "+-----------+------+-------+------+-------+------+";
 		} else {
-			toReturn =  "+-------------------------------------------+\n";
-			toReturn += "|Semester: " + semesterString + ", " + ((semester&1)==1?"efterår":"forår") + " - ingen valgte kurser|\n";
-			toReturn += "+-------------------------------------------+";
+			toReturn =  "+--------------------------------------------+\n";
+			toReturn += "|Semester: " + semesterString + ", " + ((semester&1)==1?"efteraar":"foraar") + " - ingen valgte kurser|\n";
+			toReturn += "+--------------------------------------------+";
 		}
 		return toReturn;
 	}

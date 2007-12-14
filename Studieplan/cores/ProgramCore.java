@@ -1,6 +1,3 @@
-/**
- * 
- */
 package cores;
 
 import java.io.FileInputStream;

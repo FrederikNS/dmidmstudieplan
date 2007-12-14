@@ -1,6 +1,3 @@
-/**
- * 
- */
 package dataClass;
 
 import java.io.Serializable;

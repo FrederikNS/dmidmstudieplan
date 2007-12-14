@@ -1,0 +1,1596 @@
+package test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import cores.Core;
+import cores.ProgramCore;
+
+import junit.framework.TestCase;
+import dataClass.SelectedCourse;
+import dataClass.StudyPlan;
+import databases.CourseBase;
+import exceptions.AnotherCourseDependsOnThisCourseException;
+import exceptions.CannotSaveStudyPlanException;
+import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CorruptStudyPlanFileException;
+import exceptions.CourseAlreadyExistsException;
+import exceptions.CourseDoesNotExistException;
+import exceptions.FilePermissionException;
+import exceptions.StudyPlanDoesNotExistException;
+
+/**
+ * Tests the class Core by using jUnit
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class CoreTest extends TestCase {
+
+	/**
+	 * Creates the global variable core
+	 */
+	Core core;
+	/**
+	 * Set to true if the Permission cannot be run.
+	 */
+	boolean disablePermissionTest = false;
+	
+	/**
+	 * Sets up the data the test class uses throughout testing
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		//Forces the core to not load ui
+		String testSetup[] = {"--no-ui", "--silent"};
+		core = new ProgramCore(testSetup); 
+		File f = new File("PermissionDenied.plan");
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		if(f.canRead()) {
+			if(!f.setReadable(false)) {
+				disablePermissionTest = true;
+				return;
+			}
+		}
+		if(f.canWrite()) {
+			if(!f.setWritable(false)){
+				disablePermissionTest = true;
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Tests if Core is able to create a new CourseBase that isn't null
+	 */
+	public void testCourseBase() {
+		CourseBase base = core.getCourseBase();
+		assertNotNull(base);
+	}
+	
+	/**
+	 * Tests if core is able to create a new studyplan
+	 */
+	public void testCreateStudyPlan() {
+		core.newStudyPlan("testSubject");
+		try {
+			StudyPlan testPlan = core.getStudyPlan("testSubject");
+			assertNotNull(testPlan);
+		} catch (StudyPlanDoesNotExistException e) {
+			//Fails if it can't find the study plan (something failed during created it)
+			fail("Exception: StudyPlanDoesNotExistException");
+		}
+	}
+	
+	/**
+	 * Makes an positive test, to see if it can fill a study plan correct
+	 */
+	public void testFillStudyPlanPositive() {
+		try {
+			//Creates a new studyplan if it doesn't exist
+			core.getStudyPlan("testSubject", true);
+		} catch (StudyPlanDoesNotExistException e1) {
+			//We forced it to be created, therefore it is not going to happen
+			fail(e1.toString());
+		}
+		try {
+			//Adds two different courses that normally would conflict (same schema groups) in two different semesters
+			core.addCourseToStudyPlan("testSubject", "01005", 1);
+			core.addCourseToStudyPlan("testSubject", "01035", 3);
+		} catch (Exception e) {
+			//If any other kind of error occures, something is wrong
+			fail("Exception " + e.toString());
+		}
+		try {
+			//Finds a studyplan
+			StudyPlan testPlan = core.getStudyPlan("testSubject");
+			//Checks if both courses are in the study plan
+			assertTrue( testPlan.contains("01005") && testPlan.contains("01035"));
+		} catch (StudyPlanDoesNotExistException e) {
+			//If this exception is thrown, something had gone wrong in adding the courses to the study plan 
+			fail(e.toString());
+		} 
+	}
+	
+	/**
+	 * Runs a negative test to see if it is possible to add conflicting courses
+	 */
+	public void testFillStudyPlanNegative() {
+		try {
+			//Creates a new study plan
+			core.getStudyPlan("testSubject", true);
+		} catch (StudyPlanDoesNotExistException e2) {
+			//We just forced it to be created, this exception is not going to happen
+			fail(e2.toString());
+		}
+		try {
+			//Adds a course to the study plan
+			core.addCourseToStudyPlan("testSubject", "01005", 1);
+		} catch (Exception e1) {
+			fail(e1.toString());
+		}
+		try {
+			//Adds the same course to the study plan
+			core.addCourseToStudyPlan("testSubject", "01005", 1);
+			fail("Course does already exists");
+		} catch (CourseAlreadyExistsException e) {
+			//It threw this error, just as expected
+			
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		try {
+			//Adds a course that has the same schema group as course 01005
+			core.addCourseToStudyPlan("testSubject", "01715", 1);
+			fail("No conflicting Exception");
+		} catch (ConflictingCourseInStudyPlanException e) {
+			//Throws an exception, just as expected
+			
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+	
+	/**
+	 * A positive test to see if the save function works
+	 */
+	public void testSavePositive() {
+		try {
+			//Sets up a study plan with data (reuses the data inserted from a previous test)
+			testFillStudyPlanPositive();
+			StudyPlan testPlan = core.getStudyPlan("testSubject");
+			try {
+				//Saves the study plan
+				core.saveStudyPlanAs(testPlan, "testSavePositive");
+			} catch (CannotSaveStudyPlanException e) {
+				fail("Exception: CannotSaveStudyPlanException");
+			} catch (FilePermissionException e) {
+				fail("Exception: FilePermissionException");
+			}
+		} catch (StudyPlanDoesNotExistException e) {
+			fail("Exception: StudyPlanDoesNotExistsException");
+		}
+	}
+
+	/**
+	 * A negative test to see if the save function works as expected
+	 */
+	public void testSaveNegative() {
+		//Loads in the data from a previous test (to avoid making the same thing several times)
+		testFillStudyPlanPositive();
+		try {
+			//Tries to save an non-existing study plan
+			core.saveStudyPlanAs("testPlanFail", "testSaveNegative");
+			fail("No Exception");
+		} catch (CannotSaveStudyPlanException e) {
+			fail(e.toString());
+		} catch (FilePermissionException e) {
+			fail(e.toString());
+		} catch (StudyPlanDoesNotExistException e) {
+			//It is expected it not to be able to find that study plan
+			
+		}
+		try {
+			//Saves the study plan to a file the user have no permission to write in
+			core.saveStudyPlanAs("testSubject", "PermissionDenied");
+			fail("No Exception");
+		} catch (FilePermissionException e) {
+			//Permission denied to the file, as expected
+			
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+	
+	/**
+	 * Do a positive test of the load function to see if it works
+	 */
+	public void testLoadPositive() {
+		//Sets up test data
+		testSavePositive();
+		try {
+			//Loads an existing study plan
+			core.loadStudyPlan("testSavePositive");
+		} catch (FilePermissionException e) {
+			fail("Exception: FilePermission");
+		} catch (FileNotFoundException e) {
+			fail("Exception: FailNotFound");
+		} catch (CorruptStudyPlanFileException e) {
+			fail("Exception: CorruptStudyPlan");
+		} catch (IOException e) {
+			fail("Exception: IOException");
+		}
+	}
+	
+	/**
+	 * Do a negative test of the load function to see if it reacts as expected
+	 */
+	public void testLoadNegative() {
+		try {
+			//Tries to load a study plan that does not exists
+			core.loadStudyPlan("FileDoesNotExist");
+			fail("No Exception");
+		} catch (FileNotFoundException e) {
+			//An exception, as expected
+			
+		} catch (IOException e) {
+			fail("Exception - IOException: " +e.toString());
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
+		}
+		try {
+			//Tries to load a study plan the user got no permission to read
+			core.loadStudyPlan("PermissionDenied");
+			fail("No Exception");
+		} catch (FilePermissionException e) {
+			//An exception, as expected
+			
+		} catch (IOException e) {
+			fail("Exception: IOException");
+		}
+	}
+	
+	/**
+	 * A positive test of removing courses from an existing study plan
+	 */
+	public void testRemoveCoursePositive() {
+		//Sets up test data
+		testFillStudyPlanPositive();
+		try {
+			//Remove a course from the study plan
+			core.removeCourseFromStudyPlan("testSubject", "01005");
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A negative test of removing courses from a study plan
+	 */
+	public void testRemoveCourseNegative() {
+		//Sets up test data
+		testFillStudyPlanPositive();
+		try {
+			//Tries to remove a course thats not in the study plan
+			if(core.removeCourseFromStudyPlan("testSubject", "01006")) {  
+				fail("Course ought not to have been in the plan");
+			}
+		} catch (StudyPlanDoesNotExistException e) {
+			fail(e.toString());
+		} catch (CourseDoesNotExistException Success) {
+			
+		}  catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
+		}
+		try {
+			//Tries to remove a course from a non-existing study plan
+			if(core.removeCourseFromStudyPlan("testFail", "01005")) {
+				fail("No Exception");
+			}
+		} catch (CourseDoesNotExistException e) {
+			fail(e.toString());
+		} catch (StudyPlanDoesNotExistException e) {
+			
+		} catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
+		}
+		
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01035"), 2));
+			core.addCourseToStudyPlan(new SelectedCourse(cb.findCourse("01250"), 4));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			core.removeCourseFromStudyPlan("01035");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
+			return;
+		}
+	}
+
+	/**
+	 * A positive test to see if a course is in a study plan
+	 */
+	public void testCourseInStudyPlanPositive() {
+		//Sets up test data
+		testFillStudyPlanPositive();
+		try {
+			//Checks if a course is in the study plan
+			assertTrue(core.isCourseInStudyPlan("testSubject", "01005"));
+		} catch (StudyPlanDoesNotExistException e) {
+			fail(e.toString());
+		}
+	}
+	
+	/**
+	 * A negative test to see if a course is in a study plan
+	 */
+	public void testCourseInStudyPlanNegative() {
+		//Sets up test data
+		testFillStudyPlanPositive();
+		try {
+			//Searching for a course in a non-existing study plan
+			core.isCourseInStudyPlan("testFail", "01005");
+			fail("No Exception");
+		} catch (StudyPlanDoesNotExistException e) {
+			
+		}
+	}
+	
+	/**
+	 * A positive test to see if a course ID is valid
+	 */
+	public void testValidCoursePositive() {
+		assertTrue(core.isValidCourse("01005"));
+	}
+	
+	/**
+	 * A negative test to see if a course ID is valid
+	 */
+	public void testValidCourseNegative() {
+		assertFalse(core.isValidCourse("99999") || core.isValidCourse("gk2opt"));
+	}
+	
+	/**
+	 * Tears down everything the test has created, including setting the class variable to null
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		core = null;
+	}
+}package test;
+
+import dataClass.Course;
+import databases.CourseBase;
+import exceptions.CourseDoesNotExistException;
+import junit.framework.TestCase;
+
+/**
+ * This test class runs a series of tests on the class CourseBase
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class CourseBaseTest extends TestCase {
+
+	/**
+	 * Sets up a class variable
+	 */
+	private CourseBase base;
+	
+	/**
+	 * Initialises the CourseBase
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		base = new CourseBase();
+	}
+	
+	/**
+	 * Tests to see how many courses the database can find
+	 */
+	public void testAmountOfCourses(){
+		//More than 100, just to set something
+		assertTrue(base.getAmountOfCourses()>100);
+	}
+	
+	/**
+	 * Tests if it can find a specific course
+	 */
+	public void testFindCourse() {
+		try {
+			assertNotNull(base.findCourse("01005"));
+		} catch (CourseDoesNotExistException e) {
+			fail("Course Not Found");
+		}
+	}
+	
+	/**
+	 * Tests if it can find any course containing the specified string
+	 */
+	public void testSearch() {
+		Course[] match;
+		try {
+			match = base.search("mat");
+		} catch (CourseDoesNotExistException e) {
+			fail("Nothing Found");
+			return;
+		}
+		assertTrue(match.length > 0);
+	}
+	
+	/**
+	 * Tests if it can find all courses
+	 */
+	public void testGetAllCourses() {
+		assertTrue(base.getAllCourses().length==base.getAmountOfCourses());
+	}
+	
+	/**
+	 * Tests if it can do toString()
+	 */
+	public void testToString() {
+		assertNotNull(base.toString());
+	}
+	
+	/**
+	 * Test that the getAllCourses does not allow methods outside CourseBase to alter in the 
+	 * list inside CourseBase. 
+	 */
+	public void testOverwriteProtection() {
+		Course[] temp = base.getAllCourses();		
+		temp[0] = null;
+		assertNotNull(base.getAllCourses()[0]);
+	}
+	
+	/**
+	 * Tears everything down, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		base = null;
+	}
+}package test;
+
+import junit.framework.TestCase;
+import dataClass.Course;
+import dataClass.SelectedCourse;
+import databases.CourseBase;
+
+/**
+ * This test class tests the class Course
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class CourseTest extends TestCase {
+
+	/**
+	 * A class variable the test uses
+	 */
+	Course cc;
+	
+	/**
+	 * Sets up some data the test needs and associates it with the class variable
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		CourseBase cb = new CourseBase();
+		cc = cb.findCourse("01715");
+	}
+
+	/**
+	 * Tests if it can find the correst courseID
+	 */
+	public void testGetCourseID() {
+		assertTrue(cc.getCourseID().equals("01715"));
+	}
+	
+	/**
+	 * Tests if it can find the correct schema groups for the selected course
+	 */
+	public void testSkemaToString() {
+		try {
+			//Uses course 01005 because it got more "skema" groups
+			CourseBase cb = new CourseBase();
+			cc = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+		//Sets up a string array with the correct schema groups
+		String test[] = {"E5A","E5B","E3B","F5A","F5B","F3B"};
+		String skema = cc.skemaToString();
+		for(int i = 0; i < test.length ; i++) {
+			//Tests if it finds any schema groups that does not belong to course 01005
+			if(!skema.contains(test[i])) {
+				fail("did not contain " + test[i]);
+			}
+		}
+	}
+
+	/**
+	 * Tests if it can find the correct name of the course
+	 */
+	public void testGetCourseName() {
+		assertTrue(cc.getCourseName().equals("Funktionalanalyse"));
+	}
+	
+	/**
+	 * A positive test to see if it can find the correct dependency
+	 */
+	public void testGetDependenciesPositive() {
+		String skema = cc.getDependencies();
+		assertTrue(skema.contains("01035"));
+	}
+
+	/**
+	 * A negative test of finding the correct dependency
+	 */
+	public void testConflictingSkemaPositive() {
+		Course cc2;
+		try {
+			CourseBase cb = new CourseBase();
+			cc2 = cb.findCourse("02121");
+		} catch (Exception e) {
+			fail("Course not found");
+			return;
+		}
+		assertTrue(cc.conflictingSkema(cc2) == 0);
+	}
+
+	/**
+	 * Testing if it can set new dependencies for a course
+	 */
+	public void testSetDependencies() {
+		String depends = "01005 02101";
+		cc.setDependencies(depends);
+		String test = cc.getDependencies();
+		//Tests to see if it actually worked
+		assertTrue(test.equals(depends));
+	}
+
+	/**
+	 * Testing if it can get the skema data of the course (and that is matches the expected values from the database converted into the internal data pattern)
+	 */
+	public void testGetFullSkemaData() {
+		assertTrue( cc.getFullSkemaData() == ((Course.INTERNAL_WEDNESDAY_MORNING<<Course.INTERNAL_SHIFT_AUTUMN) | Course.INTERNAL_SEASON_AUTUMN_LONG) );
+	}
+
+	/**
+	 * Testing if the setFullSkemaData overwrites the skema data in the course as expected.
+	 */
+	public void testSetFullSkemaDataPositive() {
+		int newSkema = Course.INTERNAL_WEDNESDAY_MORNING | Course.INTERNAL_THURSDAY_MORNING;
+		cc.setFullSkemaData(newSkema);
+		assertTrue( cc.getFullSkemaData() == newSkema);
+	}
+	
+	/**
+	 * Testing if the setFullSkemaData obeys the "ignore 0" as it says it will.
+	 */
+	public void testSetFullSkemaDataNegative() {
+		int currentSkema = cc.getFullSkemaData();
+		cc.setFullSkemaData(0);
+		assertTrue( cc.getFullSkemaData() == currentSkema);
+	}
+
+	/**
+	 * Test if the setSkemagruppe method accurately parse the data required.
+	 */
+	public void testSetSkemagruppePositive() {
+		cc.setSkemagruppe("E1A", false);
+		int test = 0;
+		int skema = ((Course.INTERNAL_MONDAY_MORNING << Course.INTERNAL_SHIFT_AUTUMN) | Course.INTERNAL_SEASON_AUTUMN_LONG);
+		if(cc.getFullSkemaData() == skema) {
+			test++;
+		}
+		cc.setSkemagruppe("E2A", true);
+		skema |= Course.INTERNAL_MONDAY_AFTERNOON << Course.INTERNAL_SHIFT_AUTUMN;
+		if(cc.getFullSkemaData() == skema)   {
+			test++;
+		}
+		cc.setSkemagruppe("F3A", false);
+		skema = ((Course.INTERNAL_TUESDAY_MORNING << Course.INTERNAL_SHIFT_SPRING) | Course.INTERNAL_SEASON_SPRING_LONG);
+		if(cc.getFullSkemaData() == skema)   {
+			test++;
+		}
+		assertTrue(test == 3);
+	}
+
+	/**
+	 * Test if the setSkemagruppe method ignore mal-formatted data as it claims it will
+	 */
+	public void testSetSkemagruppeNegative() {
+		try {
+			cc.setSkemagruppe("blah", false);
+		}catch(IllegalArgumentException e) {
+		}
+		try {
+			cc.setSkemagruppe("5A", false);
+		}catch(IllegalArgumentException e) {
+		}
+	}
+	
+	/**
+	 * Tests if the data it gets from the database, is the same as the class variable got specified
+	 */
+	public void testEqualsObject() {
+		boolean test1 = cc.equals(new Course(cc.getCourseID(),cc.getCourseName()));
+		boolean test2;
+		try {
+			test2 = cc.equals(new SelectedCourse(cc,1 ));
+		}  catch (Exception e) {
+			fail("Could not create course");
+			return;
+		}
+		assertTrue(test1 && test2);
+	}
+
+	/**
+	 * A positive test of comparing two courses to see if they are the same
+	 */
+	public void testIsSameCourseIDPositive() {
+		assertTrue(cc.isSameCourseID(cc.getCourseID()));
+	}
+	
+	/**
+	 * A negative test of comparing two courses to see if they are the same
+	 */
+	public void testIsSameCourseIDNegative() {
+		assertFalse(cc.isSameCourseID("01005") || cc.isSameCourseID("0"));
+	}
+	
+	/**
+	 * Tears down everything the test used, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception  {
+		super.tearDown();
+		cc = null;
+	}
+}package test;
+
+import junit.framework.TestCase;
+import dataClass.Course;
+import dataClass.SelectedCourse;
+import databases.CourseBase;
+
+/**
+ * Tests the class SelectedCourses by usint jUnit
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class SelectedCourseTest extends TestCase {
+
+	/**
+	 * Sets up the class variable used for SelectedCourse
+	 */
+	SelectedCourse sc;
+	/**
+	 * Sets up the class variable used for CourseBase
+	 */
+	CourseBase cb;
+	
+	/**
+	 * Sets up some data needed for the tests
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		cb = new CourseBase();
+		sc = new SelectedCourse(cb.findCourse("01715"), 3);
+	}
+
+	/**
+	 * A positive test of the comparing function
+	 */
+	public void testCompareToPositive() {
+		SelectedCourse sc2;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01715"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;			
+		}
+		int test = 0;
+		if(sc.compareTo(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == 0){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == -1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == 1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == -1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == -1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.compareTo(sc2) == -1){
+			test++;
+		}
+		assertTrue(test == 9);
+		
+	}
+
+	/**
+	 * A negative test of the comparing function
+	 */
+	public void testCompareToNegative() {
+		try {
+			//Tries to create an object that gets typecasted
+			sc.compareTo((SelectedCourse) new Object());
+			fail("Should not allow us to do that");
+		} catch (Exception e) {
+			
+		}
+		try {
+			//Creates a Course, that gets typecasted to SelectedCourse 
+			SelectedCourse sc2 = (SelectedCourse) new Course("01005", " ");
+			sc.compareTo(sc2);
+			//These two types are uncompareable
+			fail("uncompareble objects");
+		} catch(Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * Testing if it can get the right starting semester for a course
+	 */
+	public void testGetStartingSemester() {
+		SelectedCourse sc2 = null;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			//Should not happen, else something is terrible wrong
+			System.out.println(e);
+		}
+		assertTrue(sc2.getStartingSemester() == 1);
+	}
+
+	/**
+	 * Testing if it can get the right starting period for a course
+	 */
+	public void testGetStartingPeriod() {
+		SelectedCourse sc2 = null;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			//Should not happen, else something is terrible wrong
+			System.out.println(e);
+		}
+		assertTrue(sc2.getStartingPeriod()==1);
+	}
+
+	/**
+	 * Testing if it can get the right finishing period
+	 */
+	public void testGetFinishingPeriod() {
+		assertTrue(sc.getFinishingPeriod() == 5);
+	}
+
+	/**
+	 * Testing if a course is in the same semester as another course
+	 */
+	public void testGetIsInSameSemester() {
+		SelectedCourse sc2;
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+		int test = 0;
+		if(sc.getIsInSameSemester(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == 0){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == -1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == 0){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == -1){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(cb.findCourse("02101"), 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == 1) {
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == 0){
+			test++;
+		}
+		try {
+			sc2 = new SelectedCourse(sc2, 5);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInSameSemester(sc2) == -1){
+			test++;
+		}
+		assertTrue(test == 9);
+	}
+
+	/**
+	 * Testing which period a course is in
+	 */
+	public void testGetIsInPeriod() {
+		int test = 0;
+		if(sc.getIsInPeriod(1, 4) == 1) {
+			test++;
+		}
+		if(sc.getIsInPeriod(5, 5) == 0) {
+			test++;
+		}
+		if(sc.getIsInPeriod(4, 6) == 0) {
+			test++;
+		}
+		if(sc.getIsInPeriod(6, 20) == -1) {
+			test++;
+		}
+		try {
+			sc = new SelectedCourse(sc, 1);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInPeriod(1, 2) == 0) {
+			test++;
+		}
+		if(sc.getIsInPeriod(3, 4) == -1) {
+			test++;
+		}
+		if(sc.getIsInPeriod(3, 4) == -1) {
+			test++;
+		}
+		try {
+			sc = new SelectedCourse(sc, 3);
+		} catch (Exception e) {
+			fail("Could not create course.");
+		} 
+		if(sc.getIsInPeriod(1, 2) == 1) {
+			test++;
+		}
+		if(sc.getIsInPeriod(3, 4) == 1) {
+			test++;
+		}
+		if(sc.getIsInPeriod(5, 6) == 0) {
+			test++;
+		}
+		assertTrue(test == 10);
+	}
+
+	/**
+	 * Checks if a semester is valid
+	 */
+	public void testIsValidSemesterPositive() {
+		assertTrue(SelectedCourse.isValidSemester(2));
+	}
+
+	/**
+	 * Checks if a semester is invalid
+	 */
+	public void testIsValidSemesterNegative() {
+		boolean test1;
+		boolean test2;
+		test1 = SelectedCourse.isValidSemester(-1);
+		test2 = SelectedCourse.isValidSemester(21);
+		//If just one passes, the test will fail
+		assertFalse(test1 || test2);
+	}
+
+	/**
+	 * Tears down everything the test has created, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		sc = null;
+	}
+}package test;
+
+import junit.framework.TestCase;
+import dataClass.Course;
+import dataClass.SelectedCourse;
+import dataClass.StudyPlan;
+import databases.CourseBase;
+import exceptions.AnotherCourseDependsOnThisCourseException;
+import exceptions.ConflictingCourseInStudyPlanException;
+import exceptions.CourseCannotStartInThisSemesterException;
+import exceptions.CourseIsMissingDependenciesException;
+
+/**
+ * This test class tests the class StudyPlan by usint jUnit
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class StudyPlanTest extends TestCase {
+
+	/**
+	 * Sets up an class variable
+	 */
+	StudyPlan sp;
+
+	/**
+	 * Sets up a study plan the test will use
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception{
+		super.setUp();
+		sp = new StudyPlan("testSubject3");
+	}
+
+	/**
+	 * A positive test of comparing two objects with each other
+	 */
+	public void testEqualsObjectPositive() {
+		Object obj = new StudyPlan("testSubject3");
+		assertTrue(sp.equals(obj));
+	}
+
+	/**
+	 * A negative of comparing to objects
+	 */
+	public void testEqualsObjectNegative() {
+		assertFalse(sp.equals("testFail") || sp.equals(""));
+	}
+
+	/**
+	 * A positive test of adding a course to the study plan
+	 */
+	public void testAddPositive() {
+		//Sets up a course we want to add
+		CourseBase cb;
+		SelectedCourse sc;
+		try {
+			cb = new CourseBase();
+			sc = new SelectedCourse(cb.findCourse("01005"), 1);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+
+		try {
+			sp.add(sc);
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A negative test of adding a course
+	 */
+	public void testAddNegative() {
+		//Sets up test data
+		testAddPositive();
+
+		CourseBase cb;
+		SelectedCourse sc1, sc2;
+		try {
+			cb = new CourseBase();
+			sc1 = new SelectedCourse(cb.findCourse("01715"), 1);
+
+			sp.add(sc1);
+		} catch (ConflictingCourseInStudyPlanException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+
+		try {
+			cb = new CourseBase();
+			sc2 = new SelectedCourse(cb.findCourse("01450"), 10);
+			if(sp.add(sc2)) {
+				fail("Allowed course to start in semester it cannot!");
+			}
+		} catch (CourseCannotStartInThisSemesterException Success) {
+			
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		try {
+			cb = new CourseBase();
+			sc2 = new SelectedCourse(cb.findCourse("01450"), 9);
+			if(sp.add(sc2)) {
+				fail("Allowed course to be added without the dependencies being met!");
+			}
+		} catch (CourseIsMissingDependenciesException Success) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A positive test to see if a study plan contains a specific string
+	 */
+	public void testContainsStringPositive() {
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+			sp.add(new SelectedCourse(cb.findCourse("01005"), 1));
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		assertTrue(sp.contains("01005"));
+	}
+
+	/**
+	 * A negative test to see if a study plan contains a a specific sting
+	 */
+	public void testContainsStringNegative() {
+		assertFalse(sp.contains("01005"));
+	}
+
+	/**
+	 * A positive test to see if a study plan contains a specific course
+	 */
+	public void testContainsCoursePositive() {
+		SelectedCourse sc;
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+			sc = new SelectedCourse(cb.findCourse("01005"), 1);
+			sp.add(sc);
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+		boolean test1 = sp.contains(sc);
+		boolean test2 = sp.contains(new Course("01005", " "));
+		assertTrue(test1 && test2);
+	}
+
+	/**
+	 * A negative test to see if a study plan contains a specific course
+	 */
+	public void testContainsCourseNegative() {
+		assertFalse(sp.contains("01005"));
+	}
+
+	/**
+	 * A positive test of removing a specific string from a study plan 
+	 */
+	public void testRemoveStringPositive() {
+		//Sets up test data
+		testAddPositive();
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 3));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+
+		try {
+			assertTrue(sp.remove("01450") && sp.remove("01246") && sp.remove("01250") && sp.remove("01035"));
+		} catch (Exception e) {
+			fail("No Exception ought to happen: " + e.toString() );
+			return;
+		}
+	}
+
+	/**
+	 * A negative test of removing a specific string from a study plan
+	 */
+	public void testRemoveStringNegative() {
+		try {
+			if(sp.remove("01005")) {
+				fail("course ought not to exist");
+			}
+		} catch (Exception e) {
+			fail("No Exception ought to happen: " + e.toString() );
+			return;
+		}
+		
+		try {
+			if(sp.remove("")) {
+				fail("no string given");
+			}
+		} catch (IllegalArgumentException e) {
+
+		} catch (Exception e) {
+			fail("Wrong Exception: " + e.toString() );
+			return;
+		}
+
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+
+		try {
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			sp.remove("01246");
+			fail("No exception");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+			
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
+			return;
+		}
+	}
+
+	/**
+	 * A positive test of removing a specific course from a study plan
+	 */
+	public void testRemoveCoursePositive() {
+		//Sets up test data
+		testAddPositive();
+		try {
+			assertTrue(sp.remove(new Course("01005", " ")));
+		} catch (Exception e) {
+			fail("No exception ought to be thrown: " + e.toString());
+		}
+	}
+
+	/**
+	 * A negative test of removing a specific course from a study plan
+	 */
+	public void testRemoveCourseNegative() {
+
+		try {
+			if(sp.remove(new Course("01005", " "))) {
+				fail("course ought not to exist");
+			}
+		} catch (Exception e) {
+			fail("Exception ought not to happen: " + e.toString());
+			return;
+		}
+
+		try {
+			if(sp.remove(new Course("", " "))) {
+				fail("no name");
+			}
+		} catch (IllegalArgumentException e) {
+
+		} catch (Exception e) {
+			fail("Wrong exception: " + e.toString());
+			return;
+		}
+		
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+		} catch (Exception e) {
+			fail("DatabaseReader failed");
+			return;
+		}
+		
+		try {
+			sp.add(new SelectedCourse(cb.findCourse("01035"), 2));
+			sp.add(new SelectedCourse(cb.findCourse("01250"), 4));
+			sp.add(new SelectedCourse(cb.findCourse("01246"), 5));
+			sp.add(new SelectedCourse(cb.findCourse("01450"), 7));
+		} catch (Exception e) {
+			System.err.println(e);
+			fail("Adding course?");
+		}
+		try {
+			sp.remove(cb.findCourse("01246"));
+			fail("No exception");
+		} catch (AnotherCourseDependsOnThisCourseException e) {
+
+		} catch(Exception e) {
+			fail("Wrong Exception: " + e.toString());
+			return;
+		}
+	}
+
+	/**
+	 * A positive test of printing study plan for a semester
+	 */
+	public void testPrintSemesterPositive() {
+		//Sets up test data
+		testAddPositive();
+		try {
+			sp.printSemester(1);
+			sp.printSemester(2);
+		} catch (IllegalArgumentException e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A negative test of printing study plan for a semester
+	 */
+	public void testPrintSemesterNegative() {
+		try {
+			//Tries to print study plan from a non-existing semester
+			sp.printSemester(21);
+			fail("Exception expected");
+		} catch (IllegalArgumentException e) {
+
+		}
+	}
+
+	/**
+	 * Tears everything the test class has created, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		sp = null;
+	}
+}package test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import junit.framework.TestCase;
+import dataClass.SelectedCourse;
+import dataClass.StudyPlan;
+import databases.CourseBase;
+import databases.UserDatabase;
+import exceptions.CannotSaveStudyPlanException;
+import exceptions.FilePermissionException;
+
+/**
+ * This test class runs a series of tests on the class UserDatabase using jUnit
+ * @author Morten Sørensen
+ * @author Frederik Nordahl Sabroe
+ * @author Niels Thykier
+ */
+public class UserDatabaseTest extends TestCase {
+
+	/**
+	 * Sets up the class variable usr
+	 */
+	UserDatabase usr;
+	/**
+	 * Set to true if the Permission cannot be run.
+	 */
+	boolean disablePermissionTest = false;
+
+	/**
+	 * Initialises the UserDatabase
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		usr = new UserDatabase();
+		File f = new File("PermissionDenied.plan");
+		if(!f.exists()) {
+			f.createNewFile();
+		}
+		if(f.canRead()) {
+			if(!f.setReadable(false)) {
+				disablePermissionTest = true;
+				return;
+			}
+		}
+		if(f.canWrite()) {
+			if(!f.setWritable(false)){
+				disablePermissionTest = true;
+				return;
+			}
+		}
+	}
+
+	/**
+	 * A positive test to see if a saved study plan exists
+	 */
+	public void testExistsPositive() {
+		assertTrue(usr.exists("UserDBTest"));
+	}
+
+	/**
+	 * A negative test to see if a saved study plan exists
+	 */
+	public void testExistsNegative() {
+		if(usr.exists("UserDBTest.plan"))
+			fail("File ought not exist");
+
+		if(usr.exists("testFail"))
+			fail("File ought not exists");
+	}
+
+	/**
+	 * A positive test of the save function
+	 */
+	public void testSavePositive() {
+		StudyPlan testPlan = new StudyPlan("testSubject2");
+		CourseBase cb;
+		try {
+			cb = new CourseBase();
+			testPlan.add(new SelectedCourse(cb.findCourse("01005"), 1));
+		} catch (Exception e) {
+			fail(e.toString());		
+		}
+		try {
+			usr.saveStudyPlan(testPlan);
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A negative test of the save function
+	 */
+	public void testSaveNegative() {
+		//User types in an empty name
+		StudyPlan testPlan = new StudyPlan("");
+		try {
+			usr.saveStudyPlan(testPlan);
+			fail("No name");
+		} catch (CannotSaveStudyPlanException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		StudyPlan testPlan2 = new StudyPlan("PermissionDenied");
+		//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+		//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+		//and set up permissions for it (only root can read and write).
+		//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+		//always got full access to the system.
+		try {
+			//User tries to save to a file he doesn't have permissions to write in
+			usr.saveStudyPlan(testPlan2);
+			fail("Permission Denied");
+		} catch (FilePermissionException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A positive test of the load function
+	 */
+	public void testLoadPositive() {
+		testSavePositive();
+		StudyPlan plan = null;
+		try {
+			plan = usr.loadStudyPlan("testSubject2");			
+		} catch (Exception e) {
+			fail(e.toString());
+			return;
+		}
+
+		assertTrue(plan.contains("01005"));
+	}
+
+	/**
+	 * A negative test of the load function
+	 */
+	public void testLoadNegative() {
+		testSavePositive();
+		try {
+			//User types in a plan that doesn't exists
+			usr.loadStudyPlan("testFail");
+			fail("File ought not to exists");
+		} catch (FileNotFoundException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			assertTrue(true);
+			return;
+		}
+		try {
+			//User tries to load a plan without the required read permission
+			usr.loadStudyPlan("PermissionDenied");
+			//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+			//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+			//and set up permissions for it (only root can read and write).
+			//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+			//always got full access to the system.
+			fail("Permission denied");
+		} catch (FilePermissionException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * A positive test of deleting a study plan
+	 */
+	public void testDeletePositive() {
+		//Sets up some test data
+		testSavePositive();
+		try {
+			usr.deleteFile("testSubject2");
+		} catch (Exception e) {
+			fail("File should exists");
+		}
+	}
+
+	/**
+	 * A negative test of deleting a study plan
+	 */
+	public void testDeleteNegative() {
+		try {
+			//User forgot to type in a name
+			usr.deleteFile("");
+			fail("no name");
+		} catch (FileNotFoundException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		try {
+			//Usere typed in an non-existing study plan
+			usr.deleteFile("testFail");
+			fail("File ought not to exist");
+		} catch (FileNotFoundException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+		if(disablePermissionTest) {
+			System.out.println("Warning: Permission test skipped");
+			return;
+		}
+		try {
+			//User tries to delete a studyplan without the required permission
+			usr.deleteFile("PermissionDenied");
+			//For this test works, the file PermissionDenied.plan needs to be off-limit for the user.
+			//It is easy for a linux user to make such kind of file, all they need is to hand it over to the root user
+			//and set up permissions for it (only root can read and write).
+			//For Windows users, this is harder. Usually they always log in as some sort of administrator, and therefore
+			//always got full access to the system.
+			fail("Permission Denied");
+		} catch (FilePermissionException e) {
+
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	/**
+	 * Tears down everything the test has created, including resetting the class variable
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		usr = null;
+	}
+}

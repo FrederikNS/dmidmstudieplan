@@ -1,6 +1,3 @@
-/**
- * 
- */
 package databases;
 
 import java.io.File;
