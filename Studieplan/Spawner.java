@@ -20,5 +20,4 @@ public class Spawner {
 			System.exit(1);
 		}
 	}
-
 }
