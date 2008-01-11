@@ -445,6 +445,13 @@ public class CourseBase {
 				}
 			}
 			amountOfDoubleCourses = doubleCourses;
+			
+			for(int i = 0 ; i < database.length ; i++ ) {
+				try {
+					database[i].close();
+				} catch (IOException e) {
+				}
+			}
 			loadTime = System.currentTimeMillis() - startTime;
 			return skema;
 		}

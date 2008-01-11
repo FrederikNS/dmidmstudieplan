@@ -71,12 +71,19 @@ public class UserDatabase {
 
 		if(!f.canWrite() ) 
 			throw new FilePermissionException("write");
-		ObjectOutputStream oos;
+		ObjectOutputStream oos = null;
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream(f));
 			oos.writeObject(plan);
 		} catch(IOException e) {
 			throw new CannotSaveStudyPlanException(plan, "ObjectOutputStream failed to store StudyPlan object");	
+		} finally {
+			try {
+				if(oos != null) {
+					oos.close();
+				}
+			} catch (IOException e) {	
+			}
 		}
 	}
 
@@ -107,18 +114,25 @@ public class UserDatabase {
 		//throws FileNotFoundException if it does not exist.
 		if(!exists(file, extension))
 			throw new FileNotFoundException();
-			
+
 
 
 		File f = new File(file + "." + extension);
 		if(!f.canRead()) 
 			throw new FilePermissionException("read");
-		ObjectInputStream ois;
+		ObjectInputStream ois = null;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(f)) ;
 		} catch (IOException e1) {
 			System.err.println("1: " + e1);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
+		} finally {
+			if(ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e) {
+				}
+			}
 		}
 
 		Object obj;
@@ -129,46 +143,54 @@ public class UserDatabase {
 		} catch (IOException e) {
 			System.err.println("2: " + e);
 			throw new CorruptStudyPlanFileException(file + "." + extension);
+		} finally {
+			if(ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e) {
+				}
+			}
 		}
+
 		if(obj == null)
 			throw new CorruptStudyPlanFileException(file + "." + extension);
 		if(!(obj instanceof StudyPlan)) 
 			throw new CorruptStudyPlanFileException(file + "." + extension);
-		
+
 		return (StudyPlan) obj;
-		}
-
-		/**
-		 * Same as calling deleteFile(file, "plan");
-		 * @param file name of file without extension and without trailing dot.
-		 * @param extension the extension of the file without leading dot.
-		 * @throws FileNotFoundException if the file did not exist.
-		 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
-		 * @throws FilePermissionException If needed permissions were missing. 
-		 */
-		public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException{
-			String filename = file + "." + extension;
-			if(!exists(file, extension)) {
-				throw new FileNotFoundException(file + "." + extension);
-			}
-			File f = new File(filename);
-
-			if(!f.canWrite())
-				throw new FilePermissionException("write");
-
-			if(!f.delete())
-				throw new FileCouldNotBeDeletedException(file + "." + extension);
-		}
-
-		/**
-		 * Same as calling deleteFile(file, "plan");
-		 * @param file name of file without extension.
-		 * @throws FileNotFoundException if the file did not exist.
-		 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
-		 * @throws FilePermissionException If needed permissions were missing.
-		 */
-		public void deleteFile(String file) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException {
-			deleteFile(file, "plan");
-		}
-
 	}
+
+	/**
+	 * Same as calling deleteFile(file, "plan");
+	 * @param file name of file without extension and without trailing dot.
+	 * @param extension the extension of the file without leading dot.
+	 * @throws FileNotFoundException if the file did not exist.
+	 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
+	 * @throws FilePermissionException If needed permissions were missing. 
+	 */
+	public void deleteFile(String file, String extension) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException{
+		String filename = file + "." + extension;
+		if(!exists(file, extension)) {
+			throw new FileNotFoundException(file + "." + extension);
+		}
+		File f = new File(filename);
+
+		if(!f.canWrite())
+			throw new FilePermissionException("write");
+
+		if(!f.delete())
+			throw new FileCouldNotBeDeletedException(file + "." + extension);
+	}
+
+	/**
+	 * Same as calling deleteFile(file, "plan");
+	 * @param file name of file without extension.
+	 * @throws FileNotFoundException if the file did not exist.
+	 * @throws FileCouldNotBeDeletedException if the file could not be deleted.
+	 * @throws FilePermissionException If needed permissions were missing.
+	 */
+	public void deleteFile(String file) throws FileNotFoundException, FileCouldNotBeDeletedException, FilePermissionException {
+		deleteFile(file, "plan");
+	}
+
+}
