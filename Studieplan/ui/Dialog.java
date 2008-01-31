@@ -436,7 +436,7 @@ public class Dialog extends UI {
 	 * it exists).
 	 */
 	private void helpMe() {
-		indtastet[1] = indtastet[0];
+		indtastet[0] = indtastet[1];
 		
 		switch(commandCheck()) {
 		case COMMAND_AFSLUT:
@@ -549,17 +549,23 @@ public class Dialog extends UI {
 	 */
 	private void search() {
 		String searchString = "";
+		Course[] matches = null;
 		for(int i=1 ; i<9 ; i++) {
 			if(indtastet[i]!=null) {
 				searchString += " " + indtastet[i];	
 			}
 		}
-		searchString.trim();
 		try {
-			getCore().search(searchString);
+			matches = getCore().search(searchString.trim());
 		} catch (CourseDoesNotExistException e) {
 			System.err.println(e);
+			return;
 		}
+		for(int i = 0 ; i < matches.length ; i++) {
+			System.out.println(matches[i]);
+		}
+		System.out.println();
+		System.out.println("Fandt " + matches.length + " kurser, der indeholdt det indtastede." );
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import dataClass.Course;
 import exceptions.CourseDoesNotExistException;
@@ -187,11 +188,17 @@ public class CourseBase {
 	 */
 	public Course[] search(String pattern) throws CourseDoesNotExistException {
 		ArrayList<Course> match = new ArrayList<Course>();
+		Scanner scan;
+		String patternLower = pattern.toLowerCase();
 		int size = getAmountOfCourses();
 		for(int i = 0; i < size ; i++) {
-			if(allCourses[i].toString().contains(pattern)) {
+			scan = new Scanner(allCourses[i].toString().toLowerCase());
+			if(null != scan.findInLine("("+patternLower+")")) {
 				match.add(allCourses[i]);
 			}
+		}
+		if(match.size() < 1) {
+			throw new CourseDoesNotExistException("indeholdende \"" + pattern +"\"");
 		}
 		return match.toArray(new Course[1]);
 	}
