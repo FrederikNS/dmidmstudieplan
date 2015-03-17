@@ -1,0 +1,1 @@
+This is a simple program made by a couple of students a DTU (Technical University of Denmark), which will generate a plan of studies for. This is our Exam project for the course 02101 "Indledende Programmering"
